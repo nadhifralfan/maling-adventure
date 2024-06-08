@@ -14,6 +14,8 @@
 		1AFAB36C2C129F70003E4120 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFAB36B2C129F70003E4120 /* ViewController.swift */; };
 		1AFAB36E2C129F74003E4120 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AFAB36D2C129F74003E4120 /* Assets.xcassets */; };
 		1AFAB3712C129F74003E4120 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 1AFAB3702C129F74003E4120 /* Base */; };
+		1AFAB3792C12A04D003E4120 /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 1AFAB3782C12A04D003E4120 /* bg.png */; };
+		4CF55BC22C1303DC00578D62 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF55BC12C1303DC00578D62 /* background.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,8 @@
 		1AFAB36D2C129F74003E4120 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1AFAB3702C129F74003E4120 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1AFAB3722C129F74003E4120 /* testaja.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = testaja.entitlements; sourceTree = "<group>"; };
+		1AFAB3782C12A04D003E4120 /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bg.png; path = ../../../Downloads/bg.png; sourceTree = "<group>"; };
+		4CF55BC12C1303DC00578D62 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,8 +68,10 @@
 				1AFAB3692C129F70003E4120 /* GameScene.swift */,
 				1AFAB36B2C129F70003E4120 /* ViewController.swift */,
 				1AFAB36D2C129F74003E4120 /* Assets.xcassets */,
+				1AFAB3782C12A04D003E4120 /* bg.png */,
 				1AFAB36F2C129F74003E4120 /* Main.storyboard */,
 				1AFAB3722C129F74003E4120 /* testaja.entitlements */,
+				4CF55BC12C1303DC00578D62 /* background.png */,
 			);
 			path = testaja;
 			sourceTree = "<group>";
@@ -128,6 +134,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AFAB3792C12A04D003E4120 /* bg.png in Resources */,
+				4CF55BC22C1303DC00578D62 /* background.png in Resources */,
 				1AFAB3662C129F70003E4120 /* GameScene.sks in Resources */,
 				1AFAB36E2C129F74003E4120 /* Assets.xcassets in Resources */,
 				1AFAB3682C129F70003E4120 /* Actions.sks in Resources */,
@@ -289,7 +297,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3G6F9PLS9D;
+				DEVELOPMENT_TEAM = KK835KRLS4;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -316,7 +324,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3G6F9PLS9D;
+				DEVELOPMENT_TEAM = KK835KRLS4;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
