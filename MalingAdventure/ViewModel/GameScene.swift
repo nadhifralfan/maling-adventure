@@ -1,12 +1,6 @@
-//
-//  LevelSelectScene.swift
-//  MalingAdventure
-//
-//  Created by Nadhif Rahman Alfan on 07/06/24.
-//
-
 import SpriteKit
 import GameplayKit
+import GameController
 
 class GameScene: SKScene {
     private var level: Level
@@ -14,11 +8,13 @@ class GameScene: SKScene {
     private var currentStoryIndex: Int = 0
     private var currentSection: Int = 0
     private var player: Player!
-    
-    init(size: CGSize, level: Level, section: Int, isPlaying: Bool) {
+    private var controllers: [GCController] = []
+
+    init(size: CGSize, level: Level, section: Int, isPlaying: Bool, controllers: [GCController]) {
         self.level = level
         self.isPlaying = isPlaying
         self.currentSection = section
+        self.controllers = controllers
         super.init(size: size)
     }
     
@@ -31,9 +27,10 @@ class GameScene: SKScene {
             print("Error: No stories available in the level.")
             return
         }
-        if(isPlaying){
+        
+        if isPlaying {
             createLevelContent()
-        } else{
+        } else {
             displayCurrentStory()
         }
     }
@@ -85,7 +82,7 @@ class GameScene: SKScene {
         
         if currentStoryIndex < level.stories.count {
             let transition = SKTransition.fade(withDuration: 1.0)
-            let nextScene = GameScene(size: self.size, level: level, section: currentSection, isPlaying: false)
+            let nextScene = GameScene(size: self.size, level: level, section: currentSection, isPlaying: false, controllers: controllers)
             nextScene.currentStoryIndex = currentStoryIndex
             self.view?.presentScene(nextScene, transition: transition)
         } else {
@@ -94,8 +91,6 @@ class GameScene: SKScene {
     }
     
     func createLevelContent() {
-        print("total section \(level.sections.count)")
-        print("this section \(currentSection)")
         guard currentSection <= level.sections.count else {
             print("Error: No more sections available in the level.")
             return
@@ -121,18 +116,21 @@ class GameScene: SKScene {
         
         var position = CGPoint(x: 0, y: 0)
         
-        for _ in 0..<11{
-            for _ in 0..<18{
+        for _ in 0..<20 {
+            for _ in 0..<30 {
                 let text = SKLabelNode(text: position.debugDescription)
+                let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
+                platformNode.position = position
+                self.addChild(platformNode)
                 text.fontSize = 5
                 text.fontColor = SKColor.black
                 text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
                 text.position = position
                 text.zPosition = 2
-                position = CGPoint(x: position.x + 60, y: position.y)
+                position = CGPoint(x: position.x + 35, y: position.y)
                 self.addChild(text)
             }
-            position = CGPoint(x: 0, y: position.y + 70)
+            position = CGPoint(x: 0, y: position.y + 40)
         }
         
         for platformData in section.platforms {
@@ -153,44 +151,21 @@ class GameScene: SKScene {
                 platformNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
                 platformNode.zPosition = 2
                 self.addChild(platformNode)
-                print("Platform position: \(platformNode.position)")
             } else {
                 print("Error: Invalid platform data: \(platformData)")
             }
         }
-
         
-//        let doorEntry = section.doorEntry
-//            let doorEntryNode = SKSpriteNode(texture: doorEntry.doorType.texture)
-//            doorEntryNode.position = doorEntry.doorPosition
-//            doorEntryNode.zPosition = 2
-//            self.addChild(doorEntryNode)
-//        
-//        let doorExit = section.doorExit
-//            let doorExitNode = SKSpriteNode(texture: doorExit.doorType.texture)
-//            doorExitNode.position = doorExit.doorPosition
-//            doorExitNode.zPosition = 2
-//            self.addChild(doorExitNode)
-//        
-//        for coinPosition in section.coins {
-//            let coinNode = SKSpriteNode(imageNamed: "coin")
-//            coinNode.position = coinPosition
-//            coinNode.zPosition = 3
-//            self.addChild(coinNode)
-//        }
-//        
-        if(currentSection == 1){
+        if currentSection == 1 {
             player = Player(imageNamed: "playerImage", position: CGPoint(x: 130, y: 180))
-        } else if currentSection == 2{
+        } else if currentSection == 2 {
             player = Player(imageNamed: "playerImage", position: CGPoint(x: 0, y: 420))
         }
         player.zPosition = 4
         self.addChild(player)
-
         
         isPlaying = true
     }
-
     
     override func mouseUp(with event: NSEvent) {
         let location = event.location(in: self)
@@ -206,10 +181,10 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         if isPlaying {
             player.update(currentTime)
-            if player.position.x >= 1020 && player.position.y >= 419{
+            if player.position.x >= 1020 && player.position.y >= 419 {
                 let reveal = SKTransition.push(with: .left, duration: 1)
                 self.removeChildren(in: [player])
-                let newScene = GameScene(size: self.size, level: level, section: currentSection+1, isPlaying: true)
+                let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, isPlaying: true, controllers: controllers)
                 self.view?.presentScene(newScene, transition: reveal)
             }
         }
@@ -222,7 +197,7 @@ class GameScene: SKScene {
     }
     
     override func keyUp(with event: NSEvent) {
-        if isPlaying{
+        if isPlaying {
             player.keyUp(with: event)
         }
     }

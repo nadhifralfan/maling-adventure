@@ -26,12 +26,12 @@ class Player: SKSpriteNode {
     init(imageNamed: String, position: CGPoint) {
         let texture = SKTexture(imageNamed: imageNamed)
         textureNode = SKSpriteNode(texture: texture)
-        textureNode.size = CGSize(width: 60, height: 70)
+        textureNode.size = CGSize(width: 35, height: 40)
         textureNode.anchorPoint = CGPoint(x: 0, y: 0)
         
         super.init(texture: nil, color: .clear, size: textureNode.size)
         self.anchorPoint = CGPoint(x: 0, y: 0)
-        self.size = CGSize(width: 60, height: 70)
+        self.size = CGSize(width: 35, height: 40)
         self.position = position
         self.name = "player"
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: self.size.width / 2, y: self.size.height / 2))
@@ -77,7 +77,7 @@ class Player: SKSpriteNode {
     
     func jump() {
         guard isPlayerOnGround() else { return }
-        self.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 130))
+        self.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 80))
         isJumping = true
     }
     
