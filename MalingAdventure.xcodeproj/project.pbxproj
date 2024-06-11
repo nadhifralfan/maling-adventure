@@ -15,7 +15,6 @@
 		4CED17F42C130D31007588F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CED17F32C130D31007588F7 /* Assets.xcassets */; };
 		4CED17F72C130D31007588F7 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 4CED17F62C130D31007588F7 /* Base */; };
 		4CED17FF2C1311A3007588F7 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CED17FE2C1311A3007588F7 /* Section.swift */; };
-		4CED18072C131F50007588F7 /* dataBase.json in Resources */ = {isa = PBXBuildFile; fileRef = 4CED18062C131F50007588F7 /* dataBase.json */; };
 		4CED18092C1341B7007588F7 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CED18082C1341B7007588F7 /* Level.swift */; };
 		4CED180B2C1343A4007588F7 /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CED180A2C1343A4007588F7 /* JSONParser.swift */; };
 		4CED180D2C13504F007588F7 /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CED180C2C13504F007588F7 /* Story.swift */; };
@@ -24,6 +23,7 @@
 		4CED18172C135E1D007588F7 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CED18162C135E1D007588F7 /* Player.swift */; };
 		4CED181B2C13641C007588F7 /* LevelSelectScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4CED181A2C13641C007588F7 /* LevelSelectScene.sks */; };
 		4CED181D2C136448007588F7 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CED181C2C136448007588F7 /* GameScene.swift */; };
+		4CFED3BF2C1811A800912A89 /* dataBase.json in Resources */ = {isa = PBXBuildFile; fileRef = 4CFED3BE2C1811A800912A89 /* dataBase.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,7 +37,6 @@
 		4CED17F62C130D31007588F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4CED17F82C130D31007588F7 /* MalingAdventure.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MalingAdventure.entitlements; sourceTree = "<group>"; };
 		4CED17FE2C1311A3007588F7 /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
-		4CED18062C131F50007588F7 /* dataBase.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = dataBase.json; path = ../../../../Downloads/dataBase.json; sourceTree = "<group>"; };
 		4CED18082C1341B7007588F7 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		4CED180A2C1343A4007588F7 /* JSONParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONParser.swift; sourceTree = "<group>"; };
 		4CED180C2C13504F007588F7 /* Story.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Story.swift; sourceTree = "<group>"; };
@@ -46,6 +45,7 @@
 		4CED18162C135E1D007588F7 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		4CED181A2C13641C007588F7 /* LevelSelectScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = LevelSelectScene.sks; sourceTree = "<group>"; };
 		4CED181C2C136448007588F7 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		4CFED3BE2C1811A800912A89 /* dataBase.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dataBase.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +78,7 @@
 		4CED17E82C130D2F007588F7 /* MalingAdventure */ = {
 			isa = PBXGroup;
 			children = (
+				4CFED3BE2C1811A800912A89 /* dataBase.json */,
 				4CED18112C135138007588F7 /* Helper */,
 				4CED18102C135124007588F7 /* ViewModel */,
 				4CED180F2C13506D007588F7 /* View */,
@@ -87,7 +88,6 @@
 				4CED17F32C130D31007588F7 /* Assets.xcassets */,
 				4CED17F52C130D31007588F7 /* Main.storyboard */,
 				4CED17F82C130D31007588F7 /* MalingAdventure.entitlements */,
-				4CED18062C131F50007588F7 /* dataBase.json */,
 			);
 			path = MalingAdventure;
 			sourceTree = "<group>";
@@ -190,11 +190,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CED18072C131F50007588F7 /* dataBase.json in Resources */,
 				4CED17EC2C130D2F007588F7 /* GameScene.sks in Resources */,
 				4CED17F42C130D31007588F7 /* Assets.xcassets in Resources */,
 				4CED181B2C13641C007588F7 /* LevelSelectScene.sks in Resources */,
 				4CED17EE2C130D2F007588F7 /* Actions.sks in Resources */,
+				4CFED3BF2C1811A800912A89 /* dataBase.json in Resources */,
 				4CED17F72C130D31007588F7 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
