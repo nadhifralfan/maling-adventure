@@ -35,7 +35,7 @@ class LevelSelectScene: SKScene {
     
     func switchToGameScene(level: Level) {
         let reveal = SKTransition.fade(withDuration: 3)
-        let newScene = GameScene(size: self.size, level: level)
+        let newScene = GameScene(size: self.size, level: level, section: 1, isPlaying: false)
         self.view?.presentScene(newScene, transition: reveal)
     }
     

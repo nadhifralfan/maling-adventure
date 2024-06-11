@@ -15,8 +15,10 @@ class GameScene: SKScene {
     private var currentSection: Int = 0
     private var player: Player!
     
-    init(size: CGSize, level: Level) {
+    init(size: CGSize, level: Level, section: Int, isPlaying: Bool) {
         self.level = level
+        self.isPlaying = isPlaying
+        self.currentSection = section
         super.init(size: size)
     }
     
@@ -29,7 +31,11 @@ class GameScene: SKScene {
             print("Error: No stories available in the level.")
             return
         }
-        displayCurrentStory()
+        if(isPlaying){
+            createLevelContent()
+        } else{
+            displayCurrentStory()
+        }
     }
     
     func displayCurrentStory() {
@@ -79,7 +85,7 @@ class GameScene: SKScene {
         
         if currentStoryIndex < level.stories.count {
             let transition = SKTransition.fade(withDuration: 1.0)
-            let nextScene = GameScene(size: self.size, level: level)
+            let nextScene = GameScene(size: self.size, level: level, section: currentSection, isPlaying: false)
             nextScene.currentStoryIndex = currentStoryIndex
             self.view?.presentScene(nextScene, transition: transition)
         } else {
@@ -88,14 +94,16 @@ class GameScene: SKScene {
     }
     
     func createLevelContent() {
-        guard currentSection < level.sections.count else {
+        print("total section \(level.sections.count)")
+        print("this section \(currentSection)")
+        guard currentSection <= level.sections.count else {
             print("Error: No more sections available in the level.")
             return
         }
         
         self.removeAllChildren()
         
-        let section = level.sections[currentSection]
+        let section = level.sections[currentSection-1]
         
         guard let backgroundTexture = section.background.texture else {
             print("Error: Section background texture is nil.")
@@ -171,9 +179,14 @@ class GameScene: SKScene {
 //            self.addChild(coinNode)
 //        }
 //        
-        player = Player(imageNamed: "playerImage", position: CGPoint(x: 130, y: 180))
+        if(currentSection == 1){
+            player = Player(imageNamed: "playerImage", position: CGPoint(x: 130, y: 180))
+        } else if currentSection == 2{
+            player = Player(imageNamed: "playerImage", position: CGPoint(x: 0, y: 420))
+        }
         player.zPosition = 4
         self.addChild(player)
+
         
         isPlaying = true
     }
@@ -193,6 +206,12 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         if isPlaying {
             player.update(currentTime)
+            if player.position.x >= 1020 && player.position.y >= 419{
+                let reveal = SKTransition.push(with: .left, duration: 1)
+                self.removeChildren(in: [player])
+                let newScene = GameScene(size: self.size, level: level, section: currentSection+1, isPlaying: true)
+                self.view?.presentScene(newScene, transition: reveal)
+            }
         }
     }
     

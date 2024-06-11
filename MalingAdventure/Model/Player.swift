@@ -77,7 +77,7 @@ class Player: SKSpriteNode {
     
     func jump() {
         guard isPlayerOnGround() else { return }
-        self.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 90))
+        self.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 130))
         isJumping = true
     }
     
