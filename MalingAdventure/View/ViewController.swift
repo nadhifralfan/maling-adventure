@@ -28,7 +28,6 @@ class ViewController: NSViewController {
                 
                 insertDataToScene(scene: scene, debugMode: debugMode)
                 
-                // Set the scale mode to scale to fit the window
                 scene.scaleMode = .aspectFill
                 scene.gameControllerManager = gameControllerManager
                 // Present the scene

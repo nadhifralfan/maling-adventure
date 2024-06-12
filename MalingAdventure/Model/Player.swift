@@ -58,26 +58,41 @@ class Player: SKSpriteNode {
             jump()
         }
         if keysPressed.contains(123) { // Left arrow key
-            self.position.x -= CGFloat(3.0)
-            if isFacingRight {
-                isFacingRight = false
-                textureNode.xScale = -1 // Flip the texture horizontally
-                textureNode.position = CGPoint(x: self.size.width, y: 0) // Adjust the position to match the flip
-            }
+            moveLeft()
         }
         if keysPressed.contains(124) { // Right arrow key
-            self.position.x += CGFloat(3.0)
-            if !isFacingRight {
-                isFacingRight = true
-                textureNode.xScale = 1 // Reset the texture to normal
-                textureNode.position = CGPoint(x: 0, y: 0) // Reset the position
-            }
+            moveRight()
         }
+        if !keysPressed.contains(123) && !keysPressed.contains(124) {
+            stopMoving()
+        }
+    }
+    
+    func moveLeft() {
+        self.position.x -= CGFloat(3.0)
+        if isFacingRight {
+            isFacingRight = false
+            textureNode.xScale = -1 // Flip the texture horizontally
+            textureNode.position = CGPoint(x: self.size.width, y: 0) // Adjust the position to match the flip
+        }
+    }
+    
+    func moveRight() {
+        self.position.x += CGFloat(3.0)
+        if !isFacingRight {
+            isFacingRight = true
+            textureNode.xScale = 1 // Reset the texture to normal
+            textureNode.position = CGPoint(x: 0, y: 0) // Reset the position
+        }
+    }
+    
+    func stopMoving() {
+        // Logic to stop the player's movement
     }
     
     func jump() {
         guard isPlayerOnGround() else { return }
-        self.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 80))
+        self.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 30))
         isJumping = true
     }
     

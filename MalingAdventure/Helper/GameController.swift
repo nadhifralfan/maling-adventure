@@ -2,7 +2,16 @@ import SwiftUI
 import GameController
 
 class GameControllerManager: ObservableObject {
-    @Published var controllers: [GCController] = []
+    var controllers: [GCController] = []
+    var isSelectingLevel: Bool = false
+    var isPlaying: Bool = false
+    var isPaused: Bool = false
+    var isGameOver: Bool = false
+    var isGameWon: Bool = false
+    var isStoryMode: Bool = false
+    var thumbstickTimer: Timer?
+    var jumpTimer: Timer?
+    var isThumbstickActive = false
 
     init() {
         NotificationCenter.default.addObserver(
@@ -26,13 +35,12 @@ class GameControllerManager: ObservableObject {
     @objc func controllerConnected(notification: Notification) {
         if let controller = notification.object as? GCController {
             if !controllers.contains(controller) {
+                print("appending")
                 controllers.append(controller)
-                setupControllerInputs(controller: controller)
             }
             if controller.playerIndex == .indexUnset {
                 controller.playerIndex = GCControllerPlayerIndex(rawValue: controllers.count - 1) ?? .indexUnset
             }
-            print("Controller connected: \(controller)")
         }
     }
 
@@ -44,15 +52,41 @@ class GameControllerManager: ObservableObject {
     }
 
     func setupControllerInputs(controller: GCController) {
-//        controller.extendedGamepad?.valueChangedHandler = { [weak self] (gamepad, element) in
-//            guard let self = self else { return }
-//            // Handle gamepad input here
-//            print("Gamepad input detected")
-//            if let buttonA = gamepad.buttonA, buttonA.isPressed {
-//                print("Button A pressed")
-//            }
-//            let leftThumbstick = gamepad.leftThumbstick
-//            print("Left Thumbstick x: \(leftThumbstick.xAxis.value), y: \(leftThumbstick.yAxis.value)")
-//        }
+        controller.extendedGamepad?.valueChangedHandler = { [weak self] (gamepad, element) in
+            guard let self = self else {return}
+            if isSelectingLevel{
+                print("in selecting Level")
+                if gamepad.buttonA.isPressed {
+                    print("Button A pressed")
+                }
+                if gamepad.leftThumbstick.valueChangedHandler != nil {
+                    print("leftThumbstick value changed")
+                }
+            } else if self.isStoryMode {
+                print("in story mode")
+                if gamepad.buttonA.isPressed {
+                    print("Button A pressed")
+                }
+                if gamepad.leftThumbstick.valueChangedHandler != nil {
+                    print("leftThumbstick value changed")
+                }
+            } else if self.isPlaying {
+                print("in game")
+                if gamepad.buttonA.isPressed {
+                    print("Button A pressed")
+                }
+                if gamepad.leftThumbstick.valueChangedHandler != nil {
+                    print("leftThumbstick value changed")
+                }
+            } else if self.isPaused {
+                print("in paused")
+                if gamepad.buttonA.isPressed {
+                    print("Button A pressed")
+                }
+                if gamepad.leftThumbstick.valueChangedHandler != nil {
+                    print("leftThumbstick value changed")
+                }
+            }
+        }
     }
 }

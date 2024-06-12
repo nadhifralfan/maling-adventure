@@ -5,24 +5,34 @@ import GameController
 class LevelSelectScene: SKScene {
     public var levels: [String: Level] = [:]
     private var currentLevel: Level?
-    private var isPlaying: Bool = false
     private var selectedButtonIndex: Int = 0
     private var buttons: [SKLabelNode] = []
-    private var isLevelSelected: Bool = false
     var gameControllerManager: GameControllerManager?
 
     override func didMove(to view: SKView) {
         guard !levels.isEmpty else { return }
-
-        gameControllerManager = GameControllerManager()
-
-        // Setup the controllers and their inputs
-        for controller in gameControllerManager?.controllers ?? [] {
-            setupControllerInputs(controller: controller)
+        
+        if let gameControllerManager = gameControllerManager {
+            gameControllerManager.isSelectingLevel = true
+            
+            // Create a repeating timer that checks for controllers
+            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
+                if gameControllerManager.controllers.count > 0 {
+                    timer.invalidate()
+                    
+                    for controller in gameControllerManager.controllers {
+                        controller.extendedGamepad?.valueChangedHandler = nil
+                        self?.setupControllerInputs(controller: controller)
+                    }
+                    
+                    self?.createLevelButtons()
+                } else {
+                    print("Waiting for controllers to connect...")
+                }
+            }
         }
-
-        createLevelButtons()
     }
+
 
     func createLevelButtons() {
         for (index, _) in levels.enumerated() {
@@ -46,21 +56,14 @@ class LevelSelectScene: SKScene {
 
     func setupControllerInputs(controller: GCController) {
         controller.extendedGamepad?.valueChangedHandler = { [weak self] (gamepad, element) in
-            self?.handleGameControllerInput(gamepad: gamepad)
-        }
-    }
-
-    func handleGameControllerInput(gamepad: GCExtendedGamepad) {
-        print("checked")
-        if gamepad.leftThumbstick.up.isPressed {
-            selectedButtonIndex = max(selectedButtonIndex - 1, 0)
-            highlightButton(at: selectedButtonIndex)
-        } else if gamepad.leftThumbstick.down.isPressed {
-            selectedButtonIndex = min(selectedButtonIndex + 1, buttons.count - 1)
-            highlightButton(at: selectedButtonIndex)
-        } else if gamepad.buttonA.isPressed {
-            if !isLevelSelected {
-                isLevelSelected = true
+            guard let self = self else {return}
+            if gamepad.leftThumbstick.up.isPressed || gamepad.dpad.up.isPressed{
+                selectedButtonIndex = max(selectedButtonIndex - 1, 0)
+                highlightButton(at: selectedButtonIndex)
+            } else if gamepad.leftThumbstick.down.isPressed || gamepad.dpad.down.isPressed {
+                selectedButtonIndex = min(selectedButtonIndex + 1, buttons.count - 1)
+                highlightButton(at: selectedButtonIndex)
+            } else if gamepad.buttonA.isPressed && gameControllerManager!.isSelectingLevel == true {
                 currentLevel = levels[String(selectedButtonIndex + 1)]
                 if let level = currentLevel {
                     switchToGameScene(level: level)
@@ -70,8 +73,13 @@ class LevelSelectScene: SKScene {
     }
 
     func switchToGameScene(level: Level) {
+        for controller in gameControllerManager!.controllers {
+            controller.extendedGamepad?.valueChangedHandler = nil
+        }
         let reveal = SKTransition.fade(withDuration: 3)
-        let newScene = GameScene(size: self.size, level: level, section: 1, isPlaying: false, controllers: gameControllerManager?.controllers ?? [])
+        gameControllerManager?.isSelectingLevel = false
+        gameControllerManager?.isStoryMode = true
+        let newScene = GameScene(size: self.size, level: level, section: 1, gameControllerManager: gameControllerManager!)
         self.view?.presentScene(newScene, transition: reveal)
     }
 
