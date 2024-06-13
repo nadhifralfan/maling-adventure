@@ -57,10 +57,10 @@ class LevelSelectScene: SKScene {
     func setupControllerInputs(controller: GCController) {
         controller.extendedGamepad?.valueChangedHandler = { [weak self] (gamepad, element) in
             guard let self = self else {return}
-            if gamepad.leftThumbstick.up.isPressed || gamepad.dpad.up.isPressed{
+            if gamepad.dpad.up.isPressed{
                 selectedButtonIndex = max(selectedButtonIndex - 1, 0)
                 highlightButton(at: selectedButtonIndex)
-            } else if gamepad.leftThumbstick.down.isPressed || gamepad.dpad.down.isPressed {
+            } else if gamepad.dpad.down.isPressed {
                 selectedButtonIndex = min(selectedButtonIndex + 1, buttons.count - 1)
                 highlightButton(at: selectedButtonIndex)
             } else if gamepad.buttonA.isPressed && gameControllerManager!.isSelectingLevel == true {
@@ -70,13 +70,28 @@ class LevelSelectScene: SKScene {
                 }
             }
         }
+        controller.extendedGamepad?.leftThumbstick.up.pressedChangedHandler = { [weak self] (button, value, pressed) in
+            guard let self = self else { return }
+            if pressed {
+                selectedButtonIndex = max(selectedButtonIndex - 1, 0)
+                highlightButton(at: selectedButtonIndex)
+            }
+        }
+
+        controller.extendedGamepad?.leftThumbstick.down.pressedChangedHandler = { [weak self] (button, value, pressed) in
+            guard let self = self else { return }
+            if pressed {
+                selectedButtonIndex = min(selectedButtonIndex + 1, buttons.count - 1)
+                highlightButton(at: selectedButtonIndex)
+            }
+        }
     }
 
     func switchToGameScene(level: Level) {
         for controller in gameControllerManager!.controllers {
             controller.extendedGamepad?.valueChangedHandler = nil
         }
-        let reveal = SKTransition.fade(withDuration: 3)
+        let reveal = SKTransition.fade(withDuration: 0.5)
         gameControllerManager?.isSelectingLevel = false
         gameControllerManager?.isStoryMode = true
         let newScene = GameScene(size: self.size, level: level, section: 1, gameControllerManager: gameControllerManager!)

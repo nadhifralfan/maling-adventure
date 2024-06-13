@@ -21,7 +21,10 @@ class Player: SKSpriteNode {
     var isJumping: Bool = false
     var isWalking: Bool = false
     var isFacingRight: Bool = true
-    private var textureNode: SKSpriteNode // Child node to hold the texture
+    private var textureNode: SKSpriteNode
+    var thumbstickTimer: Timer?
+    var jumpTimer: Timer?
+    var isThumbstickActive = false
     
     init(imageNamed: String, position: CGPoint) {
         let texture = SKTexture(imageNamed: imageNamed)
@@ -36,8 +39,8 @@ class Player: SKSpriteNode {
         self.name = "player"
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: self.size.width / 2, y: self.size.height / 2))
         self.physicsBody?.categoryBitMask = PhysicsCategory.player
-        self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground
-        self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground
+        self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.player
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground 
         self.physicsBody?.affectedByGravity = true
         self.physicsBody?.allowsRotation = false
         

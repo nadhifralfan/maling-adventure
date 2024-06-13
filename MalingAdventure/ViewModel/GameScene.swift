@@ -6,7 +6,7 @@ class GameScene: SKScene {
     private var level: Level
     private var currentStoryIndex: Int = 0
     private var currentSection: Int = 0
-    private var player: Player!
+    private var players: [Player]! = []
     var gameControllerManager: GameControllerManager?
 
     init(size: CGSize, level: Level, section: Int, gameControllerManager: GameControllerManager) {
@@ -77,46 +77,44 @@ class GameScene: SKScene {
             guard let self = self else { return }
 
             if gamepad.leftThumbstick.left.isPressed || gamepad.dpad.left.isPressed {
-                self.gameControllerManager?.thumbstickTimer?.invalidate()
-                self.gameControllerManager?.thumbstickTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { [weak self] _ in
+                self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
+                self.players[controller.playerIndex.rawValue].thumbstickTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { [weak self] _ in
                     guard let self = self else { return }
                     if gamepad.leftThumbstick.left.isPressed || gamepad.dpad.left.isPressed {
-                        self.player.moveLeft()
+                        self.players[controller.playerIndex.rawValue].moveLeft()
                     } else {
-                        self.player.stopMoving()
-                        self.gameControllerManager?.thumbstickTimer?.invalidate()
+                        self.players[controller.playerIndex.rawValue].stopMoving()
+                        self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
                     }
                 })
             } else if gamepad.leftThumbstick.right.isPressed || gamepad.dpad.right.isPressed {
-                self.gameControllerManager?.thumbstickTimer?.invalidate()
-                self.gameControllerManager?.thumbstickTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { [weak self] _ in
+                self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
+                self.players[controller.playerIndex.rawValue].thumbstickTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { [weak self] _ in
                     guard let self = self else { return }
                     if gamepad.leftThumbstick.right.isPressed || gamepad.dpad.right.isPressed {
-                        self.player.moveRight()
+                        self.players[controller.playerIndex.rawValue].moveRight()
                     } else {
-                        self.player.stopMoving()
-                        self.gameControllerManager?.thumbstickTimer?.invalidate()
+                        self.players[controller.playerIndex.rawValue].stopMoving()
+                        self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
                     }
                 })
             } else {
-                self.gameControllerManager?.thumbstickTimer?.invalidate()
+                self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
             }
             
             if gamepad.buttonA.isPressed {
-                self.gameControllerManager?.jumpTimer?.invalidate()
-                self.gameControllerManager?.jumpTimer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true, block: { [weak self] _ in
+                self.players[controller.playerIndex.rawValue].jumpTimer?.invalidate()
+                self.players[controller.playerIndex.rawValue].jumpTimer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true, block: { [weak self] _ in
                     guard let self = self else { return }
-                    self.player.jump()
+                    self.players[controller.playerIndex.rawValue].jump()
                 })
             } else {
-                self.gameControllerManager?.jumpTimer?.invalidate()
+                self.players[controller.playerIndex.rawValue].jumpTimer?.invalidate()
             }
         }
     }
 
     func displayCurrentStory() {
-        // Invalidate timers and disable controller inputs
-        disableControllerInputs()
 
         let story = level.stories[currentStoryIndex]
         
@@ -148,20 +146,18 @@ class GameScene: SKScene {
     }
     
     func transitionToNextStory() {
-        // Invalidate timers and disable controller inputs
-        disableControllerInputs()
 
         currentStoryIndex += 1
         
         if currentStoryIndex < level.stories.count {
-            let transition = SKTransition.fade(withDuration: 1.0)
+            let transition = SKTransition.fade(withDuration: 0.5)
             let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!)
             nextScene.currentStoryIndex = currentStoryIndex
             self.view?.presentScene(nextScene, transition: transition)
         } else {
             gameControllerManager?.isPlaying = true
             gameControllerManager?.isStoryMode = false
-            let transition = SKTransition.fade(withDuration: 1.0)
+            let transition = SKTransition.fade(withDuration: 0.5)
             let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!)
             nextScene.currentStoryIndex = currentStoryIndex
             self.view?.presentScene(nextScene, transition: transition)
@@ -169,8 +165,6 @@ class GameScene: SKScene {
     }
     
     func createLevelContent() {
-        // Invalidate timers and disable controller inputs
-        disableControllerInputs()
 
         guard currentSection <= level.sections.count else {
             print("Error: No more sections available in the level.")
@@ -234,21 +228,22 @@ class GameScene: SKScene {
         }
         
         if currentSection == 1 {
-            player = Player(imageNamed: "playerImage", position: CGPoint(x: 130, y: 180))
+            for _ in 0..<(gameControllerManager?.controllers.count ?? 0) {
+                let player = Player(imageNamed: "playerImage", position: CGPoint(x: 130, y: 180))
+                players.append(player)
+            }
         } else if currentSection == 2 {
-            player = Player(imageNamed: "playerImage", position: CGPoint(x: 0, y: 420))
+            for _ in 0..<(gameControllerManager?.controllers.count ?? 0) {
+                let player = Player(imageNamed: "playerImage", position: CGPoint(x: 0, y: 420))
+                players.append(player)
+            }
         }
-        player.zPosition = 4
-        self.addChild(player)
-    }
 
-    // Helper function to disable controller inputs
-    private func disableControllerInputs() {
-        gameControllerManager?.thumbstickTimer?.invalidate()
-        gameControllerManager?.jumpTimer?.invalidate()
-        for controller in gameControllerManager?.controllers ?? [] {
-            controller.extendedGamepad?.valueChangedHandler = nil
+        for player in players {
+            player.zPosition = 4
+            self.addChild(player)
         }
+
     }
     
     override func mouseUp(with event: NSEvent) {
@@ -263,34 +258,38 @@ class GameScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        if let gameControllerManager = gameControllerManager {
-            if gameControllerManager.isPlaying {
-                if let player = player {
-                    player.update(currentTime)
-                    if player.position.x >= 1020 && player.position.y >= 419 {
-                        let reveal = SKTransition.push(with: .left, duration: 1)
-                        self.removeChildren(in: [player])
-                        let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager)
-                        self.view?.presentScene(newScene, transition: reveal)
+            if let gameControllerManager = gameControllerManager {
+                if gameControllerManager.isPlaying {
+                    for player in players {
+                        player.update(currentTime)
+                        if player.position.x >= 1020 && player.position.y >= 419 {
+                            let reveal = SKTransition.push(with: .left, duration: 1)
+                            self.removeChildren(in: [player])
+                            let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager)
+                            self.view?.presentScene(newScene, transition: reveal)
+                        }
                     }
                 }
             }
         }
-    }
-    
-    override func keyDown(with event: NSEvent) {
-        if let gameControllerManager = gameControllerManager {
-            if gameControllerManager.isPlaying {
-                player.keyDown(with: event)
+        
+        override func keyDown(with event: NSEvent) {
+            if let gameControllerManager = gameControllerManager {
+                if gameControllerManager.isPlaying {
+                    for player in players {
+                        player.keyDown(with: event)
+                    }
+                }
             }
         }
-    }
-    
-    override func keyUp(with event: NSEvent) {
-        if let gameControllerManager = gameControllerManager {
-            if gameControllerManager.isPlaying {
-                player.keyUp(with: event)
+        
+        override func keyUp(with event: NSEvent) {
+            if let gameControllerManager = gameControllerManager {
+                if gameControllerManager.isPlaying {
+                    for player in players {
+                        player.keyUp(with: event)
+                    }
+                }
             }
         }
-    }
 }

@@ -9,9 +9,6 @@ class GameControllerManager: ObservableObject {
     var isGameOver: Bool = false
     var isGameWon: Bool = false
     var isStoryMode: Bool = false
-    var thumbstickTimer: Timer?
-    var jumpTimer: Timer?
-    var isThumbstickActive = false
 
     init() {
         NotificationCenter.default.addObserver(
