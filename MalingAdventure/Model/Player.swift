@@ -13,6 +13,7 @@ struct PhysicsCategory {
     static let player: UInt32 = 0b1
     static let platform: UInt32 = 0b10
     static let ground: UInt32 = 0b100
+    static let hazzard: UInt32 = 0b1000
 }
 
 class Player: SKSpriteNode {
@@ -36,8 +37,8 @@ class Player: SKSpriteNode {
         self.name = "player"
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: self.size.width / 2, y: self.size.height / 2))
         self.physicsBody?.categoryBitMask = PhysicsCategory.player
-        self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground
-        self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground
+        self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard
         self.physicsBody?.affectedByGravity = true
         self.physicsBody?.allowsRotation = false
         
@@ -84,12 +85,32 @@ class Player: SKSpriteNode {
     func isPlayerOnGround() -> Bool {
         return self.physicsBody?.velocity.dy == 0
     }
+  
     
+   
     func didBegin(_ contact: SKPhysicsContact) {
+        
         let contactMask = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         if contactMask == (PhysicsCategory.player | PhysicsCategory.ground) {
             isJumping = false
         }
+        if contactMask == (PhysicsCategory.player | PhysicsCategory.hazzard) {
+            // Reset player position and stop its movement
+            self.position = CGPoint(x: 120, y: 210)
+            self.anchorPoint = CGPoint(x: 0, y: 0)
+            self.size = CGSize(width: 60, height: 70)
+            self.name = "player"
+            self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: self.size.width / 2, y: self.size.height / 2))
+            self.physicsBody?.categoryBitMask = PhysicsCategory.player
+            self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard
+            self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard
+            self.physicsBody?.affectedByGravity = true
+            self.physicsBody?.allowsRotation = false
+
+            // Also reset the textureNode position to ensure consistency
+            textureNode.position = CGPoint(x: 0, y: 0)
+        }
+
     }
     
     required init?(coder aDecoder: NSCoder) {

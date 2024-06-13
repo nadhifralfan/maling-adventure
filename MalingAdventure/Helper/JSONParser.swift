@@ -105,6 +105,12 @@ func insertDataToScene(scene: LevelSelectScene, debugMode: Bool = false) {
                                                     let yEnd = hazzardData["yEnd"] as? CGFloat {
                                                      hazzard.endPosition = CGPoint(x: xEnd, y: yEnd)
                                                     }
+                                                if let width = hazzardData["width"] as? Double,
+                                                   let height = hazzardData["height"] as? Double{
+                                                    hazzard.size = CGSize(width: width, height: height)
+                                                    
+                                                }
+//                                                print(hazzard.size)
                                                 section.hazzards.append(hazzard)
                                             }
                                         }
@@ -165,6 +171,8 @@ func debugLevelData(levels: [String:Level]){
                 print(hazzard.startPosition)
                 print("---END POSITION---")
                 print(hazzard.endPosition)
+                print("---SIZE---")
+                print(hazzard.size)
             }
         }
     }

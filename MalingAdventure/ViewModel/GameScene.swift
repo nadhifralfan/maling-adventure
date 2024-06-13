@@ -8,7 +8,8 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
+    
     private var level: Level
     private var isPlaying: Bool = false
     private var currentStoryIndex: Int = 0
@@ -27,6 +28,7 @@ class GameScene: SKScene {
     }
     
     override func didMove(to view: SKView) {
+        physicsWorld.contactDelegate = self
         guard !level.stories.isEmpty else {
             print("Error: No stories available in the level.")
             return
@@ -159,6 +161,43 @@ class GameScene: SKScene {
             }
         }
 
+        for hazzardData in section.hazzards {
+            let hazzardNode = SKSpriteNode(color: .red, size: CGSize(width: hazzardData.size.width, height: hazzardData.size.height))
+                hazzardNode.anchorPoint = CGPoint(x: 0, y: 0)
+            hazzardNode.position = CGPoint(x: hazzardData.startPosition.x, y: hazzardData.startPosition.y)
+                hazzardNode.physicsBody = SKPhysicsBody(rectangleOf: hazzardNode.size, center: CGPoint(x: hazzardNode.size.width / 2, y: hazzardData.size.height / 2))
+                hazzardNode.physicsBody?.isDynamic = false
+                hazzardNode.physicsBody?.categoryBitMask = PhysicsCategory.hazzard
+                hazzardNode.physicsBody?.collisionBitMask = PhysicsCategory.player
+                hazzardNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
+                hazzardNode.zPosition = 2
+                self.addChild(hazzardNode)
+            let destination = CGPoint(x: hazzardData.endPosition.x, y: hazzardData.endPosition.y)
+             let moveDuration: TimeInterval = 2.0 // Adjust this value as needed
+             
+             // Determine movement based on destination
+             var moveAction: SKAction?
+             
+             if hazzardData.startPosition.x != destination.x && hazzardData.startPosition.y == destination.y {
+                 // Horizontal movement (right and left)
+                 let moveRight = SKAction.moveTo(x: destination.x, duration: moveDuration)
+                 let moveLeft = SKAction.moveTo(x: hazzardData.startPosition.x, duration: moveDuration)
+                 moveAction = SKAction.sequence([moveRight, moveLeft])
+             } else if hazzardData.startPosition.y != destination.y && hazzardData.startPosition.x == destination.x {
+                 // Vertical movement (up and down)
+                 let moveUp = SKAction.moveTo(y: destination.y, duration: moveDuration)
+                 let moveDown = SKAction.moveTo(y: hazzardData.startPosition.y, duration: moveDuration)
+                 moveAction = SKAction.sequence([moveUp, moveDown])
+             }
+             
+             // Run the action if defined
+             if let moveAction = moveAction {
+                 let repeatAction = SKAction.repeatForever(moveAction)
+                 hazzardNode.run(repeatAction)
+             }
+            
+        }
+
         
 //        let doorEntry = section.doorEntry
 //            let doorEntryNode = SKSpriteNode(texture: doorEntry.doorType.texture)
@@ -190,6 +229,7 @@ class GameScene: SKScene {
         
         isPlaying = true
     }
+    
 
     
     override func mouseUp(with event: NSEvent) {
@@ -226,4 +266,7 @@ class GameScene: SKScene {
             player.keyUp(with: event)
         }
     }
+    func didBegin(_ contact: SKPhysicsContact) {
+          player.didBegin(contact)
+      }
 }
