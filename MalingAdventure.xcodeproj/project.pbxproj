@@ -24,6 +24,7 @@
 		4CED181B2C13641C007588F7 /* LevelSelectScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4CED181A2C13641C007588F7 /* LevelSelectScene.sks */; };
 		4CED181D2C136448007588F7 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CED181C2C136448007588F7 /* GameScene.swift */; };
 		4CFED3BF2C1811A800912A89 /* dataBase.json in Resources */ = {isa = PBXBuildFile; fileRef = 4CFED3BE2C1811A800912A89 /* dataBase.json */; };
+		4CFED3C12C183C3600912A89 /* GameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFED3C02C183C3600912A89 /* GameController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		4CED181A2C13641C007588F7 /* LevelSelectScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = LevelSelectScene.sks; sourceTree = "<group>"; };
 		4CED181C2C136448007588F7 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		4CFED3BE2C1811A800912A89 /* dataBase.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dataBase.json; sourceTree = "<group>"; };
+		4CFED3C02C183C3600912A89 /* GameController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				4CED180A2C1343A4007588F7 /* JSONParser.swift */,
+				4CFED3C02C183C3600912A89 /* GameController.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -207,6 +210,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CED17F22C130D2F007588F7 /* ViewController.swift in Sources */,
+				4CFED3C12C183C3600912A89 /* GameController.swift in Sources */,
 				4CED18152C1356B3007588F7 /* Hazzard.swift in Sources */,
 				4CED18132C135324007588F7 /* Door.swift in Sources */,
 				4CED17FF2C1311A3007588F7 /* Section.swift in Sources */,

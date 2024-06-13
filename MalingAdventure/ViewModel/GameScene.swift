@@ -1,25 +1,19 @@
-//
-//  LevelSelectScene.swift
-//  MalingAdventure
-//
-//  Created by Nadhif Rahman Alfan on 07/06/24.
-//
-
 import SpriteKit
 import GameplayKit
+import GameController
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private var level: Level
-    private var isPlaying: Bool = false
     private var currentStoryIndex: Int = 0
     private var currentSection: Int = 0
-    private var player: Player!
-    
-    init(size: CGSize, level: Level, section: Int, isPlaying: Bool) {
+    private var players: [Player]! = []
+    var gameControllerManager: GameControllerManager?
+
+    init(size: CGSize, level: Level, section: Int, gameControllerManager: GameControllerManager) {
         self.level = level
-        self.isPlaying = isPlaying
         self.currentSection = section
+        self.gameControllerManager = gameControllerManager
         super.init(size: size)
     }
     
@@ -33,16 +27,97 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             print("Error: No stories available in the level.")
             return
         }
-        if(isPlaying){
-            createLevelContent()
-        } else{
-            displayCurrentStory()
+        
+        if let gameControllerManager = gameControllerManager {
+            if gameControllerManager.isPlaying {
+                Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
+                    if gameControllerManager.controllers.count > 0 {
+                        timer.invalidate()
+                        
+                        for controller in gameControllerManager.controllers {
+                            controller.extendedGamepad?.valueChangedHandler = nil
+                            self?.setupControllerInputsPlaying(controller: controller)
+                        }
+                    } else {
+                        print("Waiting for controllers to connect...")
+                    }
+                }
+                createLevelContent()
+            } else {
+                Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
+                    if gameControllerManager.controllers.count > 0 {
+                        timer.invalidate()
+                        
+                        for controller in gameControllerManager.controllers {
+                            controller.extendedGamepad?.valueChangedHandler = nil
+                            self?.setupControllerInputsScene(controller: controller)
+                        }
+                    } else {
+                        print("Waiting for controllers to connect...")
+                    }
+                }
+                displayCurrentStory()
+            }
         }
     }
     
+    func setupControllerInputsScene(controller: GCController) {
+        controller.extendedGamepad?.valueChangedHandler = { [weak self] (gamepad, element) in
+            guard let self = self else { return }
+            
+            if gamepad.buttonA.isPressed {
+                self.transitionToNextStory()
+            } else if gamepad.buttonX.isPressed {
+                self.currentStoryIndex = self.level.stories.count - 1
+                self.transitionToNextStory()
+            }
+        }
+    }
+    
+    func setupControllerInputsPlaying(controller: GCController) {
+        controller.extendedGamepad?.valueChangedHandler = { [weak self] (gamepad, element) in
+            guard let self = self else { return }
+
+            if gamepad.leftThumbstick.left.isPressed || gamepad.dpad.left.isPressed {
+                self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
+                self.players[controller.playerIndex.rawValue].thumbstickTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { [weak self] _ in
+                    guard let self = self else { return }
+                    if gamepad.leftThumbstick.left.isPressed || gamepad.dpad.left.isPressed {
+                        self.players[controller.playerIndex.rawValue].moveLeft()
+                    } else {
+                        self.players[controller.playerIndex.rawValue].stopMoving()
+                        self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
+                    }
+                })
+            } else if gamepad.leftThumbstick.right.isPressed || gamepad.dpad.right.isPressed {
+                self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
+                self.players[controller.playerIndex.rawValue].thumbstickTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { [weak self] _ in
+                    guard let self = self else { return }
+                    if gamepad.leftThumbstick.right.isPressed || gamepad.dpad.right.isPressed {
+                        self.players[controller.playerIndex.rawValue].moveRight()
+                    } else {
+                        self.players[controller.playerIndex.rawValue].stopMoving()
+                        self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
+                    }
+                })
+            } else {
+                self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
+            }
+            
+            if gamepad.buttonA.isPressed {
+                self.players[controller.playerIndex.rawValue].jumpTimer?.invalidate()
+                self.players[controller.playerIndex.rawValue].jumpTimer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true, block: { [weak self] _ in
+                    guard let self = self else { return }
+                    self.players[controller.playerIndex.rawValue].jump()
+                })
+            } else {
+                self.players[controller.playerIndex.rawValue].jumpTimer?.invalidate()
+            }
+        }
+    }
+
     func displayCurrentStory() {
-        self.removeAllChildren()
-        
+
         let story = level.stories[currentStoryIndex]
         
         let storyImageNode = SKSpriteNode(texture: story.image.texture)
@@ -59,15 +134,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         storyDescriptionNode.verticalAlignmentMode = .center
         storyDescriptionNode.horizontalAlignmentMode = .center
         
-        let descriptionBackground = SKShapeNode(rectOf: CGSize(width: storyDescriptionNode.preferredMaxLayoutWidth, height: 100), cornerRadius: 10)
-        descriptionBackground.fillColor = SKColor.black.withAlphaComponent(0.5)
-        descriptionBackground.position = CGPoint(x: self.size.width / 2, y: 100)
-        
-        storyDescriptionNode.position = CGPoint(x: 0, y: -descriptionBackground.frame.height / 2)
-        descriptionBackground.addChild(storyDescriptionNode)
-        descriptionBackground.zPosition = 1
-        self.addChild(descriptionBackground)
-        
         let nextButton = SKLabelNode(text: "Next")
         nextButton.name = "nextButton"
         nextButton.fontSize = 24
@@ -78,26 +144,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let fadeInAction = SKAction.fadeIn(withDuration: 1.0)
         storyImageNode.run(fadeInAction)
-        descriptionBackground.run(fadeInAction)
         nextButton.run(fadeInAction)
     }
     
     func transitionToNextStory() {
+
         currentStoryIndex += 1
         
         if currentStoryIndex < level.stories.count {
-            let transition = SKTransition.fade(withDuration: 1.0)
-            let nextScene = GameScene(size: self.size, level: level, section: currentSection, isPlaying: false)
+            let transition = SKTransition.fade(withDuration: 0.5)
+            let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!)
             nextScene.currentStoryIndex = currentStoryIndex
             self.view?.presentScene(nextScene, transition: transition)
         } else {
-            createLevelContent()
+            gameControllerManager?.isPlaying = true
+            gameControllerManager?.isStoryMode = false
+            let transition = SKTransition.fade(withDuration: 0.5)
+            let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!)
+            nextScene.currentStoryIndex = currentStoryIndex
+            self.view?.presentScene(nextScene, transition: transition)
         }
     }
     
     func createLevelContent() {
-        print("total section \(level.sections.count)")
-        print("this section \(currentSection)")
+
         guard currentSection <= level.sections.count else {
             print("Error: No more sections available in the level.")
             return
@@ -117,24 +187,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundNode.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
         backgroundNode.zPosition = -1
         self.addChild(backgroundNode)
-        
-        print(self.size.height)
-        print(self.size.width)
-        
         var position = CGPoint(x: 0, y: 0)
         
-        for _ in 0..<11{
-            for _ in 0..<18{
+        for _ in 0..<20 {
+            for _ in 0..<30 {
                 let text = SKLabelNode(text: position.debugDescription)
+                let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
+                platformNode.position = position
+                self.addChild(platformNode)
                 text.fontSize = 5
                 text.fontColor = SKColor.black
                 text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
                 text.position = position
                 text.zPosition = 2
-                position = CGPoint(x: position.x + 60, y: position.y)
+                position = CGPoint(x: position.x + 35, y: position.y)
                 self.addChild(text)
             }
-            position = CGPoint(x: 0, y: position.y + 70)
+            position = CGPoint(x: 0, y: position.y + 40)
         }
         
         for platformData in section.platforms {
@@ -155,7 +224,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 platformNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
                 platformNode.zPosition = 2
                 self.addChild(platformNode)
-                print("Platform position: \(platformNode.position)")
             } else {
                 print("Error: Invalid platform data: \(platformData)")
             }
@@ -218,16 +286,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //            self.addChild(coinNode)
 //        }
 //        
-        if(currentSection == 1){
-            player = Player(imageNamed: "playerImage", position: CGPoint(x: 130, y: 180))
-        } else if currentSection == 2{
-            player = Player(imageNamed: "playerImage", position: CGPoint(x: 0, y: 420))
-        }
-        player.zPosition = 4
-        self.addChild(player)
-
+     
         
-        isPlaying = true
+        if currentSection == 1 {
+            for _ in 0..<(gameControllerManager?.controllers.count ?? 0) {
+                let player = Player(imageNamed: "playerImage", position: CGPoint(x: 130, y: 180))
+                players.append(player)
+            }
+        } else if currentSection == 2 {
+            for _ in 0..<(gameControllerManager?.controllers.count ?? 0) {
+                let player = Player(imageNamed: "playerImage", position: CGPoint(x: 0, y: 420))
+                players.append(player)
+            }
+        }
+
+        for player in players {
+            player.zPosition = 4
+            self.addChild(player)
+        }
+
     }
     
 
@@ -253,13 +330,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.view?.presentScene(newScene, transition: reveal)
             }
         }
-    }
-    
-    override func keyDown(with event: NSEvent) {
-        if isPlaying {
-            player.keyDown(with: event)
+            if let gameControllerManager = gameControllerManager {
+                if gameControllerManager.isPlaying {
+                    for player in players {
+                        player.update(currentTime)
+                        if player.position.x >= 1020 && player.position.y >= 419 {
+                            let reveal = SKTransition.push(with: .left, duration: 1)
+                            self.removeChildren(in: [player])
+                            let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager)
+                            self.view?.presentScene(newScene, transition: reveal)
+                        }
+                    }
+                }
+            }
         }
-    }
+        
+        override func keyDown(with event: NSEvent) {
+            if let gameControllerManager = gameControllerManager {
+                if gameControllerManager.isPlaying {
+                    for player in players {
+                        player.keyDown(with: event)
+                    }
+                }
+            }
+        }
+        
+        override func keyUp(with event: NSEvent) {
+            if let gameControllerManager = gameControllerManager {
+                if gameControllerManager.isPlaying {
+                    for player in players {
+                        player.keyUp(with: event)
+                    }
+                }
     
     override func keyUp(with event: NSEvent) {
         if isPlaying{

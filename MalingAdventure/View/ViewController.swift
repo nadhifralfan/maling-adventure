@@ -16,6 +16,8 @@ class ViewController: NSViewController {
     //TURN ON DEBUG MODE FOR DATEBASE
     var debugMode : Bool = false
     
+    let gameControllerManager = GameControllerManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -23,11 +25,11 @@ class ViewController: NSViewController {
             // Load the SKScene from 'GameScene.sks'
             if let scene = LevelSelectScene(fileNamed: "LevelSelectScene") {
                 
+                
                 insertDataToScene(scene: scene, debugMode: debugMode)
                 
-                // Set the scale mode to scale to fit the window
                 scene.scaleMode = .aspectFill
-                
+                scene.gameControllerManager = gameControllerManager
                 // Present the scene
                 view.presentScene(scene)
             }
