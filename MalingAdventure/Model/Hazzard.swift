@@ -12,7 +12,10 @@ class Hazzard : SKNode {
     var hazzardType : HazzardType = HazzardType(hazzardImageName: "")
     var startPosition : CGPoint = CGPoint()
     var endPosition : CGPoint = CGPoint()
+    var size : CGSize = CGSize()
 }
+
+
 
 enum HazzardTypeEnum {
     case type1
