@@ -8,12 +8,22 @@
 import Foundation
 import SpriteKit
 
+//struct PhysicsCategory {
+//    static let none: UInt32 = 0
+//    static let player: UInt32 = 0b1
+//    static let platform: UInt32 = 0b10
+//    static let ground: UInt32 = 0b100
+//    static let hazzard: UInt32 = 0b1000
+//}
+
 struct PhysicsCategory {
-    static let none: UInt32 = 0
-    static let player: UInt32 = 0b1
-    static let platform: UInt32 = 0b10
-    static let ground: UInt32 = 0b100
-    static let hazzard: UInt32 = 0b1000
+    static let none: UInt32 = 1 << 1
+    static let player: UInt32 = 1 << 2
+    static let platform: UInt32 = 1 << 3
+    static let ground: UInt32 = 1 << 4
+    static let coin: UInt32 = 1 << 5
+    static let scene: UInt32 = 1 << 6
+    static let hazzard: UInt32 = 1 << 7
 }
 
 class Player: SKSpriteNode {
