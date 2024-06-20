@@ -32,32 +32,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if let gameControllerManager = gameControllerManager {
             if gameControllerManager.isPlaying {
-                Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
-                    if gameControllerManager.controllers.count > 0 {
-                        timer.invalidate()
-                        
-                        for controller in gameControllerManager.controllers {
-                            controller.extendedGamepad?.valueChangedHandler = nil
-                            self?.setupControllerInputsPlaying(controller: controller)
-                        }
-                    } else {
-                        print("Waiting for controllers to connect...")
-                    }
-                }
+//                Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
+//                    if gameControllerManager.controllers.count > 0 {
+//                        timer.invalidate()
+//                        
+//                        for controller in gameControllerManager.controllers {
+//                            controller.extendedGamepad?.valueChangedHandler = nil
+//                            self?.setupControllerInputsPlaying(controller: controller)
+//                        }
+//                    } else {
+//                        print("Waiting for controllers to connect...")
+//                    }
+//                }
                 createLevelContent()
             } else {
-                Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
-                    if gameControllerManager.controllers.count > 0 {
-                        timer.invalidate()
-                        
-                        for controller in gameControllerManager.controllers {
-                            controller.extendedGamepad?.valueChangedHandler = nil
-                            self?.setupControllerInputsScene(controller: controller)
-                        }
-                    } else {
-                        print("Waiting for controllers to connect...")
-                    }
-                }
+//                Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
+//                    if gameControllerManager.controllers.count > 0 {
+//                        timer.invalidate()
+//                        
+//                        for controller in gameControllerManager.controllers {
+//                            controller.extendedGamepad?.valueChangedHandler = nil
+//                            self?.setupControllerInputsScene(controller: controller)
+//                        }
+//                    } else {
+//                        print("Waiting for controllers to connect...")
+//                    }
+//                }
 //                displayCurrentStory()
                 createLevelContent()
                 gameControllerManager.isPlaying = true
@@ -192,7 +192,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundNode.zPosition = -1
         self.addChild(backgroundNode)
         var position = CGPoint(x: 0, y: 0)
-        
+//        
         for _ in 0..<20 {
             for _ in 0..<30 {
                 let text = SKLabelNode(text: position.debugDescription)
@@ -232,7 +232,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 print("Error: Invalid platform data: \(platformData)")
             }
         }
-        
+//        
+//        for platformData in section.platforms {
+//            if let coordinates = platformData["coordinate"] as? [String: CGFloat],
+//               let size = platformData["size"] as? [String: CGFloat],
+//               let x = coordinates["x"],
+//               let y = coordinates["y"],
+//               let width = size["width"],
+//               let height = size["height"] {
+//                
+//                let platformNode = SKSpriteNode(color: .clear, size: CGSize(width: width, height: height))
+//                platformNode.anchorPoint = CGPoint(x: 0, y: 0)
+//                platformNode.position = CGPoint(x: x, y: y)
+//                platformNode.physicsBody = SKPhysicsBody(rectangleOf: platformNode.size, center: CGPoint(x: platformNode.size.width / 2, y: platformNode.size.height / 2))
+//                platformNode.physicsBody?.isDynamic = false
+//                platformNode.physicsBody?.categoryBitMask = PhysicsCategory.platform
+//                platformNode.physicsBody?.collisionBitMask = PhysicsCategory.player
+//                platformNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
+//                platformNode.zPosition = 2
+//                self.addChild(platformNode)
+//            } else {
+//                print("Error: Invalid platform data: \(platformData)")
+//            }
+//        }
         coinScoreNode.fontSize = 24
         coinScoreNode.fontColor = SKColor.black
         coinScoreNode.numberOfLines = 0
@@ -303,7 +325,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let repeatAction = SKAction.repeatForever(moveAction)
                 hazzardNode.run(repeatAction)
             }
-            
         }
 
         
@@ -348,17 +369,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     player.update(currentTime)
                     if player.position.x >= 1020 && player.position.y >= 419 && currentSection == 1 {
                         let reveal = SKTransition.push(with: .left, duration: 1)
-                        self.removeChildren(in: [player])
+//                        self.removeChildren(in: [player])
+                        self.removeAllChildren()
                         let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager)
                         self.view?.presentScene(newScene, transition: reveal)
                     } else if player.position.x < 35 && player.position.y >= 238 && currentSection == 2{
                         let reveal = SKTransition.push(with: .right, duration: 1)
-                        self.removeChildren(in: [player])
+                        self.removeAllChildren()
                         let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager)
                         self.view?.presentScene(newScene, transition: reveal)
                     } else if player.position.x < 175 && player.position.y >= 720 && currentSection == 2{
                         let reveal = SKTransition.push(with: .down, duration: 1)
-                        self.removeChildren(in: [player])
+                        self.removeAllChildren()
                         let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager)
                         self.view?.presentScene(newScene, transition: reveal)
                     }

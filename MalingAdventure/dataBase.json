@@ -153,8 +153,8 @@
               "size" : { "width": 140, "height": 30 }
             },
             {
-              "coordinate" : { "x":875, "y": 560 },
-              "size" : { "width": 105, "height": 30 }
+              "coordinate" : { "x":870, "y": 560 },
+              "size" : { "width": 110, "height": 30 }
             },
             {
               "coordinate" : { "x":35, "y": 630 },
@@ -192,26 +192,18 @@
         }
       },
       
-    {"3" :
+      {"3" :
         {
           "background" : "imageBackground3",
           "platforms": [
-            {
-              "coordinate" : { "x":0, "y": 0 },
-              "size" : { "width": 1024, "height": 80 }
-            },
-            {
-              "coordinate" : { "x":0, "y": 80 },
-              "size" : { "width": 40, "height": 160 }
-            },
-            {
-              "coordinate" : { "x":0, "y": 480 },
-              "size" : { "width": 40, "height": 300 }
-            },
-            {
-              "coordinate" : { "x":35, "y": 80 },
-              "size" : { "width": 535, "height": 40 }
-            },
+              {
+                "coordinate" : { "x":0, "y": 0 },
+                "size" : { "width": 1024, "height": 80 }
+              },
+              {
+                "coordinate" : { "x":0, "y": 80 },
+                "size" : { "width": 40, "height": 160 }
+              },
            
           ],
           "doorEntry" : {
@@ -225,15 +217,16 @@
             "y": 4
           },
           "coins" : [
-            { "x": 2, "y": 4 },
-            { "x": 3, "y": 1 },
-            { "x": 3, "y": 2 },
-            { "x": 4, "y": 5 },
-            { "x": 2, "y": 5 }
+            { "x": 140, "y": 200 },
+            { "x": 945, "y": 280 },
+            { "x": 770, "y": 360 },
+            { "x": 595, "y": 440 },
+            { "x": 700, "y": 680 },
+            { "x": 945, "y": 600 },
           ],
           
         }
-      }
+      },
       
     ]
   },
