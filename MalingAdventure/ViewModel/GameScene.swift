@@ -135,7 +135,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             guard let self = self else { return }
             if pressed {
                 self.players[controller.playerIndex.rawValue].keysPressed.insert(124)
-<<<<<<< HEAD
+
             } else {
                 self.players[controller.playerIndex.rawValue].keysPressed.remove(124)
             }
@@ -145,8 +145,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if pressed {
                 self.players[controller.playerIndex.rawValue].keysPressed.insert(126)
             } else {
-=======
-            } else {
                 self.players[controller.playerIndex.rawValue].keysPressed.remove(124)
             }
         }
@@ -155,7 +153,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if pressed {
                 self.players[controller.playerIndex.rawValue].keysPressed.insert(126)
             } else {
->>>>>>> main
                 self.players[controller.playerIndex.rawValue].keysPressed.remove(126)
             }
         }
