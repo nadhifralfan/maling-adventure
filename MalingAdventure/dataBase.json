@@ -58,8 +58,8 @@
               "ySpawn" : 420,
               "xEnd" : 680,
               "yEnd" : 420,
-              "width":40,
-              "height":40,
+              "width":35,
+              "height":35,
             },
             {
               "hazzardType" : "type2",
