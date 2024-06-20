@@ -60,18 +60,6 @@
           ],
           
           "hazzards" : [
-<<<<<<< HEAD
-            {
-              "hazzardType" :"type1",
-              "xSpawn" : 600,
-              "ySpawn" : 420,
-              "xEnd" : 680,
-              "yEnd" : 420,
-              "width":35,
-              "height":35,
-            },
-            {
-=======
               {
                   "hazzardType" :"type1",
                   "xSpawn" : 600,
@@ -84,7 +72,6 @@
               
           
           {
->>>>>>> main
               "hazzardType" : "type2",
               "xSpawn" : 680,
               "ySpawn" : 420,
