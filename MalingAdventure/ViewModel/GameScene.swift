@@ -79,43 +79,72 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupControllerInputsPlaying(controller: GCController) {
-        controller.extendedGamepad?.valueChangedHandler = { [weak self] (gamepad, element) in
+//        controller.extendedGamepad?.valueChangedHandler = { [weak self] (gamepad, element) in
+//            guard let self = self else { return }
+//            
+//            if gamepad.leftThumbstick.left.isPressed || gamepad.dpad.left.isPressed {
+//              
+//                self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
+//                self.players[controller.playerIndex.rawValue].thumbstickTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { [weak self] _ in
+//                    guard let self = self else { return }
+//                    if gamepad.leftThumbstick.left.isPressed || gamepad.dpad.left.isPressed {
+////                        self.players[controller.playerIndex.rawValue].startWalkingAnimation()
+//                        self.players[controller.playerIndex.rawValue].moveLeft()
+//                    } else {
+////                        self.players[controller.playerIndex.rawValue].stopMoving()
+//                        self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
+//                    }
+//                })
+//            } else if gamepad.leftThumbstick.right.isPressed || gamepad.dpad.right.isPressed {
+//                self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
+//                self.players[controller.playerIndex.rawValue].thumbstickTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { [weak self] _ in
+//                    guard let self = self else { return }
+//                    if gamepad.leftThumbstick.right.isPressed || gamepad.dpad.right.isPressed {
+//                        
+////                            self.players[controller.playerIndex.rawValue].startWalkingAnimation()
+//                        self.players[controller.playerIndex.rawValue].moveRight()
+//                    } else {
+////                        self.players[controller.playerIndex.rawValue].stopMoving()
+//                        self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
+//                    }
+//                })
+//            } else {
+////                self.players[controller.playerIndex.rawValue].stopWalkingAnimation()
+//                self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
+//            }
+//            
+//            if gamepad.buttonA.isPressed {
+//                self.players[controller.playerIndex.rawValue].jumpTimer?.invalidate()
+//                self.players[controller.playerIndex.rawValue].jumpTimer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true, block: { [weak self] _ in
+//                    guard let self = self else { return }
+//                    self.players[controller.playerIndex.rawValue].jump()
+//                })
+//            } else {
+//                self.players[controller.playerIndex.rawValue].jumpTimer?.invalidate()
+//            }
+//        }
+        controller.extendedGamepad?.leftThumbstick.left.pressedChangedHandler = { [weak self] (button, value, pressed) in
             guard let self = self else { return }
-            
-            if gamepad.leftThumbstick.left.isPressed || gamepad.dpad.left.isPressed {
-                self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
-                self.players[controller.playerIndex.rawValue].thumbstickTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { [weak self] _ in
-                    guard let self = self else { return }
-                    if gamepad.leftThumbstick.left.isPressed || gamepad.dpad.left.isPressed {
-                        self.players[controller.playerIndex.rawValue].moveLeft()
-                    } else {
-                        self.players[controller.playerIndex.rawValue].stopMoving()
-                        self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
-                    }
-                })
-            } else if gamepad.leftThumbstick.right.isPressed || gamepad.dpad.right.isPressed {
-                self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
-                self.players[controller.playerIndex.rawValue].thumbstickTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { [weak self] _ in
-                    guard let self = self else { return }
-                    if gamepad.leftThumbstick.right.isPressed || gamepad.dpad.right.isPressed {
-                        self.players[controller.playerIndex.rawValue].moveRight()
-                    } else {
-                        self.players[controller.playerIndex.rawValue].stopMoving()
-                        self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
-                    }
-                })
+            if pressed {
+                self.players[controller.playerIndex.rawValue].keysPressed.insert(123)
             } else {
-                self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
+                self.players[controller.playerIndex.rawValue].keysPressed.remove(123)
             }
-            
-            if gamepad.buttonA.isPressed {
-                self.players[controller.playerIndex.rawValue].jumpTimer?.invalidate()
-                self.players[controller.playerIndex.rawValue].jumpTimer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true, block: { [weak self] _ in
-                    guard let self = self else { return }
-                    self.players[controller.playerIndex.rawValue].jump()
-                })
+        }
+        controller.extendedGamepad?.leftThumbstick.right.pressedChangedHandler = { [weak self] (button, value, pressed) in
+            guard let self = self else { return }
+            if pressed {
+                self.players[controller.playerIndex.rawValue].keysPressed.insert(124)
             } else {
-                self.players[controller.playerIndex.rawValue].jumpTimer?.invalidate()
+                self.players[controller.playerIndex.rawValue].keysPressed.remove(124)
+            }
+        }
+        controller.extendedGamepad?.buttonA.pressedChangedHandler = { [weak self] (button,value,pressed) in
+            guard let self = self else { return }
+            if pressed {
+                self.players[controller.playerIndex.rawValue].keysPressed.insert(126)
+            } else {
+                self.players[controller.playerIndex.rawValue].keysPressed.remove(126)
             }
         }
     }
