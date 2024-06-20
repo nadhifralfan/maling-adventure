@@ -27,8 +27,8 @@ struct PhysicsCategory {
 }
 
 class Player: SKSpriteNode {
-    
-    private var keysPressed: Set<UInt16> = []
+    var imageName : String
+    var keysPressed: Set<UInt16> = []
     var isJumping: Bool = false
     var isWalking: Bool = false
     var isFacingRight: Bool = true
@@ -37,7 +37,10 @@ class Player: SKSpriteNode {
     var jumpTimer: Timer?
     var isThumbstickActive = false
     
+    private var walkTextures: [SKTexture] = []
+    
     init(imageNamed: String, position: CGPoint) {
+        imageName = imageNamed
         let texture = SKTexture(imageNamed: imageNamed)
         textureNode = SKSpriteNode(texture: texture)
         textureNode.size = CGSize(width: 35, height: 40)
@@ -57,6 +60,13 @@ class Player: SKSpriteNode {
         
         // Add the texture node as a child
         self.addChild(textureNode)
+        loadTextures()
+    }
+    
+    private func loadTextures() {
+        // Assuming you have images named walk1.png, walk2.png, etc. and jump.png
+        walkTextures = (1...2).map { SKTexture(imageNamed: "\(imageName)\($0)") }
+        
     }
     
     override func keyDown(with event: NSEvent) {
@@ -73,13 +83,16 @@ class Player: SKSpriteNode {
         }
         if keysPressed.contains(123) { // Left arrow key
             moveLeft()
+            startWalkingAnimation()
         }
         if keysPressed.contains(124) { // Right arrow key
             moveRight()
+            startWalkingAnimation()
         }
         if !keysPressed.contains(123) && !keysPressed.contains(124) {
             stopMoving()
         }
+   
     }
     
     func moveLeft() {
@@ -89,6 +102,7 @@ class Player: SKSpriteNode {
             textureNode.xScale = -1 // Flip the texture horizontally
             textureNode.position = CGPoint(x: self.size.width, y: 0) // Adjust the position to match the flip
         }
+        
     }
     
     func moveRight() {
@@ -100,8 +114,12 @@ class Player: SKSpriteNode {
         }
     }
     
+    func startMoving(){
+        startWalkingAnimation()
+    }
+    
     func stopMoving() {
-        // Logic to stop the player's movement
+        stopWalkingAnimation()
     }
     
     func jump() {
@@ -113,9 +131,26 @@ class Player: SKSpriteNode {
     func isPlayerOnGround() -> Bool {
         return self.physicsBody?.velocity.dy == 0
     }
-  
     
-   
+    func startWalkingAnimation() {
+        if isWalking == false {
+            print(isWalking)
+            let walkAction = SKAction.animate(with: self.walkTextures, timePerFrame: 0.1)
+            let repeatAction = SKAction.repeatForever(walkAction)
+            self.textureNode.run(repeatAction, withKey: imageName)
+            self.isWalking = true
+        }
+    }
+    
+    func stopWalkingAnimation() {
+        if isWalking {
+            print(isWalking)
+            self.textureNode.removeAction(forKey: imageName)
+            self.isWalking = false
+        }
+    }
+    
+    
     func didBegin(_ contact: SKPhysicsContact) {
         
         let contactMask = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
@@ -134,11 +169,11 @@ class Player: SKSpriteNode {
             self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard
             self.physicsBody?.affectedByGravity = true
             self.physicsBody?.allowsRotation = false
-
+            
             // Also reset the textureNode position to ensure consistency
             textureNode.position = CGPoint(x: 0, y: 0)
         }
-
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
