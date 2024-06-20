@@ -58,7 +58,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         print("Waiting for controllers to connect...")
                     }
                 }
-                displayCurrentStory()
+//                displayCurrentStory()
+                createLevelContent()
+                gameControllerManager.isPlaying = true
             }
         }
     }
@@ -248,11 +250,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 print("Error: Invalid coin data: \(coinData)")
             }
             
-            let coinNode = SKShapeNode(ellipseOf: CGSize(width: 20, height: 40))
-            coinNode.fillColor = .yellow
+           
+            let texture = SKTexture(imageNamed: "coins")
+            let coinNode = SKSpriteNode(texture: texture)
+            coinNode.size = CGSize(width: 35, height: 40)
+//            coinNode.anchorPoint = CGPoint(x: 0, y: 0)
+            
+            
             coinNode.position = CGPoint(x: x, y: y+40)
-            coinNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 20, height: 40))
+            coinNode.physicsBody = SKPhysicsBody(texture: texture, size: CGSize(width: 35, height: 40))
             coinNode.physicsBody?.isDynamic = true
+            coinNode.physicsBody?.allowsRotation = false
             coinNode.physicsBody?.categoryBitMask = PhysicsCategory.coin
             coinNode.physicsBody?.collisionBitMask = 0
             coinNode.physicsBody?.collisionBitMask = PhysicsCategory.player | PhysicsCategory.platform
@@ -299,7 +307,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
 
         
-        
+        let player = Player(imageNamed: "playerImage", position: CGPoint(x: 130, y: 180))
+        players.append(player)
         if currentSection == 1 {
             for _ in 0..<(gameControllerManager?.controllers.count ?? 0) {
                 let player = Player(imageNamed: "playerImage", position: CGPoint(x: 130, y: 180))
@@ -337,8 +346,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if gameControllerManager.isPlaying {
                 for player in players {
                     player.update(currentTime)
-                    if player.position.x >= 1020 && player.position.y >= 419 {
+                    if player.position.x >= 1020 && player.position.y >= 419 && currentSection == 1 {
                         let reveal = SKTransition.push(with: .left, duration: 1)
+                        self.removeChildren(in: [player])
+                        let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager)
+                        self.view?.presentScene(newScene, transition: reveal)
+                    } else if player.position.x < 35 && player.position.y >= 238 && currentSection == 2{
+                        let reveal = SKTransition.push(with: .right, duration: 1)
+                        self.removeChildren(in: [player])
+                        let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager)
+                        self.view?.presentScene(newScene, transition: reveal)
+                    } else if player.position.x < 175 && player.position.y >= 720 && currentSection == 2{
+                        let reveal = SKTransition.push(with: .down, duration: 1)
                         self.removeChildren(in: [player])
                         let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager)
                         self.view?.presentScene(newScene, transition: reveal)
