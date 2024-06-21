@@ -135,7 +135,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             guard let self = self else { return }
             if pressed {
                 self.players[controller.playerIndex.rawValue].keysPressed.insert(124)
-<<<<<<< HEAD
             } else {
                 self.players[controller.playerIndex.rawValue].keysPressed.remove(124)
             }
@@ -145,8 +144,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if pressed {
                 self.players[controller.playerIndex.rawValue].keysPressed.insert(126)
             } else {
-=======
-            } else {
                 self.players[controller.playerIndex.rawValue].keysPressed.remove(124)
             }
         }
@@ -155,7 +152,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if pressed {
                 self.players[controller.playerIndex.rawValue].keysPressed.insert(126)
             } else {
->>>>>>> main
                 self.players[controller.playerIndex.rawValue].keysPressed.remove(126)
             }
         }
@@ -408,7 +404,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if gameControllerManager.isPlaying {
                 for player in players {
                     player.update(currentTime)
-                    if player.position.x >= 1020 && player.position.y >= 419 && currentSection == 1 {
+                    if player.position.x >= 1020 && player.position.y >= 240 && currentSection == 1 {
                         let reveal = SKTransition.push(with: .left, duration: 1)
 //                        self.removeChildren(in: [player])
                         self.removeAllChildren()
@@ -420,6 +416,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager)
                         self.view?.presentScene(newScene, transition: reveal)
                     } else if player.position.x < 175 && player.position.y >= 720 && currentSection == 2{
+                        let reveal = SKTransition.push(with: .down, duration: 1)
+                        self.removeAllChildren()
+                        let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager)
+                        self.view?.presentScene(newScene, transition: reveal)
+                    }
+                    else if player.position.x < 770 && player.position.y >= 720 && currentSection == 3{
                         let reveal = SKTransition.push(with: .down, duration: 1)
                         self.removeAllChildren()
                         let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager)

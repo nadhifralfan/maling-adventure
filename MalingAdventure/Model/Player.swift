@@ -161,7 +161,7 @@ class Player: SKSpriteNode {
             // Reset player position and stop its movement
             self.position = CGPoint(x: 120, y: 210)
             self.anchorPoint = CGPoint(x: 0, y: 0)
-            self.size = CGSize(width: 60, height: 70)
+            self.size = CGSize(width: 35, height: 40)
             self.name = "player"
             self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: self.size.width / 2, y: self.size.height / 2))
             self.physicsBody?.categoryBitMask = PhysicsCategory.player
