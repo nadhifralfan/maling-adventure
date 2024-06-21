@@ -9,18 +9,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var currentSection: Int = 0
     private var players: [Player]! = []
     private var entities: [GKEntity]! = []
+    var playersAtDoorEntry: Set<Player> = []
+    var playersAtDoorExit: Set<Player> = []
+    var spawn: CGPoint = CGPoint(x: 0, y: 0)
     let jumpComponentSystem = GKComponentSystem(componentClass: JumpForeverComponent.self)
-
     var gameControllerManager: GameControllerManager?
     var coins: Int = 0
     let coinScoreNode = SKLabelNode(text: "Coins: 0")
     var previousUpdateTime: TimeInterval = 0
 
-    init(size: CGSize, level: Level, section: Int, gameControllerManager: GameControllerManager) {
+    init(size: CGSize, level: Level, section: Int, gameControllerManager: GameControllerManager, spawn: CGPoint) {
         self.level = level
         self.currentSection = section
         self.gameControllerManager = gameControllerManager
-        
+        self.spawn = spawn
         super.init(size: size)
     }
     
@@ -84,50 +86,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupControllerInputsPlaying(controller: GCController) {
-//        controller.extendedGamepad?.valueChangedHandler = { [weak self] (gamepad, element) in
-//            guard let self = self else { return }
-//            
-//            if gamepad.leftThumbstick.left.isPressed || gamepad.dpad.left.isPressed {
-//              
-//                self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
-//                self.players[controller.playerIndex.rawValue].thumbstickTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { [weak self] _ in
-//                    guard let self = self else { return }
-//                    if gamepad.leftThumbstick.left.isPressed || gamepad.dpad.left.isPressed {
-////                        self.players[controller.playerIndex.rawValue].startWalkingAnimation()
-//                        self.players[controller.playerIndex.rawValue].moveLeft()
-//                    } else {
-////                        self.players[controller.playerIndex.rawValue].stopMoving()
-//                        self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
-//                    }
-//                })
-//            } else if gamepad.leftThumbstick.right.isPressed || gamepad.dpad.right.isPressed {
-//                self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
-//                self.players[controller.playerIndex.rawValue].thumbstickTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { [weak self] _ in
-//                    guard let self = self else { return }
-//                    if gamepad.leftThumbstick.right.isPressed || gamepad.dpad.right.isPressed {
-//                        
-////                            self.players[controller.playerIndex.rawValue].startWalkingAnimation()
-//                        self.players[controller.playerIndex.rawValue].moveRight()
-//                    } else {
-////                        self.players[controller.playerIndex.rawValue].stopMoving()
-//                        self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
-//                    }
-//                })
-//            } else {
-////                self.players[controller.playerIndex.rawValue].stopWalkingAnimation()
-//                self.players[controller.playerIndex.rawValue].thumbstickTimer?.invalidate()
-//            }
-//            
-//            if gamepad.buttonA.isPressed {
-//                self.players[controller.playerIndex.rawValue].jumpTimer?.invalidate()
-//                self.players[controller.playerIndex.rawValue].jumpTimer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true, block: { [weak self] _ in
-//                    guard let self = self else { return }
-//                    self.players[controller.playerIndex.rawValue].jump()
-//                })
-//            } else {
-//                self.players[controller.playerIndex.rawValue].jumpTimer?.invalidate()
-//            }
-//        }
         controller.extendedGamepad?.leftThumbstick.left.pressedChangedHandler = { [weak self] (button, value, pressed) in
             guard let self = self else { return }
             if pressed {
@@ -191,14 +149,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if currentStoryIndex < level.stories.count {
             let transition = SKTransition.fade(withDuration: 0.5)
-            let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!)
+            let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-1].spawnEntry)
             nextScene.currentStoryIndex = currentStoryIndex
             self.view?.presentScene(nextScene, transition: transition)
         } else {
             gameControllerManager?.isPlaying = true
             gameControllerManager?.isStoryMode = false
             let transition = SKTransition.fade(withDuration: 0.5)
-            let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!)
+            let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-1].spawnEntry)
             nextScene.currentStoryIndex = currentStoryIndex
             self.view?.presentScene(nextScene, transition: transition)
         }
@@ -213,6 +171,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.removeAllChildren()
         
+        print(currentSection)
+        
         let section = level.sections[currentSection-1]
         
         guard let backgroundTexture = section.background.texture else {
@@ -220,13 +180,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             return
         }
         
+        //Background
         let backgroundNode = SKSpriteNode(texture: backgroundTexture)
         backgroundNode.size = self.size
         backgroundNode.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
         backgroundNode.zPosition = -1
         self.addChild(backgroundNode)
         var position = CGPoint(x: 0, y: 0)
-//        
+
+        //Coordinate Position
         for _ in 0..<20 {
             for _ in 0..<30 {
                 let text = SKLabelNode(text: position.debugDescription)
@@ -244,6 +206,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             position = CGPoint(x: 0, y: position.y + 40)
         }
         
+        //Platforms
         for platformData in section.platforms {
             if let coordinates = platformData["coordinate"] as? [String: CGFloat],
                let size = platformData["size"] as? [String: CGFloat],
@@ -266,29 +229,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 print("Error: Invalid platform data: \(platformData)")
             }
         }
-//        
-//        for platformData in section.platforms {
-//            if let coordinates = platformData["coordinate"] as? [String: CGFloat],
-//               let size = platformData["size"] as? [String: CGFloat],
-//               let x = coordinates["x"],
-//               let y = coordinates["y"],
-//               let width = size["width"],
-//               let height = size["height"] {
-//                
-//                let platformNode = SKSpriteNode(color: .clear, size: CGSize(width: width, height: height))
-//                platformNode.anchorPoint = CGPoint(x: 0, y: 0)
-//                platformNode.position = CGPoint(x: x, y: y)
-//                platformNode.physicsBody = SKPhysicsBody(rectangleOf: platformNode.size, center: CGPoint(x: platformNode.size.width / 2, y: platformNode.size.height / 2))
-//                platformNode.physicsBody?.isDynamic = false
-//                platformNode.physicsBody?.categoryBitMask = PhysicsCategory.platform
-//                platformNode.physicsBody?.collisionBitMask = PhysicsCategory.player
-//                platformNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
-//                platformNode.zPosition = 2
-//                self.addChild(platformNode)
-//            } else {
-//                print("Error: Invalid platform data: \(platformData)")
-//            }
-//        }
+        
+        //Coins
         coinScoreNode.fontSize = 24
         coinScoreNode.fontColor = SKColor.black
         coinScoreNode.numberOfLines = 0
@@ -306,25 +248,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 print("Error: Invalid coin data: \(coinData)")
             }
             
-           
-//            let texture = SKTexture(imageNamed: "coins")
-//            let coinNode = SKSpriteNode(texture: texture)
-//            coinNode.size = CGSize(width: 35, height: 40)
-//            coinNode.position = CGPoint(x: x, y: y+40)
-//            coinNode.physicsBody = SKPhysicsBody(texture: texture, size: CGSize(width: 35, height: 40))
-//            coinNode.physicsBody?.isDynamic = true
-//            coinNode.physicsBody?.allowsRotation = false
-//            coinNode.physicsBody?.categoryBitMask = PhysicsCategory.coin
-//            coinNode.physicsBody?.collisionBitMask = 0
-//            coinNode.physicsBody?.collisionBitMask = PhysicsCategory.player | PhysicsCategory.platform
-//            coinNode.physicsBody?.contactTestBitMask = PhysicsCategory.player | PhysicsCategory.scene
-//            coinNode.zPosition = 2
-//            
-//            
-//            let rotateAction = SKAction.applyForce(CGVector(dx: 0, dy: 30), duration: 0.5)
-//            let repeatAction = SKAction.repeatForever(rotateAction)
-//            coinNode.run(repeatAction, withKey: "coin")
-            //            self.addChild(coinNode)
             let coinEntity = makeCoinEntity(name: "coin", position: CGPoint(x: x, y: y), scene: self)
             entities.append(coinEntity)
 
@@ -334,6 +257,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             jumpComponentSystem.addComponent(foundIn: entity)
         }
         
+        //Hazzards
         for hazzardData in section.hazzards {
             let hazzardNode = SKSpriteNode(color: .red, size: CGSize(width: hazzardData.size.width, height: hazzardData.size.height))
             hazzardNode.anchorPoint = CGPoint(x: 0, y: 0)
@@ -346,41 +270,45 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             hazzardNode.zPosition = 2
             self.addChild(hazzardNode)
             let destination = CGPoint(x: hazzardData.endPosition.x, y: hazzardData.endPosition.y)
-            let moveDuration: TimeInterval = 2.0 // Adjust this value as needed
+            let moveDuration: TimeInterval = 2.0
             
-            // Determine movement based on destination
             var moveAction: SKAction?
             
             if hazzardData.startPosition.x != destination.x && hazzardData.startPosition.y == destination.y {
-                // Horizontal movement (right and left)
+
                 let moveRight = SKAction.moveTo(x: destination.x, duration: moveDuration)
                 let moveLeft = SKAction.moveTo(x: hazzardData.startPosition.x, duration: moveDuration)
                 moveAction = SKAction.sequence([moveRight, moveLeft])
             } else if hazzardData.startPosition.y != destination.y && hazzardData.startPosition.x == destination.x {
-                // Vertical movement (up and down)
                 let moveUp = SKAction.moveTo(y: destination.y, duration: moveDuration)
                 let moveDown = SKAction.moveTo(y: hazzardData.startPosition.y, duration: moveDuration)
                 moveAction = SKAction.sequence([moveUp, moveDown])
             }
             
-            // Run the action if defined
             if let moveAction = moveAction {
                 let repeatAction = SKAction.repeatForever(moveAction)
                 hazzardNode.run(repeatAction)
             }
         }
-
         
-//        let player = Player(imageNamed: "playerImage", position: CGPoint(x: 130, y: 180))
-//        players.append(player)
-        if currentSection == 1 {
+        //Doors
+        let doorEntry = section.doorEntry.doorType
+        doorEntry.position = section.doorEntry.doorPosition
+        doorEntry.zPosition = 2
+        self.addChild(doorEntry)
+        let doorExit = section.doorExit.doorType
+        doorExit.position = section.doorExit.doorPosition
+        doorExit.zPosition = 2
+        self.addChild(doorExit)
+        
+
+        //Players
+        if gameControllerManager?.controllers.count == 0 {
+            let player = Player(imageNamed: "playerImage", spawn: spawn, name: "P1")
+            players.append(player)
+        } else {
             for i in 0..<(gameControllerManager?.controllers.count ?? 0) {
-                let player = Player(imageNamed: "playerImage", position: CGPoint(x: 130, y: 180), name: "P\(i+1)")
-                players.append(player)
-            }
-        } else if currentSection == 2 {
-            for i in 0..<(gameControllerManager?.controllers.count ?? 0) {
-                let player = Player(imageNamed: "playerImage", position: CGPoint(x: 0, y: 420), name: "P\(i+1)")
+                let player = Player(imageNamed: "playerImage", spawn: spawn, name: "P\(i+1)")
                 players.append(player)
             }
         }
@@ -391,8 +319,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
     }
-    
-    
     
     override func mouseUp(with event: NSEvent) {
         let location = event.location(in: self)
@@ -410,34 +336,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if gameControllerManager.isPlaying {
                 for player in players {
                     player.update(currentTime)
-                    if player.position.x >= 1020 && player.position.y >= 419 && currentSection == 1 {
-                        let reveal = SKTransition.push(with: .left, duration: 1)
-//                        self.removeChildren(in: [player])
-                        self.removeAllChildren()
-                        let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager)
-                        self.view?.presentScene(newScene, transition: reveal)
-                    } else if player.position.x < 35 && player.position.y >= 238 && currentSection == 2{
-                        let reveal = SKTransition.push(with: .right, duration: 1)
-                        self.removeAllChildren()
-                        let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager)
-                        self.view?.presentScene(newScene, transition: reveal)
-                    } else if player.position.x < 175 && player.position.y >= 720 && currentSection == 2{
-                        let reveal = SKTransition.push(with: .down, duration: 1)
-                        self.removeAllChildren()
-                        let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager)
-                        self.view?.presentScene(newScene, transition: reveal)
-                    }
                 }
             }
             
             let timeSincePreviousUpdate = currentTime - previousUpdateTime
-            
-            // Update the jump component system with the time change.
-             jumpComponentSystem.update(deltaTime: timeSincePreviousUpdate)
-            
-            // Update the previous update time to keep future calculations accurate.
+            jumpComponentSystem.update(deltaTime: timeSincePreviousUpdate)
             previousUpdateTime = currentTime
-            
             coinScoreNode.text = "Coins: \(coins)"
         }
     }
@@ -463,30 +367,67 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
+        
         for player in players {
             player.didBegin(contact)
         }
         
-        if contact.bodyA.categoryBitMask == PhysicsCategory.coin &&
-            contact.bodyB.categoryBitMask == PhysicsCategory.player {
+        let bodyA = contact.bodyA
+        let bodyB = contact.bodyB
+
+        if (bodyA.categoryBitMask == PhysicsCategory.coin && bodyB.categoryBitMask == PhysicsCategory.player) || (bodyB.categoryBitMask == PhysicsCategory.coin && bodyA.categoryBitMask == PhysicsCategory.player) {
             contact.bodyA.node?.physicsBody?.contactTestBitMask = 0
             contact.bodyA.node?.removeFromParent()
             coins += 10
         }
-        
-        if contact.bodyB.categoryBitMask == PhysicsCategory.coin &&
-            (contact.bodyA.categoryBitMask == PhysicsCategory.player) {
-            contact.bodyB.node?.physicsBody?.contactTestBitMask = 0
-            contact.bodyB.node?.removeFromParent()
-            coins += 10
+
+        if (bodyA.categoryBitMask == PhysicsCategory.player && bodyB.categoryBitMask == PhysicsCategory.door) || (bodyB.categoryBitMask == PhysicsCategory.player && bodyA.categoryBitMask == PhysicsCategory.door) {
+            let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
+            let doorNode = (bodyA.categoryBitMask == PhysicsCategory.door) ? bodyA.node as! DoorType : bodyB.node as! DoorType
+
+            if doorNode == level.sections[currentSection-1].doorExit.doorType {
+                print("exit")
+                playersAtDoorExit.insert(playerNode)
+
+                if playersAtDoorExit.count == players.count {
+                    let reveal = SKTransition.push(with: .left, duration: 1)
+                    self.removeAllChildren()
+                    let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection].spawnEntry)
+                    self.view?.presentScene(newScene, transition: reveal)
+                }
+            } else if doorNode == level.sections[currentSection-1].doorEntry.doorType {
+                playersAtDoorEntry.insert(playerNode)
+                
+                if playersAtDoorEntry.count == players.count && currentSection != 1 {
+                    let reveal = SKTransition.push(with: .left, duration: 1)
+                    self.removeAllChildren()
+                    let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-1].spawnExit)
+                    self.view?.presentScene(newScene, transition: reveal)
+                }
+            }
         }
     }
+
+    
+    func didEnd(_ contact: SKPhysicsContact) {
+            let bodyA = contact.bodyA
+            let bodyB = contact.bodyB
+
+            if (bodyA.categoryBitMask == PhysicsCategory.player && bodyB.categoryBitMask == PhysicsCategory.door) || (bodyB.categoryBitMask == PhysicsCategory.player && bodyA.categoryBitMask == PhysicsCategory.door) {
+                let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
+                let doorNode = (bodyA.categoryBitMask == PhysicsCategory.door) ? bodyA.node as! DoorType : bodyB.node as! DoorType
+
+                if doorNode == level.sections[currentSection-1].doorExit.doorType {
+                    playersAtDoorExit.remove(playerNode)
+                } else if doorNode == level.sections[currentSection-1].doorEntry.doorType {
+                    playersAtDoorEntry.remove(playerNode)
+                }
+            }
+        }
     
     func makeCoinEntity(name: String, position: CGPoint, scene: SKScene) -> GKEntity {
-        // Create the box entity and grab its node from the scene.
         let coinEntity = GKEntity()
         
-        // Create and attach a geometry component to the box.
         let texture = SKTexture(imageNamed: "coins")
         let coinNode = SKSpriteNode(texture: texture)
         coinNode.size = CGSize(width: 35, height: 40)

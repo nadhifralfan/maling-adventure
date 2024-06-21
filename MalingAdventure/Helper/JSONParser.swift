@@ -70,6 +70,20 @@ func insertDataToScene(scene: LevelSelectScene, debugMode: Bool = false) {
                                             }
                                             section.doorEntry = doorEntry
                                         }
+                                        if let spawnEntry = sectionData["spawnEntry"] as? [String: Any] {
+                                            if let x = spawnEntry["x"] as? CGFloat,
+                                               let y = spawnEntry["y"] as? CGFloat {
+                                                let spawnPoint = CGPoint(x: x, y: y)
+                                                section.spawnEntry = spawnPoint
+                                            }
+                                        }
+                                        if let spawnExit = sectionData["spawnExit"] as? [String: Any] {
+                                            if let x = spawnExit["x"] as? CGFloat,
+                                               let y = spawnExit["y"] as? CGFloat {
+                                                let spawnPoint = CGPoint(x: x, y: y)
+                                                section.spawnExit = spawnPoint
+                                            }
+                                        }
                                         if let doorExitData = sectionData["doorExit"] as? [String: Any] {
                                             let doorExit = Door()
                                             if let doorTypeString = doorExitData["doorType"] as? String,
@@ -155,6 +169,9 @@ func debugLevelData(levels: [String:Level]){
             print(section.background.description)
             print("---PLATFORMS---")
             print(section.platforms)
+            print("---SPAWN---")
+            print(section.spawnEntry)
+            print(section.spawnExit)
             print("---DOOR ENTRY---")
             print(section.doorEntry.doorPosition.debugDescription)
             print(section.doorEntry.doorType.doorImageName)
