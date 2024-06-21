@@ -8,14 +8,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var currentStoryIndex: Int = 0
     private var currentSection: Int = 0
     private var players: [Player]! = []
+    private var entities: [GKEntity]! = []
+    let jumpComponentSystem = GKComponentSystem(componentClass: JumpForeverComponent.self)
+
     var gameControllerManager: GameControllerManager?
     var coins: Int = 0
     let coinScoreNode = SKLabelNode(text: "Coins: 0")
-    
+    var previousUpdateTime: TimeInterval = 0
+
     init(size: CGSize, level: Level, section: Int, gameControllerManager: GameControllerManager) {
         self.level = level
         self.currentSection = section
         self.gameControllerManager = gameControllerManager
+        
         super.init(size: size)
     }
     
@@ -32,32 +37,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if let gameControllerManager = gameControllerManager {
             if gameControllerManager.isPlaying {
-//                Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
-//                    if gameControllerManager.controllers.count > 0 {
-//                        timer.invalidate()
-//                        
-//                        for controller in gameControllerManager.controllers {
-//                            controller.extendedGamepad?.valueChangedHandler = nil
-//                            self?.setupControllerInputsPlaying(controller: controller)
-//                        }
-//                    } else {
-//                        print("Waiting for controllers to connect...")
-//                    }
-//                }
+                Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
+                    if gameControllerManager.controllers.count > 0 {
+                        timer.invalidate()
+                        
+                        for controller in gameControllerManager.controllers {
+                            controller.extendedGamepad?.valueChangedHandler = nil
+                            self?.setupControllerInputsPlaying(controller: controller)
+                        }
+                    } else {
+                        print("Waiting for controllers to connect...")
+                    }
+                }
                 createLevelContent()
             } else {
-//                Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
-//                    if gameControllerManager.controllers.count > 0 {
-//                        timer.invalidate()
-//                        
-//                        for controller in gameControllerManager.controllers {
-//                            controller.extendedGamepad?.valueChangedHandler = nil
-//                            self?.setupControllerInputsScene(controller: controller)
-//                        }
-//                    } else {
-//                        print("Waiting for controllers to connect...")
-//                    }
-//                }
+                Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
+                    if gameControllerManager.controllers.count > 0 {
+                        timer.invalidate()
+                        
+                        for controller in gameControllerManager.controllers {
+                            controller.extendedGamepad?.valueChangedHandler = nil
+                            self?.setupControllerInputsScene(controller: controller)
+                        }
+                    } else {
+                        print("Waiting for controllers to connect...")
+                    }
+                }
 //                displayCurrentStory()
                 createLevelContent()
                 gameControllerManager.isPlaying = true
@@ -135,7 +140,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             guard let self = self else { return }
             if pressed {
                 self.players[controller.playerIndex.rawValue].keysPressed.insert(124)
-<<<<<<< HEAD
             } else {
                 self.players[controller.playerIndex.rawValue].keysPressed.remove(124)
             }
@@ -145,17 +149,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if pressed {
                 self.players[controller.playerIndex.rawValue].keysPressed.insert(126)
             } else {
-=======
-            } else {
-                self.players[controller.playerIndex.rawValue].keysPressed.remove(124)
-            }
-        }
-        controller.extendedGamepad?.buttonA.pressedChangedHandler = { [weak self] (button,value,pressed) in
-            guard let self = self else { return }
-            if pressed {
-                self.players[controller.playerIndex.rawValue].keysPressed.insert(126)
-            } else {
->>>>>>> main
                 self.players[controller.playerIndex.rawValue].keysPressed.remove(126)
             }
         }
@@ -314,22 +307,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
            
-            let texture = SKTexture(imageNamed: "coins")
-            let coinNode = SKSpriteNode(texture: texture)
-            coinNode.size = CGSize(width: 35, height: 40)
-//            coinNode.anchorPoint = CGPoint(x: 0, y: 0)
-            
-            
-            coinNode.position = CGPoint(x: x, y: y+40)
-            coinNode.physicsBody = SKPhysicsBody(texture: texture, size: CGSize(width: 35, height: 40))
-            coinNode.physicsBody?.isDynamic = true
-            coinNode.physicsBody?.allowsRotation = false
-            coinNode.physicsBody?.categoryBitMask = PhysicsCategory.coin
-            coinNode.physicsBody?.collisionBitMask = 0
-            coinNode.physicsBody?.collisionBitMask = PhysicsCategory.player | PhysicsCategory.platform
-            coinNode.physicsBody?.contactTestBitMask = PhysicsCategory.player | PhysicsCategory.scene
-            coinNode.zPosition = 2
-            self.addChild(coinNode)
+//            let texture = SKTexture(imageNamed: "coins")
+//            let coinNode = SKSpriteNode(texture: texture)
+//            coinNode.size = CGSize(width: 35, height: 40)
+//            coinNode.position = CGPoint(x: x, y: y+40)
+//            coinNode.physicsBody = SKPhysicsBody(texture: texture, size: CGSize(width: 35, height: 40))
+//            coinNode.physicsBody?.isDynamic = true
+//            coinNode.physicsBody?.allowsRotation = false
+//            coinNode.physicsBody?.categoryBitMask = PhysicsCategory.coin
+//            coinNode.physicsBody?.collisionBitMask = 0
+//            coinNode.physicsBody?.collisionBitMask = PhysicsCategory.player | PhysicsCategory.platform
+//            coinNode.physicsBody?.contactTestBitMask = PhysicsCategory.player | PhysicsCategory.scene
+//            coinNode.zPosition = 2
+//            
+//            
+//            let rotateAction = SKAction.applyForce(CGVector(dx: 0, dy: 30), duration: 0.5)
+//            let repeatAction = SKAction.repeatForever(rotateAction)
+//            coinNode.run(repeatAction, withKey: "coin")
+            //            self.addChild(coinNode)
+            let coinEntity = makeCoinEntity(name: "coin", position: CGPoint(x: x, y: y), scene: self)
+            entities.append(coinEntity)
+
+        }
+        
+        for entity in entities {
+            jumpComponentSystem.addComponent(foundIn: entity)
         }
         
         for hazzardData in section.hazzards {
@@ -369,16 +371,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
 
         
-        let player = Player(imageNamed: "playerImage", position: CGPoint(x: 130, y: 180))
-        players.append(player)
+//        let player = Player(imageNamed: "playerImage", position: CGPoint(x: 130, y: 180))
+//        players.append(player)
         if currentSection == 1 {
-            for _ in 0..<(gameControllerManager?.controllers.count ?? 0) {
-                let player = Player(imageNamed: "playerImage", position: CGPoint(x: 130, y: 180))
+            for i in 0..<(gameControllerManager?.controllers.count ?? 0) {
+                let player = Player(imageNamed: "playerImage", position: CGPoint(x: 130, y: 180), name: "P\(i+1)")
                 players.append(player)
             }
         } else if currentSection == 2 {
-            for _ in 0..<(gameControllerManager?.controllers.count ?? 0) {
-                let player = Player(imageNamed: "playerImage", position: CGPoint(x: 0, y: 420))
+            for i in 0..<(gameControllerManager?.controllers.count ?? 0) {
+                let player = Player(imageNamed: "playerImage", position: CGPoint(x: 0, y: 420), name: "P\(i+1)")
                 players.append(player)
             }
         }
@@ -428,6 +430,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
             
+            let timeSincePreviousUpdate = currentTime - previousUpdateTime
+            
+            // Update the jump component system with the time change.
+             jumpComponentSystem.update(deltaTime: timeSincePreviousUpdate)
+            
+            // Update the previous update time to keep future calculations accurate.
+            previousUpdateTime = currentTime
+            
             coinScoreNode.text = "Coins: \(coins)"
         }
     }
@@ -458,15 +468,46 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         if contact.bodyA.categoryBitMask == PhysicsCategory.coin &&
-            (contact.bodyB.categoryBitMask == PhysicsCategory.player) {
-            coins += 10
+            contact.bodyB.categoryBitMask == PhysicsCategory.player {
+            contact.bodyA.node?.physicsBody?.contactTestBitMask = 0
             contact.bodyA.node?.removeFromParent()
+            coins += 10
         }
         
         if contact.bodyB.categoryBitMask == PhysicsCategory.coin &&
             (contact.bodyA.categoryBitMask == PhysicsCategory.player) {
+            contact.bodyB.node?.physicsBody?.contactTestBitMask = 0
+            contact.bodyB.node?.removeFromParent()
             coins += 10
-            contact.bodyA.node?.removeFromParent()
         }
+    }
+    
+    func makeCoinEntity(name: String, position: CGPoint, scene: SKScene) -> GKEntity {
+        // Create the box entity and grab its node from the scene.
+        let coinEntity = GKEntity()
+        
+        // Create and attach a geometry component to the box.
+        let texture = SKTexture(imageNamed: "coins")
+        let coinNode = SKSpriteNode(texture: texture)
+        coinNode.size = CGSize(width: 35, height: 40)
+        coinNode.name = "coin"
+        coinNode.position = CGPoint(x: position.x, y: position.y+coinNode.size.height)
+        coinNode.physicsBody = SKPhysicsBody(texture: texture, size: CGSize(width: 35, height: 40))
+        coinNode.physicsBody?.isDynamic = true
+        coinNode.physicsBody?.allowsRotation = false
+        coinNode.physicsBody?.categoryBitMask = PhysicsCategory.coin
+        coinNode.physicsBody?.collisionBitMask = 0
+        coinNode.physicsBody?.collisionBitMask = PhysicsCategory.player | PhysicsCategory.platform
+        coinNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
+        coinNode.zPosition = 10
+        scene.addChild(coinNode)
+        
+        let coinComponent = NodeComponent(node: coinNode)
+        coinEntity.addComponent(coinComponent)
+        
+        let jumpComponent = JumpForeverComponent(vector: CGVector(dx: 0, dy: 30), duration: 0.5)
+        coinEntity.addComponent(jumpComponent)
+        
+        return coinEntity
     }
 }
