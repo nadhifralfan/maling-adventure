@@ -12,7 +12,7 @@
       }
     ],
     "section":[
-      {"1" : 
+      {"1" :
         {
           "background" : "imageBackground",
           "platforms": [
@@ -22,24 +22,37 @@
             },
             {
               "coordinate" : { "x":0, "y": 0 },
-              "size" : { "width": 27, "height": 768 }
+              "size" : { "width": 35, "height": 768 }
             },
             {
               "coordinate" : { "x":0, "y": 0 },
-              "size" : { "width": 425, "height": 151 }
+              "size" : { "width": 280, "height": 118 }
             },
             {
-              "coordinate" : { "x":0, "y": 0 },
-              "size" : { "width": 425, "height": 120 }
+              "coordinate" : { "x":280, "y": 40 },
+              "size" : { "width": 40, "height": 120 }
             },
             {
-              "coordinate" : { "x":360, "y": 150 },
-              "size" : { "width": 65, "height": 140 }
+              "coordinate" : { "x":315, "y": 40 },
+              "size" : { "width": 740, "height": 40 }
             },
             {
-              "coordinate" : { "x":540, "y": 350 },
-              "size" : { "width": 540, "height": 70 }
-            }
+              "coordinate" : { "x":490, "y": 80 },
+              "size" : { "width": 535, "height": 40 }
+            },
+            {
+              "coordinate" : { "x":665, "y": 120 },
+              "size" : { "width": 360, "height": 40 }
+            },
+            {
+              "coordinate" : { "x":770, "y": 160 },
+              "size" : { "width": 250, "height": 40 }
+            },
+            {
+              "coordinate" : { "x":840, "y": 200 },
+              "size" : { "width": 200, "height": 40 }
+            },
+            
           ],
           
           
@@ -60,18 +73,6 @@
           ],
           
           "hazzards" : [
-<<<<<<< HEAD
-            {
-              "hazzardType" :"type1",
-              "xSpawn" : 600,
-              "ySpawn" : 420,
-              "xEnd" : 680,
-              "yEnd" : 420,
-              "width":35,
-              "height":35,
-            },
-            {
-=======
               {
                   "hazzardType" :"type1",
                   "xSpawn" : 600,
@@ -84,12 +85,11 @@
               
           
           {
->>>>>>> main
               "hazzardType" : "type2",
-              "xSpawn" : 680,
-              "ySpawn" : 420,
-              "xEnd" : 680,
-              "yEnd" : 600,
+              "xSpawn" : 500,
+              "ySpawn" : 180,
+              "xEnd" : 500,
+              "yEnd" : 280,
               "width":7,
               "height":8,
           }
@@ -211,18 +211,78 @@
           "platforms": [
               {
                 "coordinate" : { "x":0, "y": 0 },
-                "size" : { "width": 1024, "height": 80 }
+                "size" : { "width": 1024, "height": 40 }
               },
               {
-                "coordinate" : { "x":0, "y": 80 },
-                "size" : { "width": 40, "height": 160 }
+                "coordinate" : { "x":0, "y": 0 },
+                "size" : { "width": 40, "height": 768 }
               },
-           
+              {
+                "coordinate" : { "x":35, "y": 760 },
+                "size" : { "width": 40, "height": 720 }
+              },
+              {
+                "coordinate" : { "x":210, "y": 40 },
+                "size" : { "width": 280, "height": 40 }
+              },
+              {
+                "coordinate" : { "x":560, "y": 40 },
+                "size" : { "width": 500, "height": 80 }
+              },
+              {
+                "coordinate" : { "x":245, "y": 80 },
+                "size" : { "width": 246, "height": 40 }
+              },
+              {
+                "coordinate" : { "x":960, "y":120 },
+                "size" : { "width": 50, "height": 640 }
+              },
+              {
+                "coordinate" : { "x":35, "y":720  },
+                "size" : { "width": 560, "height": 40 }
+              },
+              
+              
+              {
+                "coordinate" : { "x":735, "y":200  },
+                "size" : { "width": 80, "height": 20 }
+              },
+              
+              {
+                "coordinate" : { "x":910, "y":945  },
+                "size" : { "width": 45, "height": 20 }
+              },
+              {
+                "coordinate" : { "x":910, "y":280  },
+                "size" : { "width": 45, "height": 20 }
+              },
+              {
+                "coordinate" : { "x":735, "y":360  },
+                "size" : { "width": 80, "height": 20 }
+              },
+              {
+                "coordinate" : { "x":910, "y":440  },
+                "size" : { "width": 45, "height": 20 }
+              },
+              
+              {
+                "coordinate" : { "x":735, "y":520  },
+                "size" : { "width": 80, "height": 20 }
+              },
+              {
+                "coordinate" : { "x":910, "y":600  },
+                "size" : { "width": 45, "height": 20 }
+              },
+              
+              {
+                "coordinate" : { "x":735, "y":680  },
+                "size" : { "width": 80, "height": 20 }
+              },
           ],
           "doorEntry" : {
             "doorType" : "type1",
-            "x": 150,
-            "y": 150
+            "x": 770,
+            "y": 770
           },
           "doorExit" : {
             "doorType" : "type2",
@@ -237,12 +297,76 @@
             { "x": 700, "y": 680 },
             { "x": 945, "y": 600 },
           ],
-          
+          "hazzards" : [
+          {
+              "hazzardType" : "type2",
+              "xSpawn" : 315,
+              "ySpawn" : 280,
+              "xEnd" : 315,
+              "yEnd" : 160,
+              "width":7,
+              "height":8,
+          }
+        ]
         }
       },
-      
+      {"4" :
+        {
+          "background" : "imageBackground4",
+          "platforms": [
+              {
+                "coordinate" : { "x":0, "y": 0 },
+                "size" : { "width": 1024, "height": 40 }
+              },
+              {
+                "coordinate" : { "x":0, "y": 0 },
+                "size" : { "width": 40, "height": 768 }
+              },
+              {
+                "coordinate" : { "x":35, "y": 760 },
+                "size" : { "width": 40, "height": 720 }
+              },
+              {
+                "coordinate" : { "x":210, "y": 40 },
+                "size" : { "width": 280, "height": 40 }
+              },
+            
+          ],
+          "doorEntry" : {
+            "doorType" : "type1",
+            "x": 780,
+            "y": 780
+          },
+          "doorExit" : {
+            "doorType" : "type2",
+            "x": 2,
+            "y": 4
+          },
+          "coins" : [
+            { "x": 140, "y": 200 },
+            { "x": 945, "y": 280 },
+            { "x": 770, "y": 360 },
+            { "x": 595, "y": 440 },
+            { "x": 700, "y": 680 },
+            { "x": 945, "y": 600 },
+          ],
+          "hazzards" : [
+          {
+              "hazzardType" : "type2",
+              "xSpawn" : 315,
+              "ySpawn" : 280,
+              "xEnd" : 315,
+              "yEnd" : 160,
+              "width":7,
+              "height":8,
+          }
+        ]
+        }
+      },
     ]
   },
+  
+  
   "2": {
   "isUnlocked" : true,
     "stories" : [
@@ -256,7 +380,7 @@
       }
     ],
     "section":[
-      {"1" : 
+      {"1" :
         {
           "background" : "imageBackground",
           "platforms": [
