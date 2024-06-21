@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01FE5C402C247FF20077920C /* NodeComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FE5C3F2C247FF20077920C /* NodeComponent.swift */; };
+		01FE5C422C2480110077920C /* JumpForeverComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FE5C412C2480110077920C /* JumpForeverComponent.swift */; };
 		4CED17EA2C130D2F007588F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CED17E92C130D2F007588F7 /* AppDelegate.swift */; };
 		4CED17EC2C130D2F007588F7 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4CED17EB2C130D2F007588F7 /* GameScene.sks */; };
 		4CED17EE2C130D2F007588F7 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4CED17ED2C130D2F007588F7 /* Actions.sks */; };
@@ -28,6 +30,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		01FE5C3F2C247FF20077920C /* NodeComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeComponent.swift; sourceTree = "<group>"; };
+		01FE5C412C2480110077920C /* JumpForeverComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpForeverComponent.swift; sourceTree = "<group>"; };
 		4CED17E62C130D2F007588F7 /* MalingAdventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MalingAdventure.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CED17E92C130D2F007588F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4CED17EB2C130D2F007588F7 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -61,6 +65,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		01FE5C3E2C247FE30077920C /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				01FE5C3F2C247FF20077920C /* NodeComponent.swift */,
+				01FE5C412C2480110077920C /* JumpForeverComponent.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		4CED17DD2C130D2F007588F7 = {
 			isa = PBXGroup;
 			children = (
@@ -80,6 +93,7 @@
 		4CED17E82C130D2F007588F7 /* MalingAdventure */ = {
 			isa = PBXGroup;
 			children = (
+				01FE5C3E2C247FE30077920C /* Components */,
 				4CFED3BE2C1811A800912A89 /* dataBase.json */,
 				4CED18112C135138007588F7 /* Helper */,
 				4CED18102C135124007588F7 /* ViewModel */,
@@ -209,8 +223,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01FE5C402C247FF20077920C /* NodeComponent.swift in Sources */,
 				4CED17F22C130D2F007588F7 /* ViewController.swift in Sources */,
 				4CFED3C12C183C3600912A89 /* GameController.swift in Sources */,
+				01FE5C422C2480110077920C /* JumpForeverComponent.swift in Sources */,
 				4CED18152C1356B3007588F7 /* Hazzard.swift in Sources */,
 				4CED18132C135324007588F7 /* Door.swift in Sources */,
 				4CED17FF2C1311A3007588F7 /* Section.swift in Sources */,

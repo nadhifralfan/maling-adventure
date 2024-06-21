@@ -13,30 +13,30 @@ class LevelSelectScene: SKScene {
     override func didMove(to view: SKView) {
         guard !levels.isEmpty else { return }
         
-//        if let gameControllerManager = gameControllerManager {
-//            gameControllerManager.isSelectingLevel = true
-//            
-//            self.info.position.x = 30
-//            self.info.position.y = 100
-//            self.addChild(self.info)
-//            
-//            // Create a repeating timer that checks for controllers
-//            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
-//                if gameControllerManager.controllers.count > 0 {
-//                    timer.invalidate()
-//                    
-//                    for controller in gameControllerManager.controllers {
-//                        controller.extendedGamepad?.valueChangedHandler = nil
-//                        self?.setupControllerInputs(controller: controller)
-//                    }
-//                                        
-//                    self?.createLevelButtons()
-//                } else {
-//
-//                    print("Waiting for controllers to connect...")
-//                }
-//            }
-//        }
+        if let gameControllerManager = gameControllerManager {
+            gameControllerManager.isSelectingLevel = true
+            
+            self.info.position.x = 30
+            self.info.position.y = 100
+            self.addChild(self.info)
+            
+            // Create a repeating timer that checks for controllers
+            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
+                if gameControllerManager.controllers.count > 0 {
+                    timer.invalidate()
+                    
+                    for controller in gameControllerManager.controllers {
+                        controller.extendedGamepad?.valueChangedHandler = nil
+                        self?.setupControllerInputs(controller: controller)
+                    }
+                                        
+                    self?.createLevelButtons()
+                } else {
+
+                    print("Waiting for controllers to connect...")
+                }
+            }
+        }
         self.createLevelButtons()
     }
 
