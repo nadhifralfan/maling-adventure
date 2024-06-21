@@ -8,14 +8,6 @@
 import Foundation
 import SpriteKit
 
-//struct PhysicsCategory {
-//    static let none: UInt32 = 0
-//    static let player: UInt32 = 0b1
-//    static let platform: UInt32 = 0b10
-//    static let ground: UInt32 = 0b100
-//    static let hazzard: UInt32 = 0b1000
-//}
-
 struct PhysicsCategory {
     static let none: UInt32 = 1 << 1
     static let player: UInt32 = 1 << 2
@@ -24,6 +16,7 @@ struct PhysicsCategory {
     static let coin: UInt32 = 1 << 5
     static let scene: UInt32 = 1 << 6
     static let hazzard: UInt32 = 1 << 7
+    static let door: UInt32 = 1 << 8
 }
 
 class Player: SKSpriteNode {
@@ -36,10 +29,12 @@ class Player: SKSpriteNode {
     var thumbstickTimer: Timer?
     var jumpTimer: Timer?
     var isThumbstickActive = false
+    var goingToSection = 0
+    var spawn : CGPoint = CGPoint(x: 0, y: 0)
     
     private var walkTextures: [SKTexture] = []
     
-    init(imageNamed: String, position: CGPoint, name: String) {
+    init(imageNamed: String, spawn: CGPoint, name: String) {
         imageName = imageNamed
         let texture = SKTexture(imageNamed: imageNamed)
         textureNode = SKSpriteNode(texture: texture)
@@ -49,12 +44,13 @@ class Player: SKSpriteNode {
         super.init(texture: nil, color: .clear, size: textureNode.size)
         self.anchorPoint = CGPoint(x: 0, y: 0)
         self.size = CGSize(width: 35, height: 40)
-        self.position = position
+        self.spawn = spawn
+        self.position = spawn
         self.name = name
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: self.size.width / 2, y: self.size.height / 2))
         self.physicsBody?.categoryBitMask = PhysicsCategory.player
         self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard
-        self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.door
         self.physicsBody?.affectedByGravity = true
         self.physicsBody?.allowsRotation = false
         
@@ -165,22 +161,20 @@ class Player: SKSpriteNode {
             isJumping = false
         }
         if contactMask == (PhysicsCategory.player | PhysicsCategory.hazzard) {
-            // Reset player position and stop its movement
-            self.position = CGPoint(x: 120, y: 210)
+            // Reset player position and¸ stop its movement
+            self.position = spawn
             self.anchorPoint = CGPoint(x: 0, y: 0)
-            self.size = CGSize(width: 60, height: 70)
+            self.size = CGSize(width: 35, height: 40)
             self.name = "player"
             self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: self.size.width / 2, y: self.size.height / 2))
             self.physicsBody?.categoryBitMask = PhysicsCategory.player
             self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard
-            self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard
+            self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.door
             self.physicsBody?.affectedByGravity = true
             self.physicsBody?.allowsRotation = false
             
-            // Also reset the textureNode position to ensure consistency
             textureNode.position = CGPoint(x: 0, y: 0)
         }
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
