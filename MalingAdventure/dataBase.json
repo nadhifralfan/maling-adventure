@@ -21,6 +21,10 @@
               "size" : { "width": 1024, "height": 40 }
             },
             {
+              "coordinate" : { "x":1024, "y": 240 },
+              "size" : { "width": 35, "height": 160 }
+            },
+            {
               "coordinate" : { "x":0, "y": 0 },
               "size" : { "width": 35, "height": 768 }
             },
@@ -98,6 +102,10 @@
             {
               "coordinate" : { "x":0, "y": 0 },
               "size" : { "width": 1024, "height": 80 }
+            },
+            {
+              "coordinate" : { "x":0, "y": 240 },
+              "size" : { "width": 2, "height": 240 }
             },
             {
               "coordinate" : { "x":0, "y": 80 },
@@ -420,22 +428,22 @@
                 }
           ],
           "spawnEntry" : {
-            "x" : 35,
-            "y" : 240
+            "x" : 770,
+            "y" : 80
           },
           "spawnExit" : {
-              "x" : 945,
-              "y" : 240
+              "x" : 70,
+              "y" : 680
           },
           "doorEntry" : {
             "doorType" : "type1",
-            "x": 945,
-            "y": 945
+            "x": 875,
+            "y": 40
           },
           "doorExit" : {
             "doorType" : "type2",
-            "x": 2,
-            "y": 4
+            "x": 0,
+            "y": 680
           },
           "coins" : [
             { "x": 140, "y": 200 },

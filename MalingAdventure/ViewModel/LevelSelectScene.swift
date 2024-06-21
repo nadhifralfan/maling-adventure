@@ -32,7 +32,6 @@ class LevelSelectScene: SKScene {
                                         
                     self?.createLevelButtons()
                 } else {
-
                     print("Waiting for controllers to connect...")
                 }
             }

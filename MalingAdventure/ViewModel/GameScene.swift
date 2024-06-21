@@ -65,9 +65,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         print("Waiting for controllers to connect...")
                     }
                 }
-//                displayCurrentStory()
-                createLevelContent()
-                gameControllerManager.isPlaying = true
+                displayCurrentStory()
+//                createLevelContent()
+//                gameControllerManager.isPlaying = true
             }
         }
     }
@@ -215,7 +215,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                let width = size["width"],
                let height = size["height"] {
                 
-                let platformNode = SKSpriteNode(color: .lightGray, size: CGSize(width: width, height: height))
+                let platformNode = SKSpriteNode(color: .clear, size: CGSize(width: width, height: height))
                 platformNode.anchorPoint = CGPoint(x: 0, y: 0)
                 platformNode.position = CGPoint(x: x, y: y)
                 platformNode.physicsBody = SKPhysicsBody(rectangleOf: platformNode.size, center: CGPoint(x: platformNode.size.width / 2, y: platformNode.size.height / 2))
@@ -386,10 +386,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let doorNode = (bodyA.categoryBitMask == PhysicsCategory.door) ? bodyA.node as! DoorType : bodyB.node as! DoorType
 
             if doorNode == level.sections[currentSection-1].doorExit.doorType {
-                print("exit")
                 playersAtDoorExit.insert(playerNode)
 
                 if playersAtDoorExit.count == players.count {
+                    print("exit")
                     let reveal = SKTransition.push(with: .left, duration: 1)
                     self.removeAllChildren()
                     let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection].spawnEntry)
