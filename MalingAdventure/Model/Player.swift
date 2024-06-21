@@ -39,7 +39,7 @@ class Player: SKSpriteNode {
     
     private var walkTextures: [SKTexture] = []
     
-    init(imageNamed: String, position: CGPoint) {
+    init(imageNamed: String, position: CGPoint, name: String) {
         imageName = imageNamed
         let texture = SKTexture(imageNamed: imageNamed)
         textureNode = SKSpriteNode(texture: texture)
@@ -50,13 +50,20 @@ class Player: SKSpriteNode {
         self.anchorPoint = CGPoint(x: 0, y: 0)
         self.size = CGSize(width: 35, height: 40)
         self.position = position
-        self.name = "player"
+        self.name = name
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: self.size.width / 2, y: self.size.height / 2))
         self.physicsBody?.categoryBitMask = PhysicsCategory.player
         self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard
         self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard
         self.physicsBody?.affectedByGravity = true
         self.physicsBody?.allowsRotation = false
+        
+        let nameNode = SKLabelNode(text: name)
+        nameNode.fontSize = 10
+        nameNode.position.y = nameNode.position.y + size.height
+        nameNode.position.x = nameNode.position.x + size.width/2
+        
+        self.addChild(nameNode)
         
         // Add the texture node as a child
         self.addChild(textureNode)
@@ -134,7 +141,7 @@ class Player: SKSpriteNode {
     
     func startWalkingAnimation() {
         if isWalking == false {
-            print(isWalking)
+//            print(isWalking)
             let walkAction = SKAction.animate(with: self.walkTextures, timePerFrame: 0.1)
             let repeatAction = SKAction.repeatForever(walkAction)
             self.textureNode.run(repeatAction, withKey: imageName)
@@ -144,7 +151,7 @@ class Player: SKSpriteNode {
     
     func stopWalkingAnimation() {
         if isWalking {
-            print(isWalking)
+//            print(isWalking)
             self.textureNode.removeAction(forKey: imageName)
             self.isWalking = false
         }
