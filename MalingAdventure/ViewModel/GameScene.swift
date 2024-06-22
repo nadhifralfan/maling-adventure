@@ -14,15 +14,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var spawn: CGPoint = CGPoint(x: 0, y: 0)
     let jumpComponentSystem = GKComponentSystem(componentClass: JumpForeverComponent.self)
     var gameControllerManager: GameControllerManager?
+    var hapticsManager: HapticsManager?
     var coins: Int = 0
     let coinScoreNode = SKLabelNode(text: "Coins: 0")
     var previousUpdateTime: TimeInterval = 0
 
-    init(size: CGSize, level: Level, section: Int, gameControllerManager: GameControllerManager, spawn: CGPoint) {
+    init(size: CGSize, level: Level, section: Int, gameControllerManager: GameControllerManager, spawn: CGPoint, hapticsManager: HapticsManager) {
         self.level = level
         self.currentSection = section
         self.gameControllerManager = gameControllerManager
         self.spawn = spawn
+        self.hapticsManager = hapticsManager
         super.init(size: size)
     }
     
@@ -149,14 +151,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if currentStoryIndex < level.stories.count {
             let transition = SKTransition.fade(withDuration: 0.5)
-            let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-1].spawnEntry)
+            let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-1].spawnEntry, hapticsManager: hapticsManager!)
             nextScene.currentStoryIndex = currentStoryIndex
             self.view?.presentScene(nextScene, transition: transition)
         } else {
             gameControllerManager?.isPlaying = true
             gameControllerManager?.isStoryMode = false
             let transition = SKTransition.fade(withDuration: 0.5)
-            let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-1].spawnEntry)
+            let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-1].spawnEntry, hapticsManager: hapticsManager!)
             nextScene.currentStoryIndex = currentStoryIndex
             self.view?.presentScene(nextScene, transition: transition)
         }
@@ -309,6 +311,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } else {
             for i in 0..<(gameControllerManager?.controllers.count ?? 0) {
                 let player = Player(imageNamed: "playerImage", spawn: spawn, name: "P\(i+1)")
+                player.setController(gameControllerManager?.controllers[i])
                 players.append(player)
             }
         }
@@ -387,11 +390,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func didBegin(_ contact: SKPhysicsContact) {
         
+        let contactMask = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+
         for player in players {
-            player.didBegin(contact)
-            
+            player.didBegin(contact, hapticsManager: hapticsManager!)
         }
-        
+                
         coinAndPlayerContact(contact)
         
         let bodyA = contact.bodyA
@@ -408,7 +412,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if playersAtDoorExit.count == players.count {
                     let reveal = SKTransition.push(with: .left, duration: 1)
                     self.removeAllChildren()
-                    let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection].spawnEntry)
+                    let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection].spawnEntry, hapticsManager: hapticsManager!)
                     self.view?.presentScene(newScene, transition: reveal)
                 }
             } else if doorNode == level.sections[currentSection-1].doorEntry.doorType {
@@ -417,7 +421,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if playersAtDoorEntry.count == players.count && currentSection != 1 {
                     let reveal = SKTransition.push(with: .left, duration: 1)
                     self.removeAllChildren()
-                    let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-1].spawnExit)
+                    let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-1].spawnExit, hapticsManager: hapticsManager!)
                     self.view?.presentScene(newScene, transition: reveal)
                 }
             }

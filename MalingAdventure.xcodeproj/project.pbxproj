@@ -7,6 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		013712972C2698AF00A1F6AF /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013712962C2698AF00A1F6AF /* HapticsManager.swift */; };
+		013712AC2C26C6F200A1F6AF /* Boing.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 0137129F2C26C6F100A1F6AF /* Boing.ahap */; };
+		013712AD2C26C6F200A1F6AF /* Drums.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 013712A02C26C6F100A1F6AF /* Drums.ahap */; };
+		013712AE2C26C6F200A1F6AF /* Drums.wav in Resources */ = {isa = PBXBuildFile; fileRef = 013712A12C26C6F100A1F6AF /* Drums.wav */; };
+		013712AF2C26C6F200A1F6AF /* Gravel.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 013712A22C26C6F100A1F6AF /* Gravel.ahap */; };
+		013712B02C26C6F200A1F6AF /* Heartbeats.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 013712A32C26C6F100A1F6AF /* Heartbeats.ahap */; };
+		013712B12C26C6F200A1F6AF /* Hit.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 013712A42C26C6F100A1F6AF /* Hit.ahap */; };
+		013712B22C26C6F200A1F6AF /* Inflate.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 013712A52C26C6F100A1F6AF /* Inflate.ahap */; };
+		013712B32C26C6F200A1F6AF /* Oscillate.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 013712A62C26C6F100A1F6AF /* Oscillate.ahap */; };
+		013712B42C26C6F200A1F6AF /* Recharge.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 013712A72C26C6F100A1F6AF /* Recharge.ahap */; };
+		013712B52C26C6F200A1F6AF /* Rumble.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 013712A82C26C6F100A1F6AF /* Rumble.ahap */; };
+		013712B62C26C6F200A1F6AF /* Sparkle.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 013712A92C26C6F100A1F6AF /* Sparkle.ahap */; };
+		013712B72C26C6F200A1F6AF /* Triple.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 013712AA2C26C6F100A1F6AF /* Triple.ahap */; };
 		01FE5C402C247FF20077920C /* NodeComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FE5C3F2C247FF20077920C /* NodeComponent.swift */; };
 		01FE5C422C2480110077920C /* JumpForeverComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FE5C412C2480110077920C /* JumpForeverComponent.swift */; };
 		4CED17EA2C130D2F007588F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CED17E92C130D2F007588F7 /* AppDelegate.swift */; };
@@ -30,6 +43,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		013712962C2698AF00A1F6AF /* HapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsManager.swift; sourceTree = "<group>"; };
+		0137129F2C26C6F100A1F6AF /* Boing.ahap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Boing.ahap; sourceTree = "<group>"; };
+		013712A02C26C6F100A1F6AF /* Drums.ahap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Drums.ahap; sourceTree = "<group>"; };
+		013712A12C26C6F100A1F6AF /* Drums.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Drums.wav; sourceTree = "<group>"; };
+		013712A22C26C6F100A1F6AF /* Gravel.ahap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Gravel.ahap; sourceTree = "<group>"; };
+		013712A32C26C6F100A1F6AF /* Heartbeats.ahap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Heartbeats.ahap; sourceTree = "<group>"; };
+		013712A42C26C6F100A1F6AF /* Hit.ahap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Hit.ahap; sourceTree = "<group>"; };
+		013712A52C26C6F100A1F6AF /* Inflate.ahap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Inflate.ahap; sourceTree = "<group>"; };
+		013712A62C26C6F100A1F6AF /* Oscillate.ahap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Oscillate.ahap; sourceTree = "<group>"; };
+		013712A72C26C6F100A1F6AF /* Recharge.ahap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Recharge.ahap; sourceTree = "<group>"; };
+		013712A82C26C6F100A1F6AF /* Rumble.ahap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Rumble.ahap; sourceTree = "<group>"; };
+		013712A92C26C6F100A1F6AF /* Sparkle.ahap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Sparkle.ahap; sourceTree = "<group>"; };
+		013712AA2C26C6F100A1F6AF /* Triple.ahap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Triple.ahap; sourceTree = "<group>"; };
 		01FE5C3F2C247FF20077920C /* NodeComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeComponent.swift; sourceTree = "<group>"; };
 		01FE5C412C2480110077920C /* JumpForeverComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpForeverComponent.swift; sourceTree = "<group>"; };
 		4CED17E62C130D2F007588F7 /* MalingAdventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MalingAdventure.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,6 +91,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		013712952C26989A00A1F6AF /* HapticControllers */ = {
+			isa = PBXGroup;
+			children = (
+				013712962C2698AF00A1F6AF /* HapticsManager.swift */,
+			);
+			path = HapticControllers;
+			sourceTree = "<group>";
+		};
+		013712AB2C26C6F100A1F6AF /* AHAP */ = {
+			isa = PBXGroup;
+			children = (
+				0137129F2C26C6F100A1F6AF /* Boing.ahap */,
+				013712A02C26C6F100A1F6AF /* Drums.ahap */,
+				013712A12C26C6F100A1F6AF /* Drums.wav */,
+				013712A22C26C6F100A1F6AF /* Gravel.ahap */,
+				013712A32C26C6F100A1F6AF /* Heartbeats.ahap */,
+				013712A42C26C6F100A1F6AF /* Hit.ahap */,
+				013712A52C26C6F100A1F6AF /* Inflate.ahap */,
+				013712A62C26C6F100A1F6AF /* Oscillate.ahap */,
+				013712A72C26C6F100A1F6AF /* Recharge.ahap */,
+				013712A82C26C6F100A1F6AF /* Rumble.ahap */,
+				013712A92C26C6F100A1F6AF /* Sparkle.ahap */,
+				013712AA2C26C6F100A1F6AF /* Triple.ahap */,
+			);
+			path = AHAP;
+			sourceTree = "<group>";
+		};
 		01FE5C3E2C247FE30077920C /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -93,6 +146,8 @@
 		4CED17E82C130D2F007588F7 /* MalingAdventure */ = {
 			isa = PBXGroup;
 			children = (
+				013712AB2C26C6F100A1F6AF /* AHAP */,
+				013712952C26989A00A1F6AF /* HapticControllers */,
 				01FE5C3E2C247FE30077920C /* Components */,
 				4CFED3BE2C1811A800912A89 /* dataBase.json */,
 				4CED18112C135138007588F7 /* Helper */,
@@ -207,10 +262,22 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				013712B22C26C6F200A1F6AF /* Inflate.ahap in Resources */,
+				013712B42C26C6F200A1F6AF /* Recharge.ahap in Resources */,
 				4CED17EC2C130D2F007588F7 /* GameScene.sks in Resources */,
+				013712B12C26C6F200A1F6AF /* Hit.ahap in Resources */,
 				4CED17F42C130D31007588F7 /* Assets.xcassets in Resources */,
+				013712AC2C26C6F200A1F6AF /* Boing.ahap in Resources */,
+				013712B62C26C6F200A1F6AF /* Sparkle.ahap in Resources */,
+				013712B02C26C6F200A1F6AF /* Heartbeats.ahap in Resources */,
 				4CED181B2C13641C007588F7 /* LevelSelectScene.sks in Resources */,
+				013712AF2C26C6F200A1F6AF /* Gravel.ahap in Resources */,
 				4CED17EE2C130D2F007588F7 /* Actions.sks in Resources */,
+				013712B52C26C6F200A1F6AF /* Rumble.ahap in Resources */,
+				013712AE2C26C6F200A1F6AF /* Drums.wav in Resources */,
+				013712B32C26C6F200A1F6AF /* Oscillate.ahap in Resources */,
+				013712AD2C26C6F200A1F6AF /* Drums.ahap in Resources */,
+				013712B72C26C6F200A1F6AF /* Triple.ahap in Resources */,
 				4CFED3BF2C1811A800912A89 /* dataBase.json in Resources */,
 				4CED17F72C130D31007588F7 /* Base in Resources */,
 			);
@@ -226,6 +293,7 @@
 				01FE5C402C247FF20077920C /* NodeComponent.swift in Sources */,
 				4CED17F22C130D2F007588F7 /* ViewController.swift in Sources */,
 				4CFED3C12C183C3600912A89 /* GameController.swift in Sources */,
+				013712972C2698AF00A1F6AF /* HapticsManager.swift in Sources */,
 				01FE5C422C2480110077920C /* JumpForeverComponent.swift in Sources */,
 				4CED18152C1356B3007588F7 /* Hazzard.swift in Sources */,
 				4CED18132C135324007588F7 /* Door.swift in Sources */,
@@ -381,7 +449,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = KK835KRLS4;
+				DEVELOPMENT_TEAM = UW36D2XW6X;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -409,7 +477,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = KK835KRLS4;
+				DEVELOPMENT_TEAM = UW36D2XW6X;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";

@@ -8,6 +8,8 @@ class LevelSelectScene: SKScene {
     private var selectedButtonIndex: Int = 0
     private var buttons: [SKLabelNode] = []
     var gameControllerManager: GameControllerManager?
+    var hapticsManager: HapticsManager?
+
     let info = SKLabelNode(text: "Waiting for controllers to connect...")
 
     override func didMove(to view: SKView) {
@@ -103,7 +105,7 @@ class LevelSelectScene: SKScene {
         let reveal = SKTransition.fade(withDuration: 0.5)
         gameControllerManager?.isSelectingLevel = false
         gameControllerManager?.isStoryMode = true
-        let newScene = GameScene(size: self.size, level: level, section: 1, gameControllerManager: gameControllerManager!, spawn : level.sections[0].spawnEntry)
+        let newScene = GameScene(size: self.size, level: level, section: 1, gameControllerManager: gameControllerManager!, spawn : level.sections[0].spawnEntry, hapticsManager: hapticsManager!)
         self.view?.presentScene(newScene, transition: reveal)
     }
 
