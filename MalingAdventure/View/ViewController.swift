@@ -17,6 +17,7 @@ class ViewController: NSViewController {
     var debugMode : Bool = true
     
     let gameControllerManager = GameControllerManager()
+    let hapticsManager = HapticsManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,11 +26,12 @@ class ViewController: NSViewController {
             // Load the SKScene from 'GameScene.sks'
             if let scene = LevelSelectScene(fileNamed: "LevelSelectScene") {
                 
-                
                 insertDataToScene(scene: scene, debugMode: debugMode)
                 
                 scene.scaleMode = .aspectFill
                 scene.gameControllerManager = gameControllerManager
+                scene.hapticsManager = hapticsManager
+
                 // Present the scene
                 view.presentScene(scene)
             }

@@ -7,6 +7,7 @@
 
 import Foundation
 import SpriteKit
+import GameController
 
 struct PhysicsCategory {
     static let none: UInt32 = 1 << 1
@@ -31,6 +32,7 @@ class Player: SKSpriteNode {
     var isThumbstickActive = false
     var goingToSection = 0
     var spawn : CGPoint = CGPoint(x: 0, y: 0)
+    var controller: GCController?
     
     private var walkTextures: [SKTexture] = []
     
@@ -61,6 +63,10 @@ class Player: SKSpriteNode {
         // Add the texture node as a child
         self.addChild(textureNode)
         loadTextures()
+    }
+    
+    func setController(_ controller: GCController?){
+        self.controller = controller
     }
     
     private func createPhysicBody(){
@@ -160,7 +166,7 @@ class Player: SKSpriteNode {
     }
     
     
-    func didBegin(_ contact: SKPhysicsContact) {
+    func didBegin(_ contact: SKPhysicsContact, hapticsManager: HapticsManager) {
         
         let contactMask = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         if contactMask == (PhysicsCategory.player | PhysicsCategory.ground) {
@@ -170,6 +176,9 @@ class Player: SKSpriteNode {
             // Reset player position and¸ stop its movement
             self.position = spawn
             createPhysicBody()
+            
+            //add haptic
+            hapticsManager.playHapticsFileController(named: "Rumble", controller: controller!)
         }
     }
     
