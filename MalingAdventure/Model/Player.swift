@@ -42,17 +42,14 @@ class Player: SKSpriteNode {
         textureNode.anchorPoint = CGPoint(x: 0, y: 0)
         
         super.init(texture: nil, color: .clear, size: textureNode.size)
+        
         self.anchorPoint = CGPoint(x: 0, y: 0)
         self.size = CGSize(width: 35, height: 40)
         self.spawn = spawn
         self.position = spawn
         self.name = name
-        self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: self.size.width / 2, y: self.size.height / 2))
-        self.physicsBody?.categoryBitMask = PhysicsCategory.player
-        self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard
-        self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.door
-        self.physicsBody?.affectedByGravity = true
-        self.physicsBody?.allowsRotation = false
+        
+        createPhysicBody()
         
         let nameNode = SKLabelNode(text: name)
         nameNode.fontSize = 10
@@ -64,6 +61,15 @@ class Player: SKSpriteNode {
         // Add the texture node as a child
         self.addChild(textureNode)
         loadTextures()
+    }
+    
+    private func createPhysicBody(){
+        self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: self.size.width / 2, y: self.size.height / 2))
+        self.physicsBody?.categoryBitMask = PhysicsCategory.player
+        self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.door
+        self.physicsBody?.affectedByGravity = true
+        self.physicsBody?.allowsRotation = false
     }
     
     private func loadTextures() {
@@ -163,17 +169,7 @@ class Player: SKSpriteNode {
         if contactMask == (PhysicsCategory.player | PhysicsCategory.hazzard) {
             // Reset player position and¸ stop its movement
             self.position = spawn
-            self.anchorPoint = CGPoint(x: 0, y: 0)
-            self.size = CGSize(width: 35, height: 40)
-            self.name = "player"
-            self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: self.size.width / 2, y: self.size.height / 2))
-            self.physicsBody?.categoryBitMask = PhysicsCategory.player
-            self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard
-            self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.door
-            self.physicsBody?.affectedByGravity = true
-            self.physicsBody?.allowsRotation = false
-            
-            textureNode.position = CGPoint(x: 0, y: 0)
+            createPhysicBody()
         }
     }
     

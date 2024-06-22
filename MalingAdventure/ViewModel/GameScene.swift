@@ -65,9 +65,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         print("Waiting for controllers to connect...")
                     }
                 }
-//                displayCurrentStory()
-                createLevelContent()
-                gameControllerManager.isPlaying = true
+                displayCurrentStory()
+//                createLevelContent()
+//                gameControllerManager.isPlaying = true
             }
         }
     }
@@ -366,20 +366,36 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func coinAndPlayerContact(_ contact: SKPhysicsContact){
+        let bodyA = contact.bodyA
+        let bodyB = contact.bodyB
+        
+        let coinAndPlayerContact = bodyA.categoryBitMask | bodyB.categoryBitMask == PhysicsCategory.player | PhysicsCategory.coin
+
+        if (coinAndPlayerContact) {
+            coins += 10
+            
+            if bodyA.categoryBitMask == PhysicsCategory.coin {
+                bodyA.node?.removeFromParent()
+                return
+            }
+            
+            bodyB.node?.removeFromParent()
+            
+        }
+    }
+    
     func didBegin(_ contact: SKPhysicsContact) {
         
         for player in players {
             player.didBegin(contact)
+            
         }
+        
+        coinAndPlayerContact(contact)
         
         let bodyA = contact.bodyA
         let bodyB = contact.bodyB
-
-        if (bodyA.categoryBitMask == PhysicsCategory.coin && bodyB.categoryBitMask == PhysicsCategory.player) || (bodyB.categoryBitMask == PhysicsCategory.coin && bodyA.categoryBitMask == PhysicsCategory.player) {
-            contact.bodyA.node?.physicsBody?.contactTestBitMask = 0
-            contact.bodyA.node?.removeFromParent()
-            coins += 10
-        }
 
         if (bodyA.categoryBitMask == PhysicsCategory.player && bodyB.categoryBitMask == PhysicsCategory.door) || (bodyB.categoryBitMask == PhysicsCategory.player && bodyA.categoryBitMask == PhysicsCategory.door) {
             let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
@@ -433,7 +449,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         coinNode.size = CGSize(width: 35, height: 40)
         coinNode.name = "coin"
         coinNode.position = CGPoint(x: position.x, y: position.y+coinNode.size.height)
-        coinNode.physicsBody = SKPhysicsBody(texture: texture, size: CGSize(width: 35, height: 40))
+        coinNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 30, height: 35))
         coinNode.physicsBody?.isDynamic = true
         coinNode.physicsBody?.allowsRotation = false
         coinNode.physicsBody?.categoryBitMask = PhysicsCategory.coin
@@ -446,7 +462,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let coinComponent = NodeComponent(node: coinNode)
         coinEntity.addComponent(coinComponent)
         
-        let jumpComponent = JumpForeverComponent(vector: CGVector(dx: 0, dy: 30), duration: 0.5)
+        let jumpComponent = JumpForeverComponent(vector: CGVector(dx: 0, dy: 40), duration: 0.5)
         coinEntity.addComponent(jumpComponent)
         
         return coinEntity
