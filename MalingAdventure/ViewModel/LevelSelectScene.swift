@@ -125,7 +125,22 @@ class LevelSelectScene: SKScene {
         }
     }
 
-    override func keyDown(with event: NSEvent) {}
+    override func keyDown(with event: NSEvent) {
+        if event.keyCode == 126 {
+            selectedButtonIndex = max(selectedButtonIndex - 1, 0)
+            highlightButton(at: selectedButtonIndex)
+        }
+        if event.keyCode == 125 {
+            selectedButtonIndex = min(selectedButtonIndex + 1, buttons.count - 1)
+            highlightButton(at: selectedButtonIndex)
+        }
+        if event.keyCode == 36 && gameControllerManager!.isSelectingLevel == true{
+            currentLevel = levels[String(selectedButtonIndex + 1)]
+            if let level = currentLevel {
+                switchToGameScene(level: level)
+            }
+        }
+    }
 
     override func update(_ currentTime: TimeInterval) {}
 }
