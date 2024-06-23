@@ -23,7 +23,6 @@ class ViewController: NSViewController {
         super.viewDidLoad()
 
         if let view = self.skView {
-            // Load the SKScene from 'GameScene.sks'
             if let scene = LevelSelectScene(fileNamed: "LevelSelectScene") {
                 
                 insertDataToScene(scene: scene, debugMode: debugMode)
@@ -35,13 +34,17 @@ class ViewController: NSViewController {
                 // Present the scene
                 view.presentScene(scene)
             }
+//            if let scene = MenuScene(fileNamed: "MenuScene") {
+//                scene.scaleMode = .aspectFill
+//                view.presentScene(scene)
+//            }
             
             view.ignoresSiblingOrder = true
             
-            view.showsPhysics = true
-            view.showsDrawCount = true
-            view.showsFPS = true
-            view.showsNodeCount = true
+            view.showsPhysics = false
+            view.showsDrawCount = false
+            view.showsFPS = false
+            view.showsNodeCount = false
         }
     }
 }

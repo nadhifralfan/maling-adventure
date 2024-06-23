@@ -22,6 +22,9 @@
 		013712B72C26C6F200A1F6AF /* Triple.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 013712AA2C26C6F100A1F6AF /* Triple.ahap */; };
 		01FE5C402C247FF20077920C /* NodeComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FE5C3F2C247FF20077920C /* NodeComponent.swift */; };
 		01FE5C422C2480110077920C /* JumpForeverComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FE5C412C2480110077920C /* JumpForeverComponent.swift */; };
+		4C7EFB2B2C27584400E9F8DE /* MenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4C7EFB2A2C27584400E9F8DE /* MenuScene.sks */; };
+		4C7EFB2D2C27584D00E9F8DE /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7EFB2C2C27584D00E9F8DE /* MenuScene.swift */; };
+		4C7EFB2F2C28553C00E9F8DE /* Foreground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7EFB2E2C28553C00E9F8DE /* Foreground.swift */; };
 		4CED17EA2C130D2F007588F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CED17E92C130D2F007588F7 /* AppDelegate.swift */; };
 		4CED17EC2C130D2F007588F7 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4CED17EB2C130D2F007588F7 /* GameScene.sks */; };
 		4CED17EE2C130D2F007588F7 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4CED17ED2C130D2F007588F7 /* Actions.sks */; };
@@ -58,6 +61,9 @@
 		013712AA2C26C6F100A1F6AF /* Triple.ahap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Triple.ahap; sourceTree = "<group>"; };
 		01FE5C3F2C247FF20077920C /* NodeComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeComponent.swift; sourceTree = "<group>"; };
 		01FE5C412C2480110077920C /* JumpForeverComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpForeverComponent.swift; sourceTree = "<group>"; };
+		4C7EFB2A2C27584400E9F8DE /* MenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MenuScene.sks; sourceTree = "<group>"; };
+		4C7EFB2C2C27584D00E9F8DE /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
+		4C7EFB2E2C28553C00E9F8DE /* Foreground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Foreground.swift; sourceTree = "<group>"; };
 		4CED17E62C130D2F007588F7 /* MalingAdventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MalingAdventure.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CED17E92C130D2F007588F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4CED17EB2C130D2F007588F7 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -172,6 +178,7 @@
 				4CED18122C135324007588F7 /* Door.swift */,
 				4CED18142C1356B3007588F7 /* Hazzard.swift */,
 				4CED18162C135E1D007588F7 /* Player.swift */,
+				4C7EFB2E2C28553C00E9F8DE /* Foreground.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -191,6 +198,8 @@
 				4CED17EF2C130D2F007588F7 /* LevelSelectScene.swift */,
 				4CED17EB2C130D2F007588F7 /* GameScene.sks */,
 				4CED181C2C136448007588F7 /* GameScene.swift */,
+				4C7EFB2A2C27584400E9F8DE /* MenuScene.sks */,
+				4C7EFB2C2C27584D00E9F8DE /* MenuScene.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -232,7 +241,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1530;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					4CED17E52C130D2F007588F7 = {
 						CreatedOnToolsVersion = 15.3;
@@ -271,6 +280,7 @@
 				013712B62C26C6F200A1F6AF /* Sparkle.ahap in Resources */,
 				013712B02C26C6F200A1F6AF /* Heartbeats.ahap in Resources */,
 				4CED181B2C13641C007588F7 /* LevelSelectScene.sks in Resources */,
+				4C7EFB2B2C27584400E9F8DE /* MenuScene.sks in Resources */,
 				013712AF2C26C6F200A1F6AF /* Gravel.ahap in Resources */,
 				4CED17EE2C130D2F007588F7 /* Actions.sks in Resources */,
 				013712B52C26C6F200A1F6AF /* Rumble.ahap in Resources */,
@@ -298,11 +308,13 @@
 				4CED18152C1356B3007588F7 /* Hazzard.swift in Sources */,
 				4CED18132C135324007588F7 /* Door.swift in Sources */,
 				4CED17FF2C1311A3007588F7 /* Section.swift in Sources */,
+				4C7EFB2F2C28553C00E9F8DE /* Foreground.swift in Sources */,
 				4CED17F02C130D2F007588F7 /* LevelSelectScene.swift in Sources */,
 				4CED181D2C136448007588F7 /* GameScene.swift in Sources */,
 				4CED18092C1341B7007588F7 /* Level.swift in Sources */,
 				4CED17EA2C130D2F007588F7 /* AppDelegate.swift in Sources */,
 				4CED180B2C1343A4007588F7 /* JSONParser.swift in Sources */,
+				4C7EFB2D2C27584D00E9F8DE /* MenuScene.swift in Sources */,
 				4CED18172C135E1D007588F7 /* Player.swift in Sources */,
 				4CED180D2C13504F007588F7 /* Story.swift in Sources */,
 			);
@@ -356,6 +368,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -419,6 +432,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -449,7 +463,8 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UW36D2XW6X;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = KK835KRLS4;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -477,7 +492,8 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UW36D2XW6X;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = KK835KRLS4;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";

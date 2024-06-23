@@ -32,7 +32,6 @@ class GameControllerManager: ObservableObject {
     @objc func controllerConnected(notification: Notification) {
         if let controller = notification.object as? GCController {
             if !controllers.contains(controller) {
-                print("appending")
                 controllers.append(controller)
             }
             if controller.playerIndex == .indexUnset {

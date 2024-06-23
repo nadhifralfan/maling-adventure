@@ -50,6 +50,12 @@ func insertDataToScene(scene: LevelSelectScene, debugMode: Bool = false) {
                                 for (_, value) in sectionDict {
                                     if let sectionData = value as? [String: Any] {
                                         let section = Section()
+                                        if let transitionNextData = sectionData["transitionNext"] as? String {
+                                            section.transitionNext = transitionNextData
+                                        }
+                                        if let transitionBackData = sectionData["transitionBack"] as? String {
+                                            section.transitionBack = transitionBackData
+                                        }
                                         if let background = sectionData["background"] as? String {
                                             section.background = SKSpriteNode(imageNamed: background)
                                         }

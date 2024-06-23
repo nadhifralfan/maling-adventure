@@ -18,6 +18,7 @@ struct PhysicsCategory {
     static let scene: UInt32 = 1 << 6
     static let hazzard: UInt32 = 1 << 7
     static let door: UInt32 = 1 << 8
+    static let foreground: UInt32 = 1 << 9
 }
 
 class Player: SKSpriteNode {
@@ -33,6 +34,9 @@ class Player: SKSpriteNode {
     var goingToSection = 0
     var spawn : CGPoint = CGPoint(x: 0, y: 0)
     var controller: GCController?
+    var buttonInteract: SKSpriteNode
+    var canInteract: Bool = false
+    var contactWith: SKNode?
     
     private var walkTextures: [SKTexture] = []
     
@@ -42,6 +46,11 @@ class Player: SKSpriteNode {
         textureNode = SKSpriteNode(texture: texture)
         textureNode.size = CGSize(width: 35, height: 40)
         textureNode.anchorPoint = CGPoint(x: 0, y: 0)
+        
+        let symbolImage = NSImage(systemSymbolName: "o.circle.fill", accessibilityDescription: nil)
+        let textureSymbol = SKTexture(image: symbolImage!)
+        self.buttonInteract = SKSpriteNode(texture: textureSymbol)
+        
         
         super.init(texture: nil, color: .clear, size: textureNode.size)
         
@@ -53,14 +62,18 @@ class Player: SKSpriteNode {
         
         createPhysicBody()
         
+        
+        self.buttonInteract.position.y = self.buttonInteract.position.y + size.height + 20
+        self.buttonInteract.position.x = self.buttonInteract.position.x + size.width/2
+        
         let nameNode = SKLabelNode(text: name)
         nameNode.fontSize = 10
         nameNode.position.y = nameNode.position.y + size.height
         nameNode.position.x = nameNode.position.x + size.width/2
         
+        self.addChild(buttonInteract)
+        self.buttonInteract.isHidden = true
         self.addChild(nameNode)
-        
-        // Add the texture node as a child
         self.addChild(textureNode)
         loadTextures()
     }
@@ -72,16 +85,20 @@ class Player: SKSpriteNode {
     private func createPhysicBody(){
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: self.size.width / 2, y: self.size.height / 2))
         self.physicsBody?.categoryBitMask = PhysicsCategory.player
-        self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard
-        self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.door
+        self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.player
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.door | PhysicsCategory.foreground
         self.physicsBody?.affectedByGravity = true
         self.physicsBody?.allowsRotation = false
+    }
+    
+    func updatePosition(to position: CGPoint) {
+        self.position = position
+        self.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
     }
     
     private func loadTextures() {
         // Assuming you have images named walk1.png, walk2.png, etc. and jump.png
         walkTextures = (1...2).map { SKTexture(imageNamed: "\(imageName)\($0)") }
-        
     }
     
     override func keyDown(with event: NSEvent) {
@@ -104,6 +121,11 @@ class Player: SKSpriteNode {
             moveRight()
             startWalkingAnimation()
         }
+        
+        if keysPressed.contains(36) { //Enter to Interact
+            
+        }
+        
         if !keysPressed.contains(123) && !keysPressed.contains(124) {
             stopMoving()
         }
@@ -139,7 +161,7 @@ class Player: SKSpriteNode {
     
     func jump() {
         guard isPlayerOnGround() else { return }
-        self.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 60))
+        self.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 40))
         isJumping = true
     }
     
@@ -149,7 +171,6 @@ class Player: SKSpriteNode {
     
     func startWalkingAnimation() {
         if isWalking == false {
-//            print(isWalking)
             let walkAction = SKAction.animate(with: self.walkTextures, timePerFrame: 0.1)
             let repeatAction = SKAction.repeatForever(walkAction)
             self.textureNode.run(repeatAction, withKey: imageName)
@@ -159,14 +180,14 @@ class Player: SKSpriteNode {
     
     func stopWalkingAnimation() {
         if isWalking {
-//            print(isWalking)
             self.textureNode.removeAction(forKey: imageName)
             self.isWalking = false
         }
     }
     
     
-    func didBegin(_ contact: SKPhysicsContact, hapticsManager: HapticsManager) {
+    func didBegin(_ contact
+                  : SKPhysicsContact, hapticsManager: HapticsManager) {
         
         let contactMask = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         if contactMask == (PhysicsCategory.player | PhysicsCategory.ground) {

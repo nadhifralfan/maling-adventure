@@ -88,28 +88,55 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupControllerInputsPlaying(controller: GCController) {
+        let player = self.players[controller.playerIndex.rawValue]
         controller.extendedGamepad?.leftThumbstick.left.pressedChangedHandler = { [weak self] (button, value, pressed) in
-            guard let self = self else { return }
+            guard self != nil else { return }
             if pressed {
-                self.players[controller.playerIndex.rawValue].keysPressed.insert(123)
+                player.keysPressed.insert(123)
             } else {
-                self.players[controller.playerIndex.rawValue].keysPressed.remove(123)
+                player.keysPressed.remove(123)
             }
         }
         controller.extendedGamepad?.leftThumbstick.right.pressedChangedHandler = { [weak self] (button, value, pressed) in
-            guard let self = self else { return }
+            guard self != nil else { return }
             if pressed {
-                self.players[controller.playerIndex.rawValue].keysPressed.insert(124)
+                player.keysPressed.insert(124)
             } else {
-                self.players[controller.playerIndex.rawValue].keysPressed.remove(124)
+                player.keysPressed.remove(124)
             }
         }
         controller.extendedGamepad?.buttonA.pressedChangedHandler = { [weak self] (button,value,pressed) in
-            guard let self = self else { return }
+            guard self != nil else { return }
             if pressed {
-                self.players[controller.playerIndex.rawValue].keysPressed.insert(126)
+                player.keysPressed.insert(126)
             } else {
-                self.players[controller.playerIndex.rawValue].keysPressed.remove(126)
+                player.keysPressed.remove(126)
+            }
+        }
+        
+        controller.extendedGamepad?.buttonB.pressedChangedHandler = { [weak self] (button,value,pressed) in
+            guard let self = self else { return }
+            if pressed && player.canInteract {
+                if player.contactWith == level.sections[currentSection-1].doorExit.doorType {
+                    playersAtDoorExit.insert(player)
+                    player.isHidden = true
+                    if playersAtDoorExit.count == players.count {
+                        let reveal = SKTransition.push(with: getTransition(to: level.sections[currentSection-1].transitionNext), duration: 1)
+                        let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection].spawnEntry, hapticsManager: hapticsManager!)
+                        self.view?.presentScene(newScene, transition: reveal)
+                    }
+                } else if player.contactWith == level.sections[currentSection-1].doorEntry.doorType {
+                    player.isHidden = true
+                    playersAtDoorEntry.insert(player)
+    
+                    if playersAtDoorEntry.count == players.count && currentSection != 1 {
+                        let reveal = SKTransition.push(with: getTransition(to: level.sections[currentSection-1].transitionBack), duration: 1)
+                        let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-2].spawnExit, hapticsManager: hapticsManager!)
+                        self.view?.presentScene(newScene, transition: reveal)
+                    }
+                } else {
+                    //TODO: Interact for other components
+                }
             }
         }
     }
@@ -172,9 +199,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         self.removeAllChildren()
-        
-        print(currentSection)
-        
+                
         let section = level.sections[currentSection-1]
         
         guard let backgroundTexture = section.background.texture else {
@@ -188,25 +213,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundNode.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
         backgroundNode.zPosition = -1
         self.addChild(backgroundNode)
-        var position = CGPoint(x: 0, y: 0)
-
-        //Coordinate Position
-        for _ in 0..<20 {
-            for _ in 0..<30 {
-                let text = SKLabelNode(text: position.debugDescription)
-                let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
-                platformNode.position = position
-                self.addChild(platformNode)
-                text.fontSize = 5
-                text.fontColor = SKColor.black
-                text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
-                text.position = position
-                text.zPosition = 2
-                position = CGPoint(x: position.x + 35, y: position.y)
-                self.addChild(text)
-            }
-            position = CGPoint(x: 0, y: position.y + 40)
-        }
+        
+//        var position = CGPoint(x: 0, y: 0)
+//
+//        //Coordinate Position
+//        for _ in 0..<20 {
+//            for _ in 0..<30 {
+//                let text = SKLabelNode(text: position.debugDescription)
+//                let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
+//                platformNode.position = position
+//                self.addChild(platformNode)
+//                text.fontSize = 5
+//                text.fontColor = SKColor.black
+//                text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
+//                text.position = position
+//                text.zPosition = 2
+//                position = CGPoint(x: position.x + 35, y: position.y)
+//                self.addChild(text)
+//            }
+//            position = CGPoint(x: 0, y: position.y + 40)
+//        }
         
         //Platforms
         for platformData in section.platforms {
@@ -217,7 +243,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                let width = size["width"],
                let height = size["height"] {
                 
-                let platformNode = SKSpriteNode(color: .lightGray, size: CGSize(width: width, height: height))
+                let platformNode = SKSpriteNode(color: .clear, size: CGSize(width: width, height: height))
                 platformNode.anchorPoint = CGPoint(x: 0, y: 0)
                 platformNode.position = CGPoint(x: x, y: y)
                 platformNode.physicsBody = SKPhysicsBody(rectangleOf: platformNode.size, center: CGPoint(x: platformNode.size.width / 2, y: platformNode.size.height / 2))
@@ -293,6 +319,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         
+        if currentSection == 2 {
+            let foreground = Foreground(imageNamed: "foreground", isDynamic: true, position: CGPoint(x: 0, y: 340), size: CGSize(width: 105, height: 428))
+            foreground.zPosition = 5
+            self.addChild(foreground)
+        }
+        
         //Doors
         let doorEntry = section.doorEntry.doorType
         doorEntry.position = section.doorEntry.doorPosition
@@ -351,7 +383,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func keyDown(with event: NSEvent) {
         if let gameControllerManager = gameControllerManager {
+            if gameControllerManager.isStoryMode{
+                if event.keyCode == 36 {
+                    transitionToNextStory()
+                }
+            }
             if gameControllerManager.isPlaying {
+                if event.keyCode == 36 && players.count == 1 && players[0].canInteract {
+                    let player = players[0]
+                    if player.contactWith == level.sections[currentSection-1].doorExit.doorType {
+                        playersAtDoorExit.insert(player)
+                        player.isHidden = true
+                        if playersAtDoorExit.count == players.count {
+                            let reveal = SKTransition.push(with: getTransition(to: level.sections[currentSection-1].transitionNext), duration: 1)
+                            let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager, spawn : level.sections[currentSection].spawnEntry, hapticsManager: hapticsManager!)
+                            self.view?.presentScene(newScene, transition: reveal)
+                        }
+                    } else if player.contactWith == level.sections[currentSection-1].doorEntry.doorType {
+                        player.isHidden = true
+                        playersAtDoorEntry.insert(player)
+        
+                        if playersAtDoorEntry.count == players.count && currentSection != 1 {
+                            let reveal = SKTransition.push(with: getTransition(to: level.sections[currentSection-1].transitionBack), duration: 1)
+                            let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager, spawn : level.sections[currentSection-2].spawnExit, hapticsManager: hapticsManager!)
+                            self.view?.presentScene(newScene, transition: reveal)
+                        }
+                    } else {
+                        //TODO: Interact for other components
+                    }
+                }
                 for player in players {
                     player.keyDown(with: event)
                 }
@@ -388,9 +448,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func getTransition(to direction: String) -> SKTransitionDirection {
+        if direction == "up"{
+            return SKTransitionDirection.up
+        } else if direction == "down"{
+            return SKTransitionDirection.down
+        }else if direction == "left"{
+            return SKTransitionDirection.left
+        }else{
+            return SKTransitionDirection.right
+        }
+    }
+    
     func didBegin(_ contact: SKPhysicsContact) {
         
-        let contactMask = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+        _ = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
 
         for player in players {
             player.didBegin(contact, hapticsManager: hapticsManager!)
@@ -400,30 +472,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let bodyA = contact.bodyA
         let bodyB = contact.bodyB
+        
+        if bodyA.categoryBitMask == PhysicsCategory.foreground || bodyB.categoryBitMask == PhysicsCategory.foreground {
+            let foregroundNode = (bodyA.categoryBitMask == PhysicsCategory.foreground) ? bodyA.node as! Foreground : bodyB.node as! Foreground
+            foregroundNode.didBegin(contact)
+        }
 
         if (bodyA.categoryBitMask == PhysicsCategory.player && bodyB.categoryBitMask == PhysicsCategory.door) || (bodyB.categoryBitMask == PhysicsCategory.player && bodyA.categoryBitMask == PhysicsCategory.door) {
             let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
             let doorNode = (bodyA.categoryBitMask == PhysicsCategory.door) ? bodyA.node as! DoorType : bodyB.node as! DoorType
+            
+            playerNode.isHidden = false
 
             if doorNode == level.sections[currentSection-1].doorExit.doorType {
-                print("exit")
-                playersAtDoorExit.insert(playerNode)
-
-                if playersAtDoorExit.count == players.count {
-                    let reveal = SKTransition.push(with: .left, duration: 1)
-                    self.removeAllChildren()
-                    let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection].spawnEntry, hapticsManager: hapticsManager!)
-                    self.view?.presentScene(newScene, transition: reveal)
-                }
+                playerNode.buttonInteract.isHidden = false
+                playerNode.contactWith = doorNode
+                playerNode.canInteract = true
+                print(playerNode.canInteract)
             } else if doorNode == level.sections[currentSection-1].doorEntry.doorType {
-                playersAtDoorEntry.insert(playerNode)
-                
-                if playersAtDoorEntry.count == players.count && currentSection != 1 {
-                    let reveal = SKTransition.push(with: .left, duration: 1)
-                    self.removeAllChildren()
-                    let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-1].spawnExit, hapticsManager: hapticsManager!)
-                    self.view?.presentScene(newScene, transition: reveal)
-                }
+                playerNode.buttonInteract.isHidden = false
+                playerNode.contactWith = doorNode
+                playerNode.canInteract = true
             }
         }
     }
@@ -436,6 +505,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if (bodyA.categoryBitMask == PhysicsCategory.player && bodyB.categoryBitMask == PhysicsCategory.door) || (bodyB.categoryBitMask == PhysicsCategory.player && bodyA.categoryBitMask == PhysicsCategory.door) {
                 let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
                 let doorNode = (bodyA.categoryBitMask == PhysicsCategory.door) ? bodyA.node as! DoorType : bodyB.node as! DoorType
+                playerNode.buttonInteract.isHidden = true
+                playerNode.contactWith = nil
+                playerNode.canInteract = false
+                playerNode.isHidden = false
 
                 if doorNode == level.sections[currentSection-1].doorExit.doorType {
                     playersAtDoorExit.remove(playerNode)
@@ -456,6 +529,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         coinNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 30, height: 35))
         coinNode.physicsBody?.isDynamic = true
         coinNode.physicsBody?.allowsRotation = false
+        coinNode.physicsBody?.affectedByGravity = true
         coinNode.physicsBody?.categoryBitMask = PhysicsCategory.coin
         coinNode.physicsBody?.collisionBitMask = 0
         coinNode.physicsBody?.collisionBitMask = PhysicsCategory.player | PhysicsCategory.platform
@@ -472,3 +546,4 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return coinEntity
     }
 }
+
