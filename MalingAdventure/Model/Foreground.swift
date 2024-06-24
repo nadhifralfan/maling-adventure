@@ -51,7 +51,6 @@ class Foreground: SKSpriteNode {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
-        print("contact")
         if contact.bodyB.categoryBitMask == PhysicsCategory.player && contact.bodyA.categoryBitMask == PhysicsCategory.foreground && self.isDynamic {
             if visible{
                 makeInvisible()
