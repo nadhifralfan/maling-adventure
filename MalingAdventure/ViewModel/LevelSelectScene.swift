@@ -103,7 +103,7 @@ class LevelSelectScene: SKScene {
         let reveal = SKTransition.fade(withDuration: 0.5)
         gameControllerManager?.isSelectingLevel = false
         gameControllerManager?.isStoryMode = true
-        let newScene = GameScene(size: self.size, level: level, section: 1, gameControllerManager: gameControllerManager!)
+        let newScene = GameScene(size: self.size, level: level, section: 3, gameControllerManager: gameControllerManager!)
         self.view?.presentScene(newScene, transition: reveal)
     }
 

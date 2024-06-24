@@ -9,7 +9,7 @@ import Foundation
 import SpriteKit
 
 class Hazzard : SKNode {
-    var hazzardType : HazzardType = HazzardType(hazzardImageName: "")
+    var hazzardType : String = ""
     var startPosition : CGPoint = CGPoint()
     var endPosition : CGPoint = CGPoint()
     var size : CGSize = CGSize()
@@ -28,7 +28,7 @@ enum HazzardTypeEnum {
         case "type1":
             self = .type1
         case "type2":
-            self = .type4
+            self = .type2
         case "type3":
             self = .type3
         case "type4":
@@ -44,7 +44,7 @@ class HazzardType : SKSpriteNode {
     
     init(hazzardImageName: String) {
         self.hazzardImageName = hazzardImageName
-        super.init(texture: SKTexture(imageNamed: hazzardImageName), color: .clear, size: CGSize(width: 50, height: 50))
+        super.init(texture: SKTexture(imageNamed: "bat"), color: .clear, size: CGSize(width: 50, height: 50))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -57,7 +57,7 @@ func createHazzardType(for type: HazzardTypeEnum) -> HazzardType {
     case .type1:
         return HazzardType(hazzardImageName: "spikesImage")
     case .type2:
-        return HazzardType(hazzardImageName: "fireImage")
+        return HazzardType(hazzardImageName: "bat")
     case .type3:
         return HazzardType(hazzardImageName: "sawImage")
     case .type4:

@@ -246,30 +246,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             position = CGPoint(x: 0, y: position.y + 40)
         }
-        
-        for platformData in section.platforms {
-            if let coordinates = platformData["coordinate"] as? [String: CGFloat],
-               let size = platformData["size"] as? [String: CGFloat],
-               let x = coordinates["x"],
-               let y = coordinates["y"],
-               let width = size["width"],
-               let height = size["height"] {
-                
-                let platformNode = SKSpriteNode(color: .lightGray, size: CGSize(width: width, height: height))
-                platformNode.anchorPoint = CGPoint(x: 0, y: 0)
-                platformNode.position = CGPoint(x: x, y: y)
-                platformNode.physicsBody = SKPhysicsBody(rectangleOf: platformNode.size, center: CGPoint(x: platformNode.size.width / 2, y: platformNode.size.height / 2))
-                platformNode.physicsBody?.isDynamic = false
-                platformNode.physicsBody?.categoryBitMask = PhysicsCategory.platform
-                platformNode.physicsBody?.collisionBitMask = PhysicsCategory.player
-                platformNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
-                platformNode.zPosition = 2
-                self.addChild(platformNode)
-            } else {
-                print("Error: Invalid platform data: \(platformData)")
-            }
-        }
-//        
+////        
 //        for platformData in section.platforms {
 //            if let coordinates = platformData["coordinate"] as? [String: CGFloat],
 //               let size = platformData["size"] as? [String: CGFloat],
@@ -278,7 +255,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //               let width = size["width"],
 //               let height = size["height"] {
 //                
-//                let platformNode = SKSpriteNode(color: .clear, size: CGSize(width: width, height: height))
+//                let platformNode = SKSpriteNode(color: .lightGray, size: CGSize(width: width, height: height))
 //                platformNode.anchorPoint = CGPoint(x: 0, y: 0)
 //                platformNode.position = CGPoint(x: x, y: y)
 //                platformNode.physicsBody = SKPhysicsBody(rectangleOf: platformNode.size, center: CGPoint(x: platformNode.size.width / 2, y: platformNode.size.height / 2))
@@ -292,6 +269,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //                print("Error: Invalid platform data: \(platformData)")
 //            }
 //        }
+        
+        for platformData in section.platforms {
+            if let coordinates = platformData["coordinate"] as? [String: CGFloat],
+               let size = platformData["size"] as? [String: CGFloat],
+               let x = coordinates["x"],
+               let y = coordinates["y"],
+               let width = size["width"],
+               let height = size["height"] {
+                
+                let platformNode = SKSpriteNode(color: .clear, size: CGSize(width: width, height: height))
+                platformNode.anchorPoint = CGPoint(x: 0, y: 0)
+                platformNode.position = CGPoint(x: x, y: y)
+                platformNode.physicsBody = SKPhysicsBody(rectangleOf: platformNode.size, center: CGPoint(x: platformNode.size.width / 2, y: platformNode.size.height / 2))
+                platformNode.physicsBody?.isDynamic = false
+                platformNode.physicsBody?.categoryBitMask = PhysicsCategory.platform
+                platformNode.physicsBody?.collisionBitMask = PhysicsCategory.player
+                platformNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
+                platformNode.zPosition = 2
+                self.addChild(platformNode)
+            } else {
+                print("Error: Invalid platform data: \(platformData)")
+            }
+        }
         coinScoreNode.fontSize = 24
         coinScoreNode.fontColor = SKColor.black
         coinScoreNode.numberOfLines = 0
@@ -338,6 +338,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             hazzardNode.physicsBody?.collisionBitMask = PhysicsCategory.player
             hazzardNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
             hazzardNode.zPosition = 2
+            print(hazzardData.hazzardType)
+            hazzardNode.texture = SKTexture(imageNamed:hazzardData.hazzardType)
             self.addChild(hazzardNode)
             let destination = CGPoint(x: hazzardData.endPosition.x, y: hazzardData.endPosition.y)
             let moveDuration: TimeInterval = 2.0 // Adjust this value as needed
@@ -404,7 +406,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if gameControllerManager.isPlaying {
                 for player in players {
                     player.update(currentTime)
-                    if player.position.x >= 1020 && player.position.y >= 240 && currentSection == 1 {
+                    if player.position.x >= 1020 && player.position.y >= 200 && currentSection == 1 {
                         let reveal = SKTransition.push(with: .left, duration: 1)
 //                        self.removeChildren(in: [player])
                         self.removeAllChildren()
@@ -420,13 +422,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         self.removeAllChildren()
                         let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager)
                         self.view?.presentScene(newScene, transition: reveal)
-                    }
-                    else if player.position.x < 770 && player.position.y >= 720 && currentSection == 3{
+                        
+                    }   else if player.position.x < 770 && player.position.y >= 720 && currentSection == 3{
+                        let reveal = SKTransition.push(with: .down, duration: 1)
+                        self.removeAllChildren()
+                        let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager)
+                        self.view?.presentScene(newScene, transition: reveal)
+                        
+                    }   else if player.position.x < 0 && player.position.y >= 80 && currentSection == 4{
                         let reveal = SKTransition.push(with: .down, duration: 1)
                         self.removeAllChildren()
                         let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager)
                         self.view?.presentScene(newScene, transition: reveal)
                     }
+                    
                 }
             }
             
