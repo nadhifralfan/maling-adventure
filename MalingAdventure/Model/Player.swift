@@ -199,7 +199,7 @@ class Player: SKSpriteNode {
             createPhysicBody()
             
             //add haptic
-            hapticsManager.playHapticsFileController(named: "Rumble", controller: controller!)
+//            hapticsManager.playHapticsFileController(named: "Rumble", controller: controller!)
         }
     }
     

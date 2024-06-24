@@ -113,9 +113,10 @@ func insertDataToScene(scene: LevelSelectScene, debugMode: Bool = false) {
                                         if let hazzard = sectionData["hazzards"] as? [[String: Any]] {
                                             for hazzardData in hazzard {
                                                 let hazzard = Hazzard()
-                                                if let hazzardTypeString = hazzardData["hazzardType"] as? String,
-                                                   let hazzardType = HazzardTypeEnum(from: hazzardTypeString) {
-                                                    hazzard.hazzardType = createHazzardType(for: hazzardType)
+                                                if let hazzardTypeString = hazzardData["hazzardType"] as? String
+                                                //,let hazzardType = HazzardTypeEnum(from: hazzardTypeString)
+                                                {
+                                                    hazzard.hazzardType = hazzardTypeString
                                                 }
                                                 if let xSpawn = hazzardData["xSpawn"] as? CGFloat,
                                                    let ySpawn = hazzardData["ySpawn"] as? CGFloat {
@@ -189,7 +190,7 @@ func debugLevelData(levels: [String:Level]){
             print("---HAZZARDS---")
             for hazzard in section.hazzards {
                 print("---HAZZARD TYPE---")
-                print(hazzard.hazzardType.hazzardImageName)
+                print(hazzard.hazzardType)
                 print("---START POSITION---")
                 print(hazzard.startPosition)
                 print("---END POSITION---")

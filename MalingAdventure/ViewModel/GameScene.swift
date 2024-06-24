@@ -296,6 +296,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             hazzardNode.physicsBody?.collisionBitMask = PhysicsCategory.player
             hazzardNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
             hazzardNode.zPosition = 2
+            hazzardNode.texture = SKTexture(imageNamed: hazzardData.hazzardType)
             self.addChild(hazzardNode)
             let destination = CGPoint(x: hazzardData.endPosition.x, y: hazzardData.endPosition.y)
             let moveDuration: TimeInterval = 2.0
