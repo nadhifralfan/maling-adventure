@@ -97,55 +97,8 @@
                     }
                 ]
             }
-          ],
-          "spawnEntry" : {
-            "x" : 120,
-            "y" : 140
-          },
-          "spawnExit" : {
-              "x" : 945,
-              "y" : 240
-          },
-          "doorEntry" : {
-            "doorType" : "type1",
-            "x": 0,
-            "y": 120
-          },
-          "doorExit" : {
-            "doorType" : "type2",
-            "x": 1024,
-            "y": 200
-          },
-          
-          "coins" : [
-            { "x": 210, "y": 160 },
-            { "x": 385, "y": 280 }
-          ],
-          
-          "hazzards" : [
-              {
-                  "hazzardType" :"type1",
-                  "xSpawn" : 600,
-                  "ySpawn" : 420,
-                  "xEnd" : 680,
-                  "yEnd" : 420,
-                  "width":40,
-                  "height":40,
-              },
-              
-          
-          {
-              "hazzardType" : "type2",
-              "xSpawn" : 500,
-              "ySpawn" : 180,
-              "xEnd" : 500,
-              "yEnd" : 280,
-              "width":7,
-              "height":8
-          }
-        ]
-        }
-      },
+        },
+            
       
       {"2" :
         {
@@ -245,8 +198,8 @@
               "y" : 240
           },
           "spawnExit" : {
-              "x" : 140,
-              "y" : 720
+              "x" : 105,
+              "y" : 670
           },
           "doorEntry" : {
               "doorType" : "type1",
@@ -256,8 +209,8 @@
          
           "doorExit" : {
             "doorType" : "type2",
-            "x": 140,
-            "y": 760
+            "x": 120,
+            "y": 670
           },
           "coins" : [
             { "x": 140, "y": 200 },
@@ -269,10 +222,10 @@
           ],
           "hazzards" : [
               {
-                  "hazzardType" :"type1",
+                  "hazzardType" :"rat",
                   "xSpawn" : 580,
                   "ySpawn" : 40,
-                  "xEnd" : 580,
+                  "xEnd" : 500,
                   "yEnd" : 40,
                   "width":38,
                   "height":40,
@@ -395,8 +348,8 @@
               "ySpawn" : 280,
               "xEnd" : 315,
               "yEnd" : 160,
-              "width":35,
-              "height":35,
+              "width":52,
+              "height":52,
           },
           
           {

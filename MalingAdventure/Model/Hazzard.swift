@@ -16,7 +16,6 @@ class Hazzard : SKNode {
 }
 
 
-
 enum HazzardTypeEnum {
     case type1
     case type2
@@ -51,6 +50,8 @@ class HazzardType : SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+
 
 func createHazzardType(for type: HazzardTypeEnum) -> HazzardType {
     switch type {

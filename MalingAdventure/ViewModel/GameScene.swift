@@ -214,25 +214,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundNode.zPosition = -1
         self.addChild(backgroundNode)
         
-//        var position = CGPoint(x: 0, y: 0)
-//
-//        //Coordinate Position
-//        for _ in 0..<20 {
-//            for _ in 0..<30 {
-//                let text = SKLabelNode(text: position.debugDescription)
-//                let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
-//                platformNode.position = position
-//                self.addChild(platformNode)
-//                text.fontSize = 5
-//                text.fontColor = SKColor.black
-//                text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
-//                text.position = position
-//                text.zPosition = 2
-//                position = CGPoint(x: position.x + 35, y: position.y)
-//                self.addChild(text)
-//            }
-//            position = CGPoint(x: 0, y: position.y + 40)
-//        }
+        var position = CGPoint(x: 0, y: 0)
+
+        //Coordinate Position
+        for _ in 0..<20 {
+            for _ in 0..<30 {
+                let text = SKLabelNode(text: position.debugDescription)
+                let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
+                platformNode.position = position
+                self.addChild(platformNode)
+                text.fontSize = 5
+                text.fontColor = SKColor.black
+                text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
+                text.position = position
+                text.zPosition = 2
+                position = CGPoint(x: position.x + 35, y: position.y)
+                self.addChild(text)
+            }
+            position = CGPoint(x: 0, y: position.y + 40)
+        }
         
         //Platforms
         for platformData in section.platforms {
@@ -296,34 +296,57 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             hazzardNode.physicsBody?.collisionBitMask = PhysicsCategory.player
             hazzardNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
             hazzardNode.zPosition = 2
-            hazzardNode.texture = SKTexture(imageNamed: hazzardData.hazzardType)
-            self.addChild(hazzardNode)
-            let destination = CGPoint(x: hazzardData.endPosition.x, y: hazzardData.endPosition.y)
-            let moveDuration: TimeInterval = 2.0
             
-            var moveAction: SKAction?
+            // Buat animasi maju
+            let texturesForward = (1...3).map { SKTexture(imageNamed: "\(hazzardData.hazzardType)\($0)") }
+            let animateForward = SKAction.animate(with: texturesForward, timePerFrame: 0.2)
+            let animateForwardLoop = SKAction.repeatForever(animateForward)
             
-            if hazzardData.startPosition.x != destination.x && hazzardData.startPosition.y == destination.y {
+            // Buat animasi mundur (membalik urutan texture)
+            let texturesBackward = texturesForward.reversed()
+            let animateBackward = SKAction.animate(with: Array(texturesBackward), timePerFrame: 0.2)
+            let animateBackwardLoop = SKAction.repeatForever(animateBackward)
 
-                let moveRight = SKAction.moveTo(x: destination.x, duration: moveDuration)
-                let moveLeft = SKAction.moveTo(x: hazzardData.startPosition.x, duration: moveDuration)
-                moveAction = SKAction.sequence([moveRight, moveLeft])
-            } else if hazzardData.startPosition.y != destination.y && hazzardData.startPosition.x == destination.x {
-                let moveUp = SKAction.moveTo(y: destination.y, duration: moveDuration)
-                let moveDown = SKAction.moveTo(y: hazzardData.startPosition.y, duration: moveDuration)
-                moveAction = SKAction.sequence([moveUp, moveDown])
+            // Tentukan durasi gerakan
+            let moveDuration: TimeInterval = 2.0
+
+            // Buat aksi gerakan
+            let moveRight = SKAction.moveTo(x: hazzardData.endPosition.x, duration: moveDuration)
+            let moveLeft = SKAction.moveTo(x: hazzardData.startPosition.x, duration: moveDuration)
+            let moveUp = SKAction.moveTo(y: hazzardData.endPosition.y, duration: moveDuration)
+            let moveDown = SKAction.moveTo(y: hazzardData.startPosition.y, duration: moveDuration)
+            
+            // Aksi untuk membalik skala secara horizontal dengan penyesuaian posisi
+            let flipHorizontal = SKAction.run {
+                hazzardNode.xScale *= -1
             }
             
-            if let moveAction = moveAction {
-                let repeatAction = SKAction.repeatForever(moveAction)
-                hazzardNode.run(repeatAction)
+            // Gabungkan animasi, gerakan, dan pembalikan skala dalam aksi grup
+            let moveAction: SKAction
+            if hazzardData.startPosition.x != hazzardData.endPosition.x && hazzardData.startPosition.y == hazzardData.endPosition.y {
+                let forwardAction = SKAction.group([moveRight, animateForward])
+                let backwardAction = SKAction.group([moveLeft, animateBackward])
+                moveAction = SKAction.sequence([forwardAction, flipHorizontal, backwardAction, flipHorizontal])
+            } else if hazzardData.startPosition.y != hazzardData.endPosition.y && hazzardData.startPosition.x == hazzardData.endPosition.x {
+                let forwardAction = SKAction.group([moveUp, animateForward])
+                let backwardAction = SKAction.group([moveDown, animateBackward])
+                moveAction = SKAction.sequence([forwardAction, flipHorizontal, backwardAction, flipHorizontal])
+            } else {
+                continue
             }
-        }
+
+            // Jalankan aksi berulang
+            let repeatAction = SKAction.repeatForever(moveAction)
+            hazzardNode.run(SKAction.group([repeatAction, animateForwardLoop]))
+            
+            self.addChild(hazzardNode)
         
-        if currentSection == 2 {
-            let foreground = Foreground(imageNamed: "foreground", isDynamic: true, position: CGPoint(x: 0, y: 340), size: CGSize(width: 105, height: 428))
-            foreground.zPosition = 5
-            self.addChild(foreground)
+
+            if currentSection == 2 {
+                let foreground = Foreground(imageNamed: "foreground", isDynamic: true, position: CGPoint(x: 0, y: 340), size: CGSize(width: 105, height: 428))
+                foreground.zPosition = 5
+                self.addChild(foreground)
+            }
         }
         
         //Doors
@@ -343,7 +366,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             players.append(player)
         } else {
             for i in 0..<(gameControllerManager?.controllers.count ?? 0) {
-                let player = Player(imageNamed: "playerImage", spawn: spawn, name: "P\(i+1)")
+                let player = Player(imageNamed: "player\(i+1)Image", spawn: spawn, name: "P\(i+1)")
                 player.setController(gameControllerManager?.controllers[i])
                 players.append(player)
             }
