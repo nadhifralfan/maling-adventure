@@ -14,32 +14,37 @@ class ViewController: NSViewController {
     @IBOutlet var skView: SKView!
     
     //TURN ON DEBUG MODE FOR DATEBASE
-    var debugMode : Bool = false
+    var debugMode : Bool = true
     
     let gameControllerManager = GameControllerManager()
+    let hapticsManager = HapticsManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         if let view = self.skView {
-            // Load the SKScene from 'GameScene.sks'
             if let scene = LevelSelectScene(fileNamed: "LevelSelectScene") {
-                
                 
                 insertDataToScene(scene: scene, debugMode: debugMode)
                 
                 scene.scaleMode = .aspectFill
                 scene.gameControllerManager = gameControllerManager
+                scene.hapticsManager = hapticsManager
+
                 // Present the scene
                 view.presentScene(scene)
             }
+//            if let scene = MenuScene(fileNamed: "MenuScene") {
+//                scene.scaleMode = .aspectFill
+//                view.presentScene(scene)
+//            }
             
             view.ignoresSiblingOrder = true
             
-//            view.showsPhysics = true
-            view.showsDrawCount = true
-            view.showsFPS = true
-            view.showsNodeCount = true
+            view.showsPhysics = false
+            view.showsDrawCount = false
+            view.showsFPS = false
+            view.showsNodeCount = false
         }
     }
 }

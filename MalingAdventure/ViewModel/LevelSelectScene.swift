@@ -8,35 +8,37 @@ class LevelSelectScene: SKScene {
     private var selectedButtonIndex: Int = 0
     private var buttons: [SKLabelNode] = []
     var gameControllerManager: GameControllerManager?
+    var hapticsManager: HapticsManager?
+
     let info = SKLabelNode(text: "Waiting for controllers to connect...")
 
     override func didMove(to view: SKView) {
         guard !levels.isEmpty else { return }
         
-//        if let gameControllerManager = gameControllerManager {
-//            gameControllerManager.isSelectingLevel = true
-//            
-//            self.info.position.x = 30
-//            self.info.position.y = 100
-//            self.addChild(self.info)
-//            
-//            // Create a repeating timer that checks for controllers
-//            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
-//                if gameControllerManager.controllers.count > 0 {
-//                    timer.invalidate()
-//                    
-//                    for controller in gameControllerManager.controllers {
-//                        controller.extendedGamepad?.valueChangedHandler = nil
-//                        self?.setupControllerInputs(controller: controller)
-//                    }
-//                                        
-//                    self?.createLevelButtons()
-//                } else {
-//
-//                    print("Waiting for controllers to connect...")
-//                }
-//            }
-//        }
+        if let gameControllerManager = gameControllerManager {
+            gameControllerManager.isSelectingLevel = true
+            
+            self.info.position.x = 30
+            self.info.position.y = 100
+            self.addChild(self.info)
+            
+            // Create a repeating timer that checks for controllers
+            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
+                if gameControllerManager.controllers.count > 0 {
+                    timer.invalidate()
+                    
+                    for controller in gameControllerManager.controllers {
+                        controller.extendedGamepad?.valueChangedHandler = nil
+                        self?.setupControllerInputs(controller: controller)
+                    }
+                                        
+                    self?.createLevelButtons()
+                } else {
+
+                    print("Waiting for controllers to connect...")
+                }
+            }
+        }
         self.createLevelButtons()
     }
 
@@ -103,7 +105,7 @@ class LevelSelectScene: SKScene {
         let reveal = SKTransition.fade(withDuration: 0.5)
         gameControllerManager?.isSelectingLevel = false
         gameControllerManager?.isStoryMode = true
-        let newScene = GameScene(size: self.size, level: level, section: 1, gameControllerManager: gameControllerManager!)
+        let newScene = GameScene(size: self.size, level: level, section: 1, gameControllerManager: gameControllerManager!, spawn : level.sections[0].spawnEntry, hapticsManager: hapticsManager!)
         self.view?.presentScene(newScene, transition: reveal)
     }
 
@@ -123,7 +125,22 @@ class LevelSelectScene: SKScene {
         }
     }
 
-    override func keyDown(with event: NSEvent) {}
+    override func keyDown(with event: NSEvent) {
+        if event.keyCode == 126 {
+            selectedButtonIndex = max(selectedButtonIndex - 1, 0)
+            highlightButton(at: selectedButtonIndex)
+        }
+        if event.keyCode == 125 {
+            selectedButtonIndex = min(selectedButtonIndex + 1, buttons.count - 1)
+            highlightButton(at: selectedButtonIndex)
+        }
+        if event.keyCode == 36 && gameControllerManager!.isSelectingLevel == true{
+            currentLevel = levels[String(selectedButtonIndex + 1)]
+            if let level = currentLevel {
+                switchToGameScene(level: level)
+            }
+        }
+    }
 
     override func update(_ currentTime: TimeInterval) {}
 }
