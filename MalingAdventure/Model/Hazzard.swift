@@ -9,7 +9,7 @@ import Foundation
 import SpriteKit
 
 class Hazzard : SKNode {
-    var hazzardType : HazzardType = HazzardType(hazzardImageName: "")
+    var hazzardType : String = ""
     var startPosition : CGPoint = CGPoint()
     var endPosition : CGPoint = CGPoint()
     var size : CGSize = CGSize()
