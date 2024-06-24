@@ -19,6 +19,7 @@ struct PhysicsCategory {
     static let hazzard: UInt32 = 1 << 7
     static let door: UInt32 = 1 << 8
     static let foreground: UInt32 = 1 << 9
+    static let box: UInt32 = 1 << 10
 }
 
 class Player: SKSpriteNode {
@@ -37,6 +38,8 @@ class Player: SKSpriteNode {
     var buttonInteract: SKSpriteNode
     var canInteract: Bool = false
     var contactWith: SKNode?
+    var contactJoint: SKNode?
+    var joint: SKPhysicsJointPin?
     
     private var walkTextures: [SKTexture] = []
     
@@ -85,10 +88,11 @@ class Player: SKSpriteNode {
     private func createPhysicBody(){
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: self.size.width / 2, y: self.size.height / 2))
         self.physicsBody?.categoryBitMask = PhysicsCategory.player
-        self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.player
-        self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.door | PhysicsCategory.foreground
+        self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.player | PhysicsCategory.box
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.door | PhysicsCategory.foreground | PhysicsCategory.box
         self.physicsBody?.affectedByGravity = true
         self.physicsBody?.allowsRotation = false
+        self.physicsBody?.restitution = 0
     }
     
     func updatePosition(to position: CGPoint) {
@@ -186,8 +190,7 @@ class Player: SKSpriteNode {
     }
     
     
-    func didBegin(_ contact
-                  : SKPhysicsContact, hapticsManager: HapticsManager) {
+    func didBegin(_ contact: SKPhysicsContact, hapticsManager: HapticsManager) {
         
         let contactMask = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         if contactMask == (PhysicsCategory.player | PhysicsCategory.ground) {
@@ -199,7 +202,11 @@ class Player: SKSpriteNode {
             createPhysicBody()
             
             //add haptic
-//            hapticsManager.playHapticsFileController(named: "Rumble", controller: controller!)
+//            hapticsManager.playHapticsFileController(named: "Boing", controller: controller!)
+        }
+        
+        if contactMask == (PhysicsCategory.player | PhysicsCategory.box){
+            
         }
     }
     
