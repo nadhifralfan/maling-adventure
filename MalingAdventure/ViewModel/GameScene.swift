@@ -214,25 +214,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundNode.zPosition = -1
         self.addChild(backgroundNode)
         
-//        var position = CGPoint(x: 0, y: 0)
-//
-//        //Coordinate Position
-//        for _ in 0..<20 {
-//            for _ in 0..<30 {
-//                let text = SKLabelNode(text: position.debugDescription)
-//                let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
-//                platformNode.position = position
-//                self.addChild(platformNode)
-//                text.fontSize = 5
-//                text.fontColor = SKColor.black
-//                text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
-//                text.position = position
-//                text.zPosition = 2
-//                position = CGPoint(x: position.x + 35, y: position.y)
-//                self.addChild(text)
-//            }
-//            position = CGPoint(x: 0, y: position.y + 40)
-//        }
+        var position = CGPoint(x: 0, y: 0)
+
+        //Coordinate Position
+        for _ in 0..<20 {
+            for _ in 0..<30 {
+                let text = SKLabelNode(text: position.debugDescription)
+                let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
+                platformNode.position = position
+                self.addChild(platformNode)
+                text.fontSize = 5
+                text.fontColor = SKColor.white
+                text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
+                text.position = position
+                text.zPosition = 2
+                position = CGPoint(x: position.x + 35, y: position.y)
+                self.addChild(text)
+            }
+            position = CGPoint(x: 0, y: position.y + 40)
+        }
         
         //Platforms
         for platformData in section.platforms {
@@ -260,7 +260,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //Coins
         coinScoreNode.fontSize = 24
-        coinScoreNode.fontColor = SKColor.black
+        coinScoreNode.fontColor = SKColor.white
         coinScoreNode.numberOfLines = 0
         coinScoreNode.position.x = 945
         coinScoreNode.position.y = 740
@@ -287,44 +287,71 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //Hazzards
         for hazzardData in section.hazzards {
-            let hazzardNode = SKSpriteNode(color: .red, size: CGSize(width: hazzardData.size.width, height: hazzardData.size.height))
-            hazzardNode.anchorPoint = CGPoint(x: 0, y: 0)
-            hazzardNode.position = CGPoint(x: hazzardData.startPosition.x, y: hazzardData.startPosition.y)
-            hazzardNode.physicsBody = SKPhysicsBody(rectangleOf: hazzardNode.size, center: CGPoint(x: hazzardNode.size.width / 2, y: hazzardData.size.height / 2))
-            hazzardNode.physicsBody?.isDynamic = false
-            hazzardNode.physicsBody?.categoryBitMask = PhysicsCategory.hazzard
-            hazzardNode.physicsBody?.collisionBitMask = PhysicsCategory.player
-            hazzardNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
-            hazzardNode.zPosition = 2
-            hazzardNode.texture = SKTexture(imageNamed: hazzardData.hazzardType)
-            self.addChild(hazzardNode)
-            let destination = CGPoint(x: hazzardData.endPosition.x, y: hazzardData.endPosition.y)
-            let moveDuration: TimeInterval = 2.0
-            
-            var moveAction: SKAction?
-            
-            if hazzardData.startPosition.x != destination.x && hazzardData.startPosition.y == destination.y {
+                let hazzardNode = SKSpriteNode(color: .red, size: CGSize(width: hazzardData.size.width, height: hazzardData.size.height))
+                hazzardNode.anchorPoint = CGPoint(x: 0, y: 0)
+                hazzardNode.position = CGPoint(x: hazzardData.startPosition.x, y: hazzardData.startPosition.y)
+                hazzardNode.physicsBody = SKPhysicsBody(rectangleOf: hazzardNode.size, center: CGPoint(x: hazzardNode.size.width / 2, y: hazzardData.size.height / 2))
+                hazzardNode.physicsBody?.isDynamic = false
+                hazzardNode.physicsBody?.categoryBitMask = PhysicsCategory.hazzard
+                hazzardNode.physicsBody?.collisionBitMask = PhysicsCategory.player
+                hazzardNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
+                hazzardNode.zPosition = 2
+                
+                // Buat animasi maju
+                let texturesForward = (1...3).map { SKTexture(imageNamed: "\(hazzardData.hazzardType)\($0)") }
+                let animateForward = SKAction.animate(with: texturesForward, timePerFrame: 0.2)
+                let animateForwardLoop = SKAction.repeatForever(animateForward)
+                
+                // Buat animasi mundur (membalik urutan texture)
+                let texturesBackward = texturesForward.reversed()
+                let animateBackward = SKAction.animate(with: Array(texturesBackward), timePerFrame: 0.2)
+                let animateBackwardLoop = SKAction.repeatForever(animateBackward)
 
-                let moveRight = SKAction.moveTo(x: destination.x, duration: moveDuration)
+                // Tentukan durasi gerakan
+                let moveDuration: TimeInterval = 2.0
+
+                // Buat aksi gerakan
+                let moveRight = SKAction.moveTo(x: hazzardData.endPosition.x, duration: moveDuration)
                 let moveLeft = SKAction.moveTo(x: hazzardData.startPosition.x, duration: moveDuration)
-                moveAction = SKAction.sequence([moveRight, moveLeft])
-            } else if hazzardData.startPosition.y != destination.y && hazzardData.startPosition.x == destination.x {
-                let moveUp = SKAction.moveTo(y: destination.y, duration: moveDuration)
+                let moveUp = SKAction.moveTo(y: hazzardData.endPosition.y, duration: moveDuration)
                 let moveDown = SKAction.moveTo(y: hazzardData.startPosition.y, duration: moveDuration)
-                moveAction = SKAction.sequence([moveUp, moveDown])
-            }
-            
-            if let moveAction = moveAction {
+                
+                // Aksi untuk membalik skala secara horizontal dengan penyesuaian posisi
+                let flipHorizontal = SKAction.run {
+                    if hazzardData.startPosition.x != hazzardData.endPosition.x {
+                        hazzardNode.xScale *= -1
+                    }
+                }
+                
+                // Gabungkan animasi, gerakan, dan pembalikan skala dalam aksi grup
+                let moveAction: SKAction
+                if hazzardData.startPosition.x != hazzardData.endPosition.x && hazzardData.startPosition.y == hazzardData.endPosition.y {
+                    let forwardAction = SKAction.group([moveRight, animateForward])
+                    let backwardAction = SKAction.group([moveLeft, animateBackward])
+                    moveAction = SKAction.sequence([forwardAction, flipHorizontal, backwardAction, flipHorizontal])
+                } else if hazzardData.startPosition.y != hazzardData.endPosition.y && hazzardData.startPosition.x == hazzardData.endPosition.x {
+                    let forwardAction = SKAction.group([moveUp, animateForward])
+                    let backwardAction = SKAction.group([moveDown, animateBackward])
+                    moveAction = SKAction.sequence([forwardAction, flipHorizontal, backwardAction, flipHorizontal])
+                } else {
+                    let forwardAction = SKAction.group([moveRight, animateForward])
+                    let backwardAction = SKAction.group([moveLeft, animateBackward])
+                    moveAction = SKAction.sequence([forwardAction, flipHorizontal, backwardAction, flipHorizontal])
+                }
+
+                // Jalankan aksi berulang
                 let repeatAction = SKAction.repeatForever(moveAction)
-                hazzardNode.run(repeatAction)
+                hazzardNode.run(SKAction.group([repeatAction, animateForwardLoop]))
+                
+                self.addChild(hazzardNode)
+            
+
+                if currentSection == 2 {
+                    let foreground = Foreground(imageNamed: "foreground", isDynamic: true, position: CGPoint(x: 0, y: 340), size: CGSize(width: 105, height: 420))
+                    foreground.zPosition = 5
+                    self.addChild(foreground)
+                }
             }
-        }
-        
-        if currentSection == 2 {
-            let foreground = Foreground(imageNamed: "foreground", isDynamic: true, position: CGPoint(x: 0, y: 340), size: CGSize(width: 105, height: 428))
-            foreground.zPosition = 5
-            self.addChild(foreground)
-        }
         
         //Doors
         let doorEntry = section.doorEntry.doorType
@@ -530,7 +557,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         coinNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 30, height: 35))
         coinNode.physicsBody?.isDynamic = true
         coinNode.physicsBody?.allowsRotation = false
-        coinNode.physicsBody?.affectedByGravity = true
+        coinNode.physicsBody?.affectedByGravity = false
         coinNode.physicsBody?.categoryBitMask = PhysicsCategory.coin
         coinNode.physicsBody?.collisionBitMask = 0
         coinNode.physicsBody?.collisionBitMask = PhysicsCategory.player | PhysicsCategory.platform
@@ -541,8 +568,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let coinComponent = NodeComponent(node: coinNode)
         coinEntity.addComponent(coinComponent)
         
-        let jumpComponent = JumpForeverComponent(vector: CGVector(dx: 0, dy: 40), duration: 0.5)
-        coinEntity.addComponent(jumpComponent)
+//        let jumpComponent = JumpForeverComponent(vector: CGVector(dx: 0, dy: 40), duration: 0.5)
+//        coinEntity.addComponent(jumpComponent)
         
         return coinEntity
     }
