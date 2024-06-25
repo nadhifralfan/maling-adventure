@@ -198,8 +198,8 @@
               "y" : 240
           },
           "spawnExit" : {
-              "x" : 140,
-              "y" : 720
+              "x" : 105,
+              "y" : 670
           },
           "doorEntry" : {
               "doorType" : "type1",
@@ -209,8 +209,8 @@
          
           "doorExit" : {
             "doorType" : "type2",
-            "x": 140,
-            "y": 760
+            "x": 120,
+            "y": 670
           },
           "coins" : [
             { "x": 140, "y": 200 },
@@ -222,10 +222,10 @@
           ],
           "hazzards" : [
               {
-                  "hazzardType" :"type1",
+                  "hazzardType" :"rat",
                   "xSpawn" : 580,
                   "ySpawn" : 40,
-                  "xEnd" : 580,
+                  "xEnd" : 500,
                   "yEnd" : 40,
                   "width":38,
                   "height":40,
@@ -348,8 +348,8 @@
               "ySpawn" : 280,
               "xEnd" : 315,
               "yEnd" : 160,
-              "width":35,
-              "height":35,
+              "width":52,
+              "height":52,
           },
           
           {

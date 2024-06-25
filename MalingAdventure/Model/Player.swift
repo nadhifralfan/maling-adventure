@@ -102,7 +102,7 @@ class Player: SKSpriteNode {
     
     private func loadTextures() {
         // Assuming you have images named walk1.png, walk2.png, etc. and jump.png
-        walkTextures = (1...2).map { SKTexture(imageNamed: "\(imageName)\($0)") }
+        walkTextures = (1...3).map { SKTexture(imageNamed: "\(imageName)\($0)") }
     }
     
     override func keyDown(with event: NSEvent) {
