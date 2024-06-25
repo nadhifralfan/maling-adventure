@@ -231,8 +231,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundNode.zPosition = -1
         self.addChild(backgroundNode)
         
-//        var position = CGPoint(x: 0, y: 0)
-//
+        var position = CGPoint(x: 0, y: 0)
+
 //        //Coordinate Position
 //        for _ in 0..<20 {
 //            for _ in 0..<30 {
@@ -364,14 +364,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 hazzardNode.run(SKAction.group([repeatAction, animateForwardLoop]))
                 
                 self.addChild(hazzardNode)
-            
-
-                if currentSection == 2 {
-                    let foreground = Foreground(imageNamed: "foreground", isDynamic: true, position: CGPoint(x: 0, y: 340), size: CGSize(width: 105, height: 420))
-                    foreground.zPosition = 5
-                    self.addChild(foreground)
-                }
+                
             }
+        
+        //MARK: Interactable Box
+        if currentSection == 1 {
+            let box = InteractableBox(imageNamed: "box1", position: CGPoint(x: 210, y: 120), size: CGSize(width: 35, height: 40))
+            box.zPosition = 3
+            self.addChild(box)
+            let box2 = InteractableBox(imageNamed: "box2", position: CGPoint(x: 210, y: 160), size: CGSize(width: 35, height: 40))
+            box2.zPosition = 3
+            self.addChild(box2)
+            let box3 = InteractableBox(imageNamed: "box3", position: CGPoint(x: 210, y: 200), size: CGSize(width: 35, height: 40))
+            box3.zPosition = 3
+            
+            self.addChild(box3)
+        }
+        
+        //MARK: Foreground
+        if currentSection == 2 {
+            let foreground = Foreground(imageNamed: "foreground", isDynamic: true, position: CGPoint(x: 0, y: 340), size: CGSize(width: 105, height: 428))
+            foreground.zPosition = 5
+            self.addChild(foreground)
+        }
+        
+        if currentSection == 4 {
+            let box = InteractableBox(imageNamed: "trampoline3", position: CGPoint(x: 140, y: 120), size: CGSize(width: 70, height: 20))
+            box.zPosition = 3
+            self.addChild(box)
+        }
         
         //Doors
         let doorEntry = section.doorEntry.doorType
