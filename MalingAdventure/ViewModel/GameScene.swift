@@ -366,11 +366,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         //Players
         if gameControllerManager?.controllers.count == 0 {
-            let player = Player(imageNamed: "playerImage", spawn: spawn, name: "P1")
+            let player = Player(imageNamed: "player1Image", spawn: spawn, name: "P1")
             players.append(player)
         } else {
             for i in 0..<(gameControllerManager?.controllers.count ?? 0) {
-                let player = Player(imageNamed: "playerImage", spawn: spawn, name: "P\(i+1)")
+                let player = Player(imageNamed: "player\(i+1)Image", spawn: spawn, name: "P\(i+1)")
                 player.setController(gameControllerManager?.controllers[i])
                 players.append(player)
             }
