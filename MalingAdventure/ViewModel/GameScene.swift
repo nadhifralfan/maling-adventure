@@ -18,7 +18,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var coins: Int = 0
     let coinScoreNode = SKLabelNode(text: "Coins: 0")
     var previousUpdateTime: TimeInterval = 0
-
+    
     init(size: CGSize, level: Level, section: Int, gameControllerManager: GameControllerManager, spawn: CGPoint, hapticsManager: HapticsManager) {
         self.level = level
         self.currentSection = section
@@ -68,8 +68,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     }
                 }
                 displayCurrentStory()
-//                createLevelContent()
-//                gameControllerManager.isPlaying = true
+                //                createLevelContent()
+                //                gameControllerManager.isPlaying = true
             }
         }
     }
@@ -128,7 +128,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 } else if player.contactWith == level.sections[currentSection-1].doorEntry.doorType {
                     player.isHidden = true
                     playersAtDoorEntry.insert(player)
-    
+                    
                     if playersAtDoorEntry.count == players.count && currentSection != 1 {
                         let reveal = SKTransition.push(with: getTransition(to: level.sections[currentSection-1].transitionBack), duration: 1)
                         let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-2].spawnExit, hapticsManager: hapticsManager!)
@@ -214,7 +214,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         self.removeAllChildren()
-                
+        
         let section = level.sections[currentSection-1]
         
         guard let backgroundTexture = section.background.texture else {
@@ -229,25 +229,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundNode.zPosition = -1
         self.addChild(backgroundNode)
         
-//        var position = CGPoint(x: 0, y: 0)
-
-//        //Coordinate Position
-//        for _ in 0..<20 {
-//            for _ in 0..<30 {
-//                let text = SKLabelNode(text: position.debugDescription)
-//                let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
-//                platformNode.position = position
-//                self.addChild(platformNode)
-//                text.fontSize = 5
-//                text.fontColor = SKColor.black
-//                text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
-//                text.position = position
-//                text.zPosition = 2
-//                position = CGPoint(x: position.x + 35, y: position.y)
-//                self.addChild(text)
-//            }
-//            position = CGPoint(x: 0, y: position.y + 40)
-//        }
+        //        var position = CGPoint(x: 0, y: 0)
+        
+        //        //Coordinate Position
+        //        for _ in 0..<20 {
+        //            for _ in 0..<30 {
+        //                let text = SKLabelNode(text: position.debugDescription)
+        //                let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
+        //                platformNode.position = position
+        //                self.addChild(platformNode)
+        //                text.fontSize = 5
+        //                text.fontColor = SKColor.black
+        //                text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
+        //                text.position = position
+        //                text.zPosition = 2
+        //                position = CGPoint(x: position.x + 35, y: position.y)
+        //                self.addChild(text)
+        //            }
+        //            position = CGPoint(x: 0, y: position.y + 40)
+        //        }
         
         //Platforms
         for platformData in section.platforms {
@@ -319,10 +319,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let texturesBackward = texturesForward.reversed()
             let animateBackward = SKAction.animate(with: Array(texturesBackward), timePerFrame: 0.2)
             let animateBackwardLoop = SKAction.repeatForever(animateBackward)
-
+            
             // Tentukan durasi gerakan
             let moveDuration: TimeInterval = 2.0
-
+            
             // Buat aksi gerakan
             let moveRight = SKAction.moveTo(x: hazzardData.endPosition.x, duration: moveDuration)
             let moveLeft = SKAction.moveTo(x: hazzardData.startPosition.x, duration: moveDuration)
@@ -347,243 +347,244 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             } else {
                 continue
             }
-
+            
             // Jalankan aksi berulang
             let repeatAction = SKAction.repeatForever(moveAction)
             hazzardNode.run(SKAction.group([repeatAction, animateForwardLoop]))
             
             self.addChild(hazzardNode)
-        
-        //MARK: Interactable Box
-        if currentSection == 1 {
-            let box = InteractableBox(imageNamed: "box", position: CGPoint(x: 210, y: 120), size: CGSize(width: 35, height: 40))
-            box.zPosition = 3
-            self.addChild(box)
-            let box2 = InteractableBox(imageNamed: "box", position: CGPoint(x: 210, y: 160), size: CGSize(width: 35, height: 40))
-            box2.zPosition = 3
-            self.addChild(box2)
-            let box3 = InteractableBox(imageNamed: "box", position: CGPoint(x: 210, y: 200), size: CGSize(width: 35, height: 40))
-            box3.zPosition = 3
             
-            self.addChild(box3)
-        }
-        
-        //MARK: Foreground
-        if currentSection == 2 {
-            let foreground = Foreground(imageNamed: "foreground", isDynamic: true, position: CGPoint(x: 0, y: 340), size: CGSize(width: 105, height: 428))
-            foreground.zPosition = 5
-            self.addChild(foreground)
-        }
-        
-        //Doors
-        let doorEntry = section.doorEntry.doorType
-        doorEntry.position = section.doorEntry.doorPosition
-        doorEntry.zPosition = 2
-        self.addChild(doorEntry)
-        let doorExit = section.doorExit.doorType
-        doorExit.position = section.doorExit.doorPosition
-        doorExit.zPosition = 2
-        self.addChild(doorExit)
-        
-
-        //Players
-        if gameControllerManager?.controllers.count == 0 {
-            let player = Player(imageNamed: "player1Image", spawn: spawn, name: "P1")
-            players.append(player)
-        } else {
-            for i in 0..<(gameControllerManager?.controllers.count ?? 0) {
-                let player = Player(imageNamed: "player\(i+1)Image", spawn: spawn, name: "P\(i+1)")
-                player.setController(gameControllerManager?.controllers[i])
+            //MARK: Interactable Box
+            if currentSection == 1 {
+                let box = InteractableBox(imageNamed: "box", position: CGPoint(x: 210, y: 120), size: CGSize(width: 35, height: 40))
+                box.zPosition = 3
+                self.addChild(box)
+                let box2 = InteractableBox(imageNamed: "box", position: CGPoint(x: 210, y: 160), size: CGSize(width: 35, height: 40))
+                box2.zPosition = 3
+                self.addChild(box2)
+                let box3 = InteractableBox(imageNamed: "box", position: CGPoint(x: 210, y: 200), size: CGSize(width: 35, height: 40))
+                box3.zPosition = 3
+                
+                self.addChild(box3)
+            }
+            
+            //MARK: Foreground
+            if currentSection == 2 {
+                let foreground = Foreground(imageNamed: "foreground", isDynamic: true, position: CGPoint(x: 0, y: 340), size: CGSize(width: 105, height: 428))
+                foreground.zPosition = 5
+                self.addChild(foreground)
+            }
+            
+            //Doors
+            let doorEntry = section.doorEntry.doorType
+            doorEntry.position = section.doorEntry.doorPosition
+            doorEntry.zPosition = 2
+            self.addChild(doorEntry)
+            let doorExit = section.doorExit.doorType
+            doorExit.position = section.doorExit.doorPosition
+            doorExit.zPosition = 2
+            self.addChild(doorExit)
+            
+            
+            //Players
+            if gameControllerManager?.controllers.count == 0 {
+                let player = Player(imageNamed: "player1Image", spawn: spawn, name: "P1")
                 players.append(player)
-            }
-        }
-        
-        for player in players {
-            player.zPosition = 4
-            self.addChild(player)
-        }
-        
-    }
-    
-    override func mouseUp(with event: NSEvent) {
-        let location = event.location(in: self)
-        let nodesAtPoint = nodes(at: location)
-        
-        for node in nodesAtPoint {
-            if node.name == "nextButton" {
-                transitionToNextStory()
-            }
-        }
-    }
-    
-    override func update(_ currentTime: TimeInterval) {
-        if let gameControllerManager = gameControllerManager {
-            if gameControllerManager.isPlaying {
-                for player in players {
-                    player.update(currentTime)
+            } else {
+                for i in 0..<(gameControllerManager?.controllers.count ?? 0) {
+                    let player = Player(imageNamed: "player\(i+1)Image", spawn: spawn, name: "P\(i+1)")
+                    player.setController(gameControllerManager?.controllers[i])
+                    players.append(player)
                 }
             }
             
-            let timeSincePreviousUpdate = currentTime - previousUpdateTime
-            jumpComponentSystem.update(deltaTime: timeSincePreviousUpdate)
-            previousUpdateTime = currentTime
-            coinScoreNode.text = "Coins: \(coins)"
+            for player in players {
+                player.zPosition = 4
+                self.addChild(player)
+            }
+            
         }
     }
-    
-    override func keyDown(with event: NSEvent) {
-        if let gameControllerManager = gameControllerManager {
-            if gameControllerManager.isStoryMode{
-                if event.keyCode == 36 {
+        
+        override func mouseUp(with event: NSEvent) {
+            let location = event.location(in: self)
+            let nodesAtPoint = nodes(at: location)
+            
+            for node in nodesAtPoint {
+                if node.name == "nextButton" {
                     transitionToNextStory()
                 }
             }
-            if gameControllerManager.isPlaying {
-                if event.keyCode == 36 && players.count == 1 && players[0].canInteract {
-                    let player = players[0]
-                    if player.contactWith == level.sections[currentSection-1].doorExit.doorType {
-                        playersAtDoorExit.insert(player)
-                        player.isHidden = true
-                        if playersAtDoorExit.count == players.count {
-                            let reveal = SKTransition.push(with: getTransition(to: level.sections[currentSection-1].transitionNext), duration: 1)
-                            let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager, spawn : level.sections[currentSection].spawnEntry, hapticsManager: hapticsManager!)
-                            self.view?.presentScene(newScene, transition: reveal)
-                        }
-                    } else if player.contactWith == level.sections[currentSection-1].doorEntry.doorType {
-                        player.isHidden = true
-                        playersAtDoorEntry.insert(player)
+        }
         
-                        if playersAtDoorEntry.count == players.count && currentSection != 1 {
-                            let reveal = SKTransition.push(with: getTransition(to: level.sections[currentSection-1].transitionBack), duration: 1)
-                            let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager, spawn : level.sections[currentSection-2].spawnExit, hapticsManager: hapticsManager!)
-                            self.view?.presentScene(newScene, transition: reveal)
-                        }
-                    } else if let contactJoint = player.contactJoint, contactJoint is InteractableBox {
-                        let box = contactJoint as! InteractableBox
-                        if player.joint == nil {
-                            player.joint = SKPhysicsJointPin.joint(withBodyA: player.physicsBody!, bodyB: contactJoint.physicsBody!, anchor: player.position)
-                            physicsWorld.add(player.joint!)
-                            player.position.y += 1
-                            box.isInteracting = true
-                        } else {
-                            physicsWorld.remove(player.joint!)
-                            box.isInteracting = false
-                            player.joint = nil
-                            player.buttonInteract.isHidden = true
-                            player.canInteract = false
-                            player.contactJoint = nil
-                        }
-                    } else {
-                        //TODO: Interact for other components
+        override func update(_ currentTime: TimeInterval) {
+            if let gameControllerManager = gameControllerManager {
+                if gameControllerManager.isPlaying {
+                    for player in players {
+                        player.update(currentTime)
                     }
                 }
-                for player in players {
-                    player.keyDown(with: event)
-                }
-            }
-        }
-    }
-    
-    override func keyUp(with event: NSEvent) {
-        if let gameControllerManager = gameControllerManager {
-            if gameControllerManager.isPlaying {
-                for player in players {
-                    player.keyUp(with: event)
-                }
-            }
-        }
-    }
-    
-    func coinAndPlayerContact(_ contact: SKPhysicsContact){
-        let bodyA = contact.bodyA
-        let bodyB = contact.bodyB
-        
-        let coinAndPlayerContact = bodyA.categoryBitMask | bodyB.categoryBitMask == PhysicsCategory.player | PhysicsCategory.coin
-
-        if (coinAndPlayerContact) {
-            coins += 10
-            
-            if bodyA.categoryBitMask == PhysicsCategory.coin {
-                bodyA.node?.removeFromParent()
-                return
-            }
-            
-            bodyB.node?.removeFromParent()
-            
-        }
-    }
-    
-    func getTransition(to direction: String) -> SKTransitionDirection {
-        if direction == "up"{
-            return SKTransitionDirection.up
-        } else if direction == "down"{
-            return SKTransitionDirection.down
-        }else if direction == "left"{
-            return SKTransitionDirection.left
-        }else{
-            return SKTransitionDirection.right
-        }
-    }
-    
-    func didBegin(_ contact: SKPhysicsContact) {
-
-        for player in players {
-            player.didBegin(contact, hapticsManager: hapticsManager!)
-        }
                 
-        //Coin Player
-        coinAndPlayerContact(contact)
-        
-        let bodyA = contact.bodyA
-        let bodyB = contact.bodyB
-        
-        if bodyB.node == nil || bodyA.node == nil { return }
-        
-        //Box & Player
-        if bodyA.categoryBitMask == PhysicsCategory.box || bodyB.categoryBitMask == PhysicsCategory.box {
-            let box = (bodyA.categoryBitMask == PhysicsCategory.box) ? bodyA.node as! InteractableBox : bodyB.node  as! InteractableBox
-            let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
-            
-            if playerNode.position.y > box.position.y + 10 || box.isInteracting == true { return }
-            
-            playerNode.buttonInteract.isHidden = false
-            playerNode.contactJoint = box
-            playerNode.canInteract = true
-        }
-        
-        
-        if bodyA.categoryBitMask == PhysicsCategory.foreground || bodyB.categoryBitMask == PhysicsCategory.foreground {
-            let foregroundNode = (bodyA.categoryBitMask == PhysicsCategory.foreground) ? bodyA.node as! Foreground : bodyB.node as! Foreground
-            foregroundNode.didBegin(contact)
-        }
-
-        if (bodyA.categoryBitMask == PhysicsCategory.player && bodyB.categoryBitMask == PhysicsCategory.door) || (bodyB.categoryBitMask == PhysicsCategory.player && bodyA.categoryBitMask == PhysicsCategory.door) {
-            let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
-            let doorNode = (bodyA.categoryBitMask == PhysicsCategory.door) ? bodyA.node as! DoorType : bodyB.node as! DoorType
-            
-            if playerNode.contactJoint != nil { return }
-            
-            playerNode.isHidden = false
-
-            if doorNode == level.sections[currentSection-1].doorExit.doorType {
-                playerNode.buttonInteract.isHidden = false
-                playerNode.contactWith = doorNode
-                playerNode.canInteract = true
-            } else if doorNode == level.sections[currentSection-1].doorEntry.doorType {
-                playerNode.buttonInteract.isHidden = false
-                playerNode.contactWith = doorNode
-                playerNode.canInteract = true
+                let timeSincePreviousUpdate = currentTime - previousUpdateTime
+                jumpComponentSystem.update(deltaTime: timeSincePreviousUpdate)
+                previousUpdateTime = currentTime
+                coinScoreNode.text = "Coins: \(coins)"
             }
         }
-    }
-
-    
-    func didEnd(_ contact: SKPhysicsContact) {
+        
+        override func keyDown(with event: NSEvent) {
+            if let gameControllerManager = gameControllerManager {
+                if gameControllerManager.isStoryMode{
+                    if event.keyCode == 36 {
+                        transitionToNextStory()
+                    }
+                }
+                if gameControllerManager.isPlaying {
+                    if event.keyCode == 36 && players.count == 1 && players[0].canInteract {
+                        let player = players[0]
+                        if player.contactWith == level.sections[currentSection-1].doorExit.doorType {
+                            playersAtDoorExit.insert(player)
+                            player.isHidden = true
+                            if playersAtDoorExit.count == players.count {
+                                let reveal = SKTransition.push(with: getTransition(to: level.sections[currentSection-1].transitionNext), duration: 1)
+                                let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager, spawn : level.sections[currentSection].spawnEntry, hapticsManager: hapticsManager!)
+                                self.view?.presentScene(newScene, transition: reveal)
+                            }
+                        } else if player.contactWith == level.sections[currentSection-1].doorEntry.doorType {
+                            player.isHidden = true
+                            playersAtDoorEntry.insert(player)
+                            
+                            if playersAtDoorEntry.count == players.count && currentSection != 1 {
+                                let reveal = SKTransition.push(with: getTransition(to: level.sections[currentSection-1].transitionBack), duration: 1)
+                                let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager, spawn : level.sections[currentSection-2].spawnExit, hapticsManager: hapticsManager!)
+                                self.view?.presentScene(newScene, transition: reveal)
+                            }
+                        } else if let contactJoint = player.contactJoint, contactJoint is InteractableBox {
+                            let box = contactJoint as! InteractableBox
+                            if player.joint == nil {
+                                player.joint = SKPhysicsJointPin.joint(withBodyA: player.physicsBody!, bodyB: contactJoint.physicsBody!, anchor: player.position)
+                                physicsWorld.add(player.joint!)
+                                player.position.y += 1
+                                box.isInteracting = true
+                            } else {
+                                physicsWorld.remove(player.joint!)
+                                box.isInteracting = false
+                                player.joint = nil
+                                player.buttonInteract.isHidden = true
+                                player.canInteract = false
+                                player.contactJoint = nil
+                            }
+                        } else {
+                            //TODO: Interact for other components
+                        }
+                    }
+                    for player in players {
+                        player.keyDown(with: event)
+                    }
+                }
+            }
+        }
+        
+        override func keyUp(with event: NSEvent) {
+            if let gameControllerManager = gameControllerManager {
+                if gameControllerManager.isPlaying {
+                    for player in players {
+                        player.keyUp(with: event)
+                    }
+                }
+            }
+        }
+        
+        func coinAndPlayerContact(_ contact: SKPhysicsContact){
             let bodyA = contact.bodyA
             let bodyB = contact.bodyB
+            
+            let coinAndPlayerContact = bodyA.categoryBitMask | bodyB.categoryBitMask == PhysicsCategory.player | PhysicsCategory.coin
+            
+            if (coinAndPlayerContact) {
+                coins += 10
+                
+                if bodyA.categoryBitMask == PhysicsCategory.coin {
+                    bodyA.node?.removeFromParent()
+                    return
+                }
+                
+                bodyB.node?.removeFromParent()
+                
+            }
+        }
         
+        func getTransition(to direction: String) -> SKTransitionDirection {
+            if direction == "up"{
+                return SKTransitionDirection.up
+            } else if direction == "down"{
+                return SKTransitionDirection.down
+            }else if direction == "left"{
+                return SKTransitionDirection.left
+            }else{
+                return SKTransitionDirection.right
+            }
+        }
+        
+        func didBegin(_ contact: SKPhysicsContact) {
+            
+            for player in players {
+                player.didBegin(contact, hapticsManager: hapticsManager!)
+            }
+            
+            //Coin Player
+            coinAndPlayerContact(contact)
+            
+            let bodyA = contact.bodyA
+            let bodyB = contact.bodyB
+            
             if bodyB.node == nil || bodyA.node == nil { return }
-
+            
+            //Box & Player
+            if bodyA.categoryBitMask == PhysicsCategory.box || bodyB.categoryBitMask == PhysicsCategory.box {
+                let box = (bodyA.categoryBitMask == PhysicsCategory.box) ? bodyA.node as! InteractableBox : bodyB.node  as! InteractableBox
+                let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
+                
+                if playerNode.position.y > box.position.y + 10 || box.isInteracting == true { return }
+                
+                playerNode.buttonInteract.isHidden = false
+                playerNode.contactJoint = box
+                playerNode.canInteract = true
+            }
+            
+            
+            if bodyA.categoryBitMask == PhysicsCategory.foreground || bodyB.categoryBitMask == PhysicsCategory.foreground {
+                let foregroundNode = (bodyA.categoryBitMask == PhysicsCategory.foreground) ? bodyA.node as! Foreground : bodyB.node as! Foreground
+                foregroundNode.didBegin(contact)
+            }
+            
+            if (bodyA.categoryBitMask == PhysicsCategory.player && bodyB.categoryBitMask == PhysicsCategory.door) || (bodyB.categoryBitMask == PhysicsCategory.player && bodyA.categoryBitMask == PhysicsCategory.door) {
+                let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
+                let doorNode = (bodyA.categoryBitMask == PhysicsCategory.door) ? bodyA.node as! DoorType : bodyB.node as! DoorType
+                
+                if playerNode.contactJoint != nil { return }
+                
+                playerNode.isHidden = false
+                
+                if doorNode == level.sections[currentSection-1].doorExit.doorType {
+                    playerNode.buttonInteract.isHidden = false
+                    playerNode.contactWith = doorNode
+                    playerNode.canInteract = true
+                } else if doorNode == level.sections[currentSection-1].doorEntry.doorType {
+                    playerNode.buttonInteract.isHidden = false
+                    playerNode.contactWith = doorNode
+                    playerNode.canInteract = true
+                }
+            }
+        }
+        
+        
+        func didEnd(_ contact: SKPhysicsContact) {
+            let bodyA = contact.bodyA
+            let bodyB = contact.bodyB
+            
+            if bodyB.node == nil || bodyA.node == nil { return }
+            
             if (bodyA.categoryBitMask == PhysicsCategory.player && bodyB.categoryBitMask == PhysicsCategory.door) || (bodyB.categoryBitMask == PhysicsCategory.player && bodyA.categoryBitMask == PhysicsCategory.door) {
                 let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
                 let doorNode = (bodyA.categoryBitMask == PhysicsCategory.door) ? bodyA.node as! DoorType : bodyB.node as! DoorType
@@ -594,14 +595,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 playerNode.contactWith = nil
                 playerNode.canInteract = false
                 playerNode.isHidden = false
-
+                
                 if doorNode == level.sections[currentSection-1].doorExit.doorType {
                     playersAtDoorExit.remove(playerNode)
                 } else if doorNode == level.sections[currentSection-1].doorEntry.doorType {
                     playersAtDoorEntry.remove(playerNode)
                 }
             }
-        
+            
             if bodyA.categoryBitMask == PhysicsCategory.box || bodyB.categoryBitMask == PhysicsCategory.box {
                 let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
                 
@@ -612,33 +613,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 playerNode.canInteract = false
             }
         }
-    
-    func makeCoinEntity(name: String, position: CGPoint, scene: SKScene) -> GKEntity {
-        let coinEntity = GKEntity()
         
-        let texture = SKTexture(imageNamed: "coins")
-        let coinNode = SKSpriteNode(texture: texture)
-        coinNode.size = CGSize(width: 35, height: 40)
-        coinNode.name = "coin"
-        coinNode.position = CGPoint(x: position.x, y: position.y+coinNode.size.height)
-        coinNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 30, height: 35))
-        coinNode.physicsBody?.isDynamic = true
-        coinNode.physicsBody?.allowsRotation = false
-        coinNode.physicsBody?.affectedByGravity = true
-        coinNode.physicsBody?.categoryBitMask = PhysicsCategory.coin
-        coinNode.physicsBody?.collisionBitMask = 0
-        coinNode.physicsBody?.collisionBitMask = PhysicsCategory.player | PhysicsCategory.platform
-        coinNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
-        coinNode.zPosition = 10
-        scene.addChild(coinNode)
-        
-        let coinComponent = NodeComponent(node: coinNode)
-        coinEntity.addComponent(coinComponent)
-        
-        let jumpComponent = JumpForeverComponent(vector: CGVector(dx: 0, dy: 40), duration: 0.5)
-        coinEntity.addComponent(jumpComponent)
-        
-        return coinEntity
+        func makeCoinEntity(name: String, position: CGPoint, scene: SKScene) -> GKEntity {
+            let coinEntity = GKEntity()
+            
+            let texture = SKTexture(imageNamed: "coins")
+            let coinNode = SKSpriteNode(texture: texture)
+            coinNode.size = CGSize(width: 35, height: 40)
+            coinNode.name = "coin"
+            coinNode.position = CGPoint(x: position.x, y: position.y+coinNode.size.height)
+            coinNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 30, height: 35))
+            coinNode.physicsBody?.isDynamic = true
+            coinNode.physicsBody?.allowsRotation = false
+            coinNode.physicsBody?.affectedByGravity = true
+            coinNode.physicsBody?.categoryBitMask = PhysicsCategory.coin
+            coinNode.physicsBody?.collisionBitMask = 0
+            coinNode.physicsBody?.collisionBitMask = PhysicsCategory.player | PhysicsCategory.platform
+            coinNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
+            coinNode.zPosition = 10
+            scene.addChild(coinNode)
+            
+            let coinComponent = NodeComponent(node: coinNode)
+            coinEntity.addComponent(coinComponent)
+            
+            let jumpComponent = JumpForeverComponent(vector: CGVector(dx: 0, dy: 40), duration: 0.5)
+            coinEntity.addComponent(jumpComponent)
+            
+            return coinEntity
+        }
     }
-}
-
+    
