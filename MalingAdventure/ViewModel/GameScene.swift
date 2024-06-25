@@ -392,19 +392,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let player = Player(imageNamed: "player\(i+1)Image", spawn: spawn, name: "P\(i+1)")
                 player.setController(gameControllerManager?.controllers[i])
                 players.append(player)
-            } else {
-                for i in 0..<(gameControllerManager?.controllers.count ?? 0) {
-                    let player = Player(imageNamed: "player\(i+1)Image", spawn: spawn, name: "P\(i+1)")
-                    player.setController(gameControllerManager?.controllers[i])
-                    players.append(player)
-                }
             }
-            
-            for player in players {
-                player.zPosition = 4
-                self.addChild(player)
-            }
-            
+        }
+        
+        for player in players {
+            player.zPosition = 4
+            self.addChild(player)
         }
     }
         

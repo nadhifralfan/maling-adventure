@@ -236,9 +236,9 @@
               {
                   "hazzardType" :"rat",
                   "xSpawn" : 580,
-                  "ySpawn" : 40,
+                  "ySpawn" : 120,
                   "xEnd" : 500,
-                  "yEnd" : 40,
+                  "yEnd" : 120,
                   "width":38,
                   "height":40,
               },
