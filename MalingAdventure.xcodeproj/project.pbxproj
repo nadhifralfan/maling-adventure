@@ -20,6 +20,7 @@
 		013712B52C26C6F200A1F6AF /* Rumble.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 013712A82C26C6F100A1F6AF /* Rumble.ahap */; };
 		013712B62C26C6F200A1F6AF /* Sparkle.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 013712A92C26C6F100A1F6AF /* Sparkle.ahap */; };
 		013712B72C26C6F200A1F6AF /* Triple.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 013712AA2C26C6F100A1F6AF /* Triple.ahap */; };
+		013712B92C2A95C700A1F6AF /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013712B82C2A95C700A1F6AF /* Coin.swift */; };
 		01FE5C402C247FF20077920C /* NodeComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FE5C3F2C247FF20077920C /* NodeComponent.swift */; };
 		01FE5C422C2480110077920C /* JumpForeverComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FE5C412C2480110077920C /* JumpForeverComponent.swift */; };
 		4C7EFB2B2C27584400E9F8DE /* MenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4C7EFB2A2C27584400E9F8DE /* MenuScene.sks */; };
@@ -60,6 +61,7 @@
 		013712A82C26C6F100A1F6AF /* Rumble.ahap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Rumble.ahap; sourceTree = "<group>"; };
 		013712A92C26C6F100A1F6AF /* Sparkle.ahap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Sparkle.ahap; sourceTree = "<group>"; };
 		013712AA2C26C6F100A1F6AF /* Triple.ahap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Triple.ahap; sourceTree = "<group>"; };
+		013712B82C2A95C700A1F6AF /* Coin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
 		01FE5C3F2C247FF20077920C /* NodeComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeComponent.swift; sourceTree = "<group>"; };
 		01FE5C412C2480110077920C /* JumpForeverComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpForeverComponent.swift; sourceTree = "<group>"; };
 		4C7EFB2A2C27584400E9F8DE /* MenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MenuScene.sks; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 				4CED18162C135E1D007588F7 /* Player.swift */,
 				4C7EFB2E2C28553C00E9F8DE /* Foreground.swift */,
 				4C7EFB302C2919C700E9F8DE /* InteractableBox.swift */,
+				013712B82C2A95C700A1F6AF /* Coin.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -307,6 +310,7 @@
 				4CED17F22C130D2F007588F7 /* ViewController.swift in Sources */,
 				4CFED3C12C183C3600912A89 /* GameController.swift in Sources */,
 				013712972C2698AF00A1F6AF /* HapticsManager.swift in Sources */,
+				013712B92C2A95C700A1F6AF /* Coin.swift in Sources */,
 				01FE5C422C2480110077920C /* JumpForeverComponent.swift in Sources */,
 				4C7EFB312C2919C700E9F8DE /* InteractableBox.swift in Sources */,
 				4CED18152C1356B3007588F7 /* Hazzard.swift in Sources */,
@@ -468,7 +472,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 3G6F9PLS9D;
+				DEVELOPMENT_TEAM = UW36D2XW6X;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -497,7 +501,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 3G6F9PLS9D;
+				DEVELOPMENT_TEAM = UW36D2XW6X;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
