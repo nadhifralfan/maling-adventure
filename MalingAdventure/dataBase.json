@@ -471,21 +471,8 @@
               },
               
               {
-                  "coordinate" : { "x":245, "y": 440 },
-                  "size" : { "width": 35, "height": 40 }
-              },
-              
-              {
                   "coordinate" : { "x":580, "y": 500 },
                   "size" : { "width": 245, "height": 30 }
-              },
-              {
-                  "coordinate" : { "x":350, "y": 360 },
-                  "size" : { "width": 40, "height": 35 }
-              },
-              {
-                  "coordinate" : { "x":210, "y": 560 },
-                  "size" : { "width": 40, "height": 35 }
               },
               {
                   "coordinate" : { "x":0, "y": 640 },
@@ -508,8 +495,8 @@
           
           "doorEntry" : {
             "doorType" : "type1",
-            "x": 100,
-            "y": 100
+            "x": 770,
+            "y": 80
           },
           "doorExit" : {
             "doorType" : "type2",
