@@ -105,8 +105,11 @@ func insertDataToScene(scene: LevelSelectScene, debugMode: Bool = false) {
                                         if let coins = sectionData["coins"] as? [[String: Any]] {
                                             for coin in coins {
                                                 if let x = coin["x"] as? CGFloat,
-                                                   let y = coin["y"] as? CGFloat {
-                                                    section.coins.append(CGPoint(x: x, y: y))
+                                                   let y = coin["y"] as? CGFloat,
+                                                   let type = coin["type"] as? String {
+                                                    
+                                                    let coinSection = Coin(position: CGPoint(x: x, y: y), type: type)
+                                                    section.coins.append(coinSection)
                                                 }
                                             }
                                         }

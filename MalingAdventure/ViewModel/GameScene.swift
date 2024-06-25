@@ -19,12 +19,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let coinScoreNode = SKLabelNode(text: "Coins: 0")
     var previousUpdateTime: TimeInterval = 0
     
-    init(size: CGSize, level: Level, section: Int, gameControllerManager: GameControllerManager, spawn: CGPoint, hapticsManager: HapticsManager) {
+    init(size: CGSize, level: Level, section: Int, gameControllerManager: GameControllerManager, spawn: CGPoint, hapticsManager: HapticsManager, coins: Int) {
         self.level = level
         self.currentSection = section
         self.gameControllerManager = gameControllerManager
         self.spawn = spawn
         self.hapticsManager = hapticsManager
+        self.coins = coins
         super.init(size: size)
     }
     
@@ -122,7 +123,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     player.isHidden = true
                     if playersAtDoorExit.count == players.count {
                         let reveal = SKTransition.push(with: getTransition(to: level.sections[currentSection-1].transitionNext), duration: 1)
-                        let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection].spawnEntry, hapticsManager: hapticsManager!)
+                        let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection].spawnEntry, hapticsManager: hapticsManager!, coins: self.coins)
                         self.view?.presentScene(newScene, transition: reveal)
                     }
                 } else if player.contactWith == level.sections[currentSection-1].doorEntry.doorType {
@@ -131,7 +132,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     
                     if playersAtDoorEntry.count == players.count && currentSection != 1 {
                         let reveal = SKTransition.push(with: getTransition(to: level.sections[currentSection-1].transitionBack), duration: 1)
-                        let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-2].spawnExit, hapticsManager: hapticsManager!)
+                        let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-2].spawnExit, hapticsManager: hapticsManager!, coins: self.coins)
                         self.view?.presentScene(newScene, transition: reveal)
                     }
                 } else if let contactJoint = player.contactJoint, contactJoint is InteractableBox {
@@ -193,14 +194,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if currentStoryIndex < level.stories.count {
             let transition = SKTransition.fade(withDuration: 0.5)
-            let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-1].spawnEntry, hapticsManager: hapticsManager!)
+            let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-1].spawnEntry, hapticsManager: hapticsManager!, coins: self.coins)
             nextScene.currentStoryIndex = currentStoryIndex
             self.view?.presentScene(nextScene, transition: transition)
         } else {
             gameControllerManager?.isPlaying = true
             gameControllerManager?.isStoryMode = false
             let transition = SKTransition.fade(withDuration: 0.5)
-            let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-1].spawnEntry, hapticsManager: hapticsManager!)
+            let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-1].spawnEntry, hapticsManager: hapticsManager!, coins: self.coins)
             nextScene.currentStoryIndex = currentStoryIndex
             self.view?.presentScene(nextScene, transition: transition)
         }
@@ -229,25 +230,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundNode.zPosition = -1
         self.addChild(backgroundNode)
         
-        //        var position = CGPoint(x: 0, y: 0)
-        
-        //        //Coordinate Position
-        //        for _ in 0..<20 {
-        //            for _ in 0..<30 {
-        //                let text = SKLabelNode(text: position.debugDescription)
-        //                let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
-        //                platformNode.position = position
-        //                self.addChild(platformNode)
-        //                text.fontSize = 5
-        //                text.fontColor = SKColor.black
-        //                text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
-        //                text.position = position
-        //                text.zPosition = 2
-        //                position = CGPoint(x: position.x + 35, y: position.y)
-        //                self.addChild(text)
-        //            }
-        //            position = CGPoint(x: 0, y: position.y + 40)
-        //        }
+//                var position = CGPoint(x: 0, y: 0)
+//        
+//                //Coordinate Position
+//                for _ in 0..<20 {
+//                    for _ in 0..<30 {
+//                        let text = SKLabelNode(text: position.debugDescription)
+//                        let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
+//                        platformNode.position = position
+//                        self.addChild(platformNode)
+//                        text.fontSize = 5
+//                        text.fontColor = SKColor.white
+//                        text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
+//                        text.position = position
+//                        text.zPosition = 2
+//                        position = CGPoint(x: position.x + 35, y: position.y)
+//                        self.addChild(text)
+//                    }
+//                    position = CGPoint(x: 0, y: position.y + 40)
+//                }
         
         //Platforms
         for platformData in section.platforms {
@@ -283,15 +284,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(coinScoreNode)
         
         for coinData in section.coins {
-            let x = coinData.x
-            let y = coinData.y
+            let x = coinData.position.x
+            let y = coinData.position.y
+            
+            print("coinData",coinData, x, y)
             
             if x == 0 || y == 0 {
                 print("Error: Invalid coin data: \(coinData)")
             }
             
-            let coinEntity = makeCoinEntity(name: "coin", position: CGPoint(x: x, y: y), scene: self)
-            entities.append(coinEntity)
+            if !coinData.hasReceived {
+                let coinEntity = makeCoinEntity(name: "coin", coin: coinData, scene: self)
+    
+                entities.append(coinEntity)
+            }
         }
         
         for entity in entities {
@@ -447,7 +453,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                             player.isHidden = true
                             if playersAtDoorExit.count == players.count {
                                 let reveal = SKTransition.push(with: getTransition(to: level.sections[currentSection-1].transitionNext), duration: 1)
-                                let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager, spawn : level.sections[currentSection].spawnEntry, hapticsManager: hapticsManager!)
+                                let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager, spawn : level.sections[currentSection].spawnEntry, hapticsManager: hapticsManager!, coins: self.coins)
                                 self.view?.presentScene(newScene, transition: reveal)
                             }
                         } else if player.contactWith == level.sections[currentSection-1].doorEntry.doorType {
@@ -456,7 +462,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                             
                             if playersAtDoorEntry.count == players.count && currentSection != 1 {
                                 let reveal = SKTransition.push(with: getTransition(to: level.sections[currentSection-1].transitionBack), duration: 1)
-                                let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager, spawn : level.sections[currentSection-2].spawnExit, hapticsManager: hapticsManager!)
+                                let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager, spawn : level.sections[currentSection-2].spawnExit, hapticsManager: hapticsManager!, coins: self.coins)
                                 self.view?.presentScene(newScene, transition: reveal)
                             }
                         } else if let contactJoint = player.contactJoint, contactJoint is InteractableBox {
@@ -502,14 +508,41 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let coinAndPlayerContact = bodyA.categoryBitMask | bodyB.categoryBitMask == PhysicsCategory.player | PhysicsCategory.coin
             
             if (coinAndPlayerContact) {
-                coins += 10
                 
+                var node: SKNode?
+                                
                 if bodyA.categoryBitMask == PhysicsCategory.coin {
-                    bodyA.node?.removeFromParent()
-                    return
+                    node = bodyA.node!
+                } else {
+                    node = bodyB.node!
                 }
                 
-                bodyB.node?.removeFromParent()
+                
+                let coinArray = level.sections[currentSection-1].coins
+                
+                print(level.sections[currentSection-1].coins)
+                
+                for i in 0..<coinArray.count {
+                    let coinData = coinArray[i]
+                                        
+                    if coinData.position.x < (node?.position.x)! + 10 && coinData.position.x > (node?.position.x)! - 10 &&
+                        coinData.position.y + 40 < (node?.position.y)! + 10 && coinData.position.y + 40 > (node?.position.y)! - 10 {
+                        coinData.hasReceived = true
+                        
+                        coins += coinData.value
+                        
+                        level.sections[currentSection-1].coins.remove(at: i)
+                        
+                        level.sections[currentSection-1].coins.append(coinData)
+                    }
+                }
+                
+                node?.removeFromParent()
+
+                
+                print(level.sections[currentSection-1].coins)
+
+                
                 
             }
         }
@@ -614,18 +647,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         
-        func makeCoinEntity(name: String, position: CGPoint, scene: SKScene) -> GKEntity {
+        func makeCoinEntity(name: String, coin: Coin, scene: SKScene) -> GKEntity {
             let coinEntity = GKEntity()
             
             let texture = SKTexture(imageNamed: "coins")
             let coinNode = SKSpriteNode(texture: texture)
             coinNode.size = CGSize(width: 35, height: 40)
             coinNode.name = "coin"
-            coinNode.position = CGPoint(x: position.x, y: position.y+coinNode.size.height)
+            coinNode.position = CGPoint(x: coin.position.x, y: coin.position.y+coinNode.size.height)
             coinNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 30, height: 35))
             coinNode.physicsBody?.isDynamic = true
             coinNode.physicsBody?.allowsRotation = false
-            coinNode.physicsBody?.affectedByGravity = true
+            coinNode.physicsBody?.affectedByGravity = false
             coinNode.physicsBody?.categoryBitMask = PhysicsCategory.coin
             coinNode.physicsBody?.collisionBitMask = 0
             coinNode.physicsBody?.collisionBitMask = PhysicsCategory.player | PhysicsCategory.platform
@@ -636,8 +669,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let coinComponent = NodeComponent(node: coinNode)
             coinEntity.addComponent(coinComponent)
             
-            let jumpComponent = JumpForeverComponent(vector: CGVector(dx: 0, dy: 40), duration: 0.5)
-            coinEntity.addComponent(jumpComponent)
+//            let jumpComponent = JumpForeverComponent(vector: CGVector(dx: 0, dy: 40), duration: 0.5)
+//            coinEntity.addComponent(jumpComponent)
             
             return coinEntity
         }
