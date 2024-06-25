@@ -134,6 +134,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-2].spawnExit, hapticsManager: hapticsManager!)
                         self.view?.presentScene(newScene, transition: reveal)
                     }
+                } else if let contactJoint = player.contactJoint, contactJoint is InteractableBox {
+                    let box = contactJoint as! InteractableBox
+                    if player.joint == nil {
+                        player.joint = SKPhysicsJointPin.joint(withBodyA: player.physicsBody!, bodyB: contactJoint.physicsBody!, anchor: player.position)
+                        physicsWorld.add(player.joint!)
+                        player.position.y += 1
+                        box.isInteracting = true
+                    } else {
+                        physicsWorld.remove(player.joint!)
+                        box.isInteracting = false
+                        player.joint = nil
+                        player.buttonInteract.isHidden = true
+                        player.canInteract = false
+                        player.contactJoint = nil
+                    }
                 } else {
                     //TODO: Interact for other components
                 }
@@ -214,25 +229,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundNode.zPosition = -1
         self.addChild(backgroundNode)
         
-        var position = CGPoint(x: 0, y: 0)
+//        var position = CGPoint(x: 0, y: 0)
 
-        //Coordinate Position
-        for _ in 0..<20 {
-            for _ in 0..<30 {
-                let text = SKLabelNode(text: position.debugDescription)
-                let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
-                platformNode.position = position
-                self.addChild(platformNode)
-                text.fontSize = 5
-                text.fontColor = SKColor.black
-                text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
-                text.position = position
-                text.zPosition = 2
-                position = CGPoint(x: position.x + 35, y: position.y)
-                self.addChild(text)
-            }
-            position = CGPoint(x: 0, y: position.y + 40)
-        }
+//        //Coordinate Position
+//        for _ in 0..<20 {
+//            for _ in 0..<30 {
+//                let text = SKLabelNode(text: position.debugDescription)
+//                let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
+//                platformNode.position = position
+//                self.addChild(platformNode)
+//                text.fontSize = 5
+//                text.fontColor = SKColor.black
+//                text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
+//                text.position = position
+//                text.zPosition = 2
+//                position = CGPoint(x: position.x + 35, y: position.y)
+//                self.addChild(text)
+//            }
+//            position = CGPoint(x: 0, y: position.y + 40)
+//        }
         
         //Platforms
         for platformData in section.platforms {
@@ -249,8 +264,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 platformNode.physicsBody = SKPhysicsBody(rectangleOf: platformNode.size, center: CGPoint(x: platformNode.size.width / 2, y: platformNode.size.height / 2))
                 platformNode.physicsBody?.isDynamic = false
                 platformNode.physicsBody?.categoryBitMask = PhysicsCategory.platform
-                platformNode.physicsBody?.collisionBitMask = PhysicsCategory.player
-                platformNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
+                platformNode.physicsBody?.collisionBitMask = PhysicsCategory.player | PhysicsCategory.box
                 platformNode.zPosition = 2
                 self.addChild(platformNode)
             } else {
@@ -278,7 +292,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             let coinEntity = makeCoinEntity(name: "coin", position: CGPoint(x: x, y: y), scene: self)
             entities.append(coinEntity)
-
         }
         
         for entity in entities {
@@ -293,7 +306,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             hazzardNode.physicsBody = SKPhysicsBody(rectangleOf: hazzardNode.size, center: CGPoint(x: hazzardNode.size.width / 2, y: hazzardData.size.height / 2))
             hazzardNode.physicsBody?.isDynamic = false
             hazzardNode.physicsBody?.categoryBitMask = PhysicsCategory.hazzard
-            hazzardNode.physicsBody?.collisionBitMask = PhysicsCategory.player
+            hazzardNode.physicsBody?.collisionBitMask = PhysicsCategory.player | PhysicsCategory.box
             hazzardNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
             hazzardNode.zPosition = 2
             
@@ -341,12 +354,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             self.addChild(hazzardNode)
         
-
-            if currentSection == 2 {
-                let foreground = Foreground(imageNamed: "foreground", isDynamic: true, position: CGPoint(x: 0, y: 340), size: CGSize(width: 105, height: 428))
-                foreground.zPosition = 5
-                self.addChild(foreground)
-            }
+        //MARK: Interactable Box
+        if currentSection == 1 {
+            let box = InteractableBox(imageNamed: "box", position: CGPoint(x: 210, y: 120), size: CGSize(width: 35, height: 40))
+            box.zPosition = 3
+            self.addChild(box)
+            let box2 = InteractableBox(imageNamed: "box", position: CGPoint(x: 210, y: 160), size: CGSize(width: 35, height: 40))
+            box2.zPosition = 3
+            self.addChild(box2)
+            let box3 = InteractableBox(imageNamed: "box", position: CGPoint(x: 210, y: 200), size: CGSize(width: 35, height: 40))
+            box3.zPosition = 3
+            
+            self.addChild(box3)
+        }
+        
+        //MARK: Foreground
+        if currentSection == 2 {
+            let foreground = Foreground(imageNamed: "foreground", isDynamic: true, position: CGPoint(x: 0, y: 340), size: CGSize(width: 105, height: 428))
+            foreground.zPosition = 5
+            self.addChild(foreground)
         }
         
         //Doors
@@ -432,6 +458,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                             let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager, spawn : level.sections[currentSection-2].spawnExit, hapticsManager: hapticsManager!)
                             self.view?.presentScene(newScene, transition: reveal)
                         }
+                    } else if let contactJoint = player.contactJoint, contactJoint is InteractableBox {
+                        let box = contactJoint as! InteractableBox
+                        if player.joint == nil {
+                            player.joint = SKPhysicsJointPin.joint(withBodyA: player.physicsBody!, bodyB: contactJoint.physicsBody!, anchor: player.position)
+                            physicsWorld.add(player.joint!)
+                            player.position.y += 1
+                            box.isInteracting = true
+                        } else {
+                            physicsWorld.remove(player.joint!)
+                            box.isInteracting = false
+                            player.joint = nil
+                            player.buttonInteract.isHidden = true
+                            player.canInteract = false
+                            player.contactJoint = nil
+                        }
                     } else {
                         //TODO: Interact for other components
                     }
@@ -485,17 +526,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
-        
-        _ = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
 
         for player in players {
             player.didBegin(contact, hapticsManager: hapticsManager!)
         }
                 
+        //Coin Player
         coinAndPlayerContact(contact)
         
         let bodyA = contact.bodyA
         let bodyB = contact.bodyB
+        
+        if bodyB.node == nil || bodyA.node == nil { return }
+        
+        //Box & Player
+        if bodyA.categoryBitMask == PhysicsCategory.box || bodyB.categoryBitMask == PhysicsCategory.box {
+            let box = (bodyA.categoryBitMask == PhysicsCategory.box) ? bodyA.node as! InteractableBox : bodyB.node  as! InteractableBox
+            let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
+            
+            if playerNode.position.y > box.position.y + 10 || box.isInteracting == true { return }
+            
+            playerNode.buttonInteract.isHidden = false
+            playerNode.contactJoint = box
+            playerNode.canInteract = true
+        }
+        
         
         if bodyA.categoryBitMask == PhysicsCategory.foreground || bodyB.categoryBitMask == PhysicsCategory.foreground {
             let foregroundNode = (bodyA.categoryBitMask == PhysicsCategory.foreground) ? bodyA.node as! Foreground : bodyB.node as! Foreground
@@ -506,13 +561,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
             let doorNode = (bodyA.categoryBitMask == PhysicsCategory.door) ? bodyA.node as! DoorType : bodyB.node as! DoorType
             
+            if playerNode.contactJoint != nil { return }
+            
             playerNode.isHidden = false
 
             if doorNode == level.sections[currentSection-1].doorExit.doorType {
                 playerNode.buttonInteract.isHidden = false
                 playerNode.contactWith = doorNode
                 playerNode.canInteract = true
-                print(playerNode.canInteract)
             } else if doorNode == level.sections[currentSection-1].doorEntry.doorType {
                 playerNode.buttonInteract.isHidden = false
                 playerNode.contactWith = doorNode
@@ -525,10 +581,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func didEnd(_ contact: SKPhysicsContact) {
             let bodyA = contact.bodyA
             let bodyB = contact.bodyB
+        
+            if bodyB.node == nil || bodyA.node == nil { return }
 
             if (bodyA.categoryBitMask == PhysicsCategory.player && bodyB.categoryBitMask == PhysicsCategory.door) || (bodyB.categoryBitMask == PhysicsCategory.player && bodyA.categoryBitMask == PhysicsCategory.door) {
                 let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
                 let doorNode = (bodyA.categoryBitMask == PhysicsCategory.door) ? bodyA.node as! DoorType : bodyB.node as! DoorType
+                
+                if playerNode.contactJoint != nil { return }
+                
                 playerNode.buttonInteract.isHidden = true
                 playerNode.contactWith = nil
                 playerNode.canInteract = false
@@ -539,6 +600,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 } else if doorNode == level.sections[currentSection-1].doorEntry.doorType {
                     playersAtDoorEntry.remove(playerNode)
                 }
+            }
+        
+            if bodyA.categoryBitMask == PhysicsCategory.box || bodyB.categoryBitMask == PhysicsCategory.box {
+                let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
+                
+                if playerNode.joint != nil { return}
+                
+                playerNode.buttonInteract.isHidden = true
+                playerNode.contactJoint = nil
+                playerNode.canInteract = false
             }
         }
     

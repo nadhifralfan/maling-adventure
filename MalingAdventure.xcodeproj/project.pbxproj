@@ -25,6 +25,7 @@
 		4C7EFB2B2C27584400E9F8DE /* MenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4C7EFB2A2C27584400E9F8DE /* MenuScene.sks */; };
 		4C7EFB2D2C27584D00E9F8DE /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7EFB2C2C27584D00E9F8DE /* MenuScene.swift */; };
 		4C7EFB2F2C28553C00E9F8DE /* Foreground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7EFB2E2C28553C00E9F8DE /* Foreground.swift */; };
+		4C7EFB312C2919C700E9F8DE /* InteractableBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7EFB302C2919C700E9F8DE /* InteractableBox.swift */; };
 		4CED17EA2C130D2F007588F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CED17E92C130D2F007588F7 /* AppDelegate.swift */; };
 		4CED17EC2C130D2F007588F7 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4CED17EB2C130D2F007588F7 /* GameScene.sks */; };
 		4CED17EE2C130D2F007588F7 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4CED17ED2C130D2F007588F7 /* Actions.sks */; };
@@ -64,6 +65,7 @@
 		4C7EFB2A2C27584400E9F8DE /* MenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MenuScene.sks; sourceTree = "<group>"; };
 		4C7EFB2C2C27584D00E9F8DE /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		4C7EFB2E2C28553C00E9F8DE /* Foreground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Foreground.swift; sourceTree = "<group>"; };
+		4C7EFB302C2919C700E9F8DE /* InteractableBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractableBox.swift; sourceTree = "<group>"; };
 		4CED17E62C130D2F007588F7 /* MalingAdventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MalingAdventure.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CED17E92C130D2F007588F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4CED17EB2C130D2F007588F7 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 				4CED18142C1356B3007588F7 /* Hazzard.swift */,
 				4CED18162C135E1D007588F7 /* Player.swift */,
 				4C7EFB2E2C28553C00E9F8DE /* Foreground.swift */,
+				4C7EFB302C2919C700E9F8DE /* InteractableBox.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 				4CFED3C12C183C3600912A89 /* GameController.swift in Sources */,
 				013712972C2698AF00A1F6AF /* HapticsManager.swift in Sources */,
 				01FE5C422C2480110077920C /* JumpForeverComponent.swift in Sources */,
+				4C7EFB312C2919C700E9F8DE /* InteractableBox.swift in Sources */,
 				4CED18152C1356B3007588F7 /* Hazzard.swift in Sources */,
 				4CED18132C135324007588F7 /* Door.swift in Sources */,
 				4CED17FF2C1311A3007588F7 /* Section.swift in Sources */,
