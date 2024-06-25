@@ -94,13 +94,13 @@
                 
                 "hazzards" : [
                     {
-                        "hazzardType" : "type2",
+                        "hazzardType" : "bat",
                         "xSpawn" : 500,
                         "ySpawn" : 180,
                         "xEnd" : 500,
                         "yEnd" : 280,
-                        "width":7,
-                        "height":8,
+                        "width":35,
+                        "height":35,
                     }
                 ]
             }
@@ -119,7 +119,7 @@
             },
             {
               "coordinate" : { "x":0, "y": 80 },
-              "size" : { "width": 40, "height": 160 }
+              "size" : { "width": 40, "height": 150 }
             },
             {
               "coordinate" : { "x":0, "y": 480 },
@@ -186,8 +186,8 @@
               "size" : { "width": 780, "height": 25 }
             },
             {
-              "coordinate" : { "x":35, "y": 480 },
-              "size" : { "width": 105, "height": 30 }
+              "coordinate" : { "x":0, "y": 480 },
+              "size" : { "width": 180, "height": 30 }
             },
             {
               "coordinate" : { "x":735, "y": 120 },
@@ -232,6 +232,7 @@
             { "x": 310, "y": 640, "type": "coin" },
           ],
           "hazzards" : [
+
               {
                   "hazzardType" :"rat",
                   "xSpawn" : 580,
@@ -240,6 +241,16 @@
                   "yEnd" : 40,
                   "width":38,
                   "height":40,
+              },
+              
+              {
+                  "hazzardType" :"water",
+                  "xSpawn" : 575,
+                  "ySpawn" : 0,
+                  "xEnd" : 575,
+                  "yEnd" : 0,
+                  "width":40,
+                  "height":80,
               },
         ]
         }
@@ -323,6 +334,14 @@
                 "coordinate" : { "x":720, "y":660  },
                 "size" : { "width": 90, "height": 20 }
               },
+              {
+                "coordinate" : { "x":105, "y":0  },
+                "size" : { "width": 90, "height": 2 }
+              },
+              {
+                "coordinate" : { "x":480, "y":0  },
+                "size" : { "width": 80, "height": 2 }
+              },
           ],
           
           "spawnEntry" : {
@@ -336,8 +355,8 @@
           
           "doorEntry" : {
             "doorType" : "type1",
-            "x": 945,
-            "y": 945
+            "x": 105,
+            "y": 0
           },
           "doorExit" : {
             "doorType" : "type2",
@@ -369,14 +388,14 @@
           },
           
           {
-              "hazzardType" : "trans",
+              "hazzardType" :"water",
               "xSpawn" : 480,
-              "ySpawn" : 40,
+              "ySpawn" : 0,
               "xEnd" : 480,
-              "yEnd" : 40,
-              "width": 70,
-              "height":110,
-          }
+              "yEnd" : 0,
+              "width":65,
+              "height":100,
+          },
         ]
         }
       },
@@ -460,6 +479,22 @@
                   "coordinate" : { "x":580, "y": 500 },
                   "size" : { "width": 245, "height": 30 }
               },
+              {
+                  "coordinate" : { "x":350, "y": 360 },
+                  "size" : { "width": 40, "height": 35 }
+              },
+              {
+                  "coordinate" : { "x":210, "y": 560 },
+                  "size" : { "width": 40, "height": 35 }
+              },
+              {
+                  "coordinate" : { "x":0, "y": 640 },
+                  "size" : { "width": 10, "height": 80 }
+              },
+              {
+                  "coordinate" : { "x":420, "y": 0 },
+                  "size" : { "width": 604, "height": 5 }
+              },
               
           ],
           "spawnEntry" : {
@@ -467,8 +502,8 @@
               "y" : 80
           },
           "spawnExit" : {
-              "x" : 1015,
-              "y" : 230
+              "x" : 0,
+              "y" : 640
           },
           
           "doorEntry" : {
@@ -478,8 +513,8 @@
           },
           "doorExit" : {
             "doorType" : "type2",
-            "x": 1015,
-            "y": 230
+            "x": 0,
+            "y": 640
           },
           
           "coins" : [
@@ -492,13 +527,32 @@
           
           "hazzards" : [
               {
-                  "hazzardType" : "type2",
+                  "hazzardType" : "bat",
                   "xSpawn" : 315,
                   "ySpawn" : 280,
                   "xEnd" : 315,
                   "yEnd" : 160,
-                  "width":7,
-                  "height":8,
+                  "width":35,
+                  "height":35,
+              },
+              {
+                  "hazzardType" : "rat",
+                  "xSpawn" : 1015,
+                  "ySpawn" : 0,
+                  "xEnd" : 455,
+                  "yEnd" : 0,
+                  "width":40,
+                  "height":30,
+              },
+              
+              {
+                  "hazzardType" : "trans",
+                  "xSpawn" : 420,
+                  "ySpawn" : 0,
+                  "xEnd" : 420,
+                  "yEnd" : 0,
+                  "width":595,
+                  "height":10,
               }
         ]
         }
