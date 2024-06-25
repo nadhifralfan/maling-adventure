@@ -16,8 +16,9 @@ class InteractableBox: SKSpriteNode {
     init(imageNamed: String, position: CGPoint, size: CGSize){
         let texture = SKTexture(imageNamed: imageNamed)
         textureNode = SKSpriteNode(texture: texture, size: size)
+        textureNode.anchorPoint = CGPoint(x: 0, y: 0)
         
-        super.init(texture: texture, color: .clear, size: size)
+        super.init(texture: nil, color: .clear, size: size)
         
         self.anchorPoint = CGPoint(x: 0, y: 0)
         self.size = size
@@ -30,6 +31,10 @@ class InteractableBox: SKSpriteNode {
         self.physicsBody?.isDynamic = true
         self.physicsBody?.allowsRotation = false
         self.physicsBody?.friction = 0
+//        self.physicsBody?.mass = 0.1
+        self.physicsBody?.linearDamping = 0
+        
+        self.addChild(textureNode)
     }
     
     func didBegin(_ contact: SKPhysicsContact){

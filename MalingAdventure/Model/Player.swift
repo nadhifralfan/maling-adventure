@@ -85,7 +85,7 @@ class Player: SKSpriteNode {
         self.controller = controller
     }
     
-    private func createPhysicBody(){
+    func createPhysicBody(){
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: self.size.width / 2, y: self.size.height / 2))
         self.physicsBody?.categoryBitMask = PhysicsCategory.player
         self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.player | PhysicsCategory.box
@@ -190,23 +190,11 @@ class Player: SKSpriteNode {
     }
     
     
-    func didBegin(_ contact: SKPhysicsContact, hapticsManager: HapticsManager) {
-        
+    func didBegin(_ contact: SKPhysicsContact) {
         let contactMask = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+        
         if contactMask == (PhysicsCategory.player | PhysicsCategory.ground) {
             isJumping = false
-        }
-        if contactMask == (PhysicsCategory.player | PhysicsCategory.hazzard) {
-            // Reset player position and¸ stop its movement
-            self.position = spawn
-            createPhysicBody()
-            
-            //add haptic
-//            hapticsManager.playHapticsFileController(named: "Boing", controller: controller!)
-        }
-        
-        if contactMask == (PhysicsCategory.player | PhysicsCategory.box){
-            
         }
     }
     
