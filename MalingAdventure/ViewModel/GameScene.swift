@@ -231,8 +231,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundNode.zPosition = -1
         self.addChild(backgroundNode)
         
-        var position = CGPoint(x: 0, y: 0)
-
+//        var position = CGPoint(x: 0, y: 0)
+//
 //        //Coordinate Position
 //        for _ in 0..<20 {
 //            for _ in 0..<30 {
