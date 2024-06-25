@@ -516,13 +516,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                         
                     if coinData.position.x < (node?.position.x)! + 10 && coinData.position.x > (node?.position.x)! - 10 &&
                         coinData.position.y + 40 < (node?.position.y)! + 10 && coinData.position.y + 40 > (node?.position.y)! - 10 {
-                        coinData.hasReceived = true
-                        
                         coins += coinData.value
                         
                         level.sections[currentSection-1].coins.remove(at: i)
-                        
-                        level.sections[currentSection-1].coins.append(coinData)
                     }
                 }
                 
