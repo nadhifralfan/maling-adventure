@@ -68,6 +68,7 @@ class LevelSelectScene: SKScene {
     func setupControllerInputs(controller: GCController) {
         controller.extendedGamepad?.valueChangedHandler = { [weak self] (gamepad, element) in
             guard let self = self else {return}
+            SoundManager.playClick()
             if gamepad.dpad.up.isPressed{
                 selectedButtonIndex = max(selectedButtonIndex - 1, 0)
                 highlightButton(at: selectedButtonIndex)
@@ -86,6 +87,7 @@ class LevelSelectScene: SKScene {
             if pressed {
                 selectedButtonIndex = max(selectedButtonIndex - 1, 0)
                 highlightButton(at: selectedButtonIndex)
+                SoundManager.playClick()
             }
         }
 
@@ -94,6 +96,7 @@ class LevelSelectScene: SKScene {
             if pressed {
                 selectedButtonIndex = min(selectedButtonIndex + 1, buttons.count - 1)
                 highlightButton(at: selectedButtonIndex)
+                SoundManager.playClick()
             }
         }
     }
@@ -105,7 +108,8 @@ class LevelSelectScene: SKScene {
         let reveal = SKTransition.fade(withDuration: 0.5)
         gameControllerManager?.isSelectingLevel = false
         gameControllerManager?.isStoryMode = true
-        let newScene = GameScene(size: self.size, level: level, section: 1, gameControllerManager: gameControllerManager!, spawn : level.sections[0].spawnEntry, hapticsManager: hapticsManager!, coins: 0)
+        SoundManager.playBackground()
+        let newScene = GameScene(size: self.size, level: level, section: 4, gameControllerManager: gameControllerManager!, spawn : level.sections[0].spawnEntry, hapticsManager: hapticsManager!, coins: 0)
         self.view?.presentScene(newScene, transition: reveal)
     }
 
@@ -137,8 +141,15 @@ class LevelSelectScene: SKScene {
         if event.keyCode == 36 && gameControllerManager!.isSelectingLevel == true{
             currentLevel = levels[String(selectedButtonIndex + 1)]
             if let level = currentLevel {
+                SoundManager.playClick()
                 switchToGameScene(level: level)
             }
+        }
+        if event.characters == "w"{
+            SoundManager.play("diamond")
+        }
+        if event.characters == "a"{
+            SoundManager.play("coin")
         }
     }
 
