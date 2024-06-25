@@ -18,6 +18,7 @@ class ViewController: NSViewController {
     
     let gameControllerManager = GameControllerManager()
     let hapticsManager = HapticsManager()
+    let soundManager = SoundManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
