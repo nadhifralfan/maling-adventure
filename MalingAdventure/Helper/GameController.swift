@@ -46,7 +46,14 @@ class GameControllerManager: ObservableObject {
             print("Controller disconnected: \(disconnectedController)")
         }
     }
-
+    func resetGameState() {
+        isSelectingLevel = true
+        isPlaying = false
+        isPaused = false
+        isGameOver = false
+        isGameWon = false
+        isStoryMode = false
+    }
     func setupControllerInputs(controller: GCController) {
         controller.extendedGamepad?.valueChangedHandler = { [weak self] (gamepad, element) in
             guard let self = self else {return}

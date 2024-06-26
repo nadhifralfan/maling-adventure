@@ -72,14 +72,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 //                createLevelContent()
                 //                gameControllerManager.isPlaying = true
             } else if gameControllerManager.isGameWon {
+                Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
+                    if gameControllerManager.controllers.count > 0 {
+                        timer.invalidate()
+                        
+                        for controller in gameControllerManager.controllers {
+                            controller.extendedGamepad?.valueChangedHandler = nil
+                            self?.setupControllerEndScene(controller: controller)
+                        }
+                    } else {
+                        print("Waiting for controllers to connect...")
+                    }
+                }
                 SoundManager.stopBackground()
                 SoundManager.playEnding()
-                let texture = SKTexture(imageNamed: "ending")
+                let texture = SKTexture(imageNamed: "image1")
                 let ImageNode = SKSpriteNode(texture: texture)
                 ImageNode.size = self.size
                 ImageNode.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
                 ImageNode.zPosition = 0
                 self.addChild(ImageNode)
+                
+                
+              
             }
         }
     }
@@ -93,6 +108,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             } else if gamepad.buttonX.isPressed {
                 self.currentStoryIndex = self.level.stories.count - 1
                 self.transitionToNextStory()
+            }
+        }
+    }
+    
+    func setupControllerEndScene(controller: GCController) {
+        controller.extendedGamepad?.valueChangedHandler = { [weak self] (gamepad, element) in
+            guard let self = self else { return }
+            
+            if gamepad.buttonA.isPressed || gamepad.buttonX.isPressed {
+                gameControllerManager!.resetGameState()
+                let transition = SKTransition.fade(withDuration: 3)
+                if let scene = LevelSelectScene(fileNamed: "LevelSelectScene"){
+                    
+                    insertDataToScene(scene: scene, debugMode: false)
+                    scene.scaleMode = .aspectFill
+                    scene.gameControllerManager = gameControllerManager
+                    scene.hapticsManager = hapticsManager
+                    self.view?.presentScene(scene, transition: transition)
+                }
             }
         }
     }
@@ -185,14 +219,72 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         storyImageNode.zPosition = 0
         self.addChild(storyImageNode)
         
-        let storyDescriptionNode = SKLabelNode(text: story.desc)
-        storyDescriptionNode.fontSize = 24
-        storyDescriptionNode.fontColor = SKColor.white
-        storyDescriptionNode.numberOfLines = 0
-        storyDescriptionNode.preferredMaxLayoutWidth = self.size.width - 40
-        storyDescriptionNode.verticalAlignmentMode = .center
-        storyDescriptionNode.horizontalAlignmentMode = .center
-        
+        var descriptionNodes: [SKLabelNode] = []
+
+        // Loop through each description and create SKLabelNode for each
+        for description in story.desc {
+            let storyDescriptionNode = SKLabelNode(text: description)
+            storyDescriptionNode.fontSize = 24
+            storyDescriptionNode.fontColor = SKColor.white
+            storyDescriptionNode.numberOfLines = 0
+            storyDescriptionNode.preferredMaxLayoutWidth = self.size.width - 40
+            storyDescriptionNode.verticalAlignmentMode = .center
+            storyDescriptionNode.horizontalAlignmentMode = .center
+            storyDescriptionNode.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
+            storyDescriptionNode.zPosition = 1
+            storyDescriptionNode.alpha = 0  // Initially hidden
+            self.addChild(storyDescriptionNode)
+            descriptionNodes.append(storyDescriptionNode)
+        }
+
+        // Function to display descriptions sequentially
+        func displayDescriptionsSequentially(index: Int) {
+            guard index < descriptionNodes.count else {
+                return
+            }
+            
+            let currentDescriptionNode = descriptionNodes[index]
+            currentDescriptionNode.alpha = 1
+            let textToAnimate = story.desc[index]
+            
+            animateTypingEffect(node: currentDescriptionNode, text: textToAnimate, characterDelay: 0.03)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                currentDescriptionNode.alpha = 0
+                
+                if index == descriptionNodes.count - 1 {
+                    currentDescriptionNode.alpha = 1
+                }
+                
+                displayDescriptionsSequentially(index: index + 1)
+            }
+        }
+
+        displayDescriptionsSequentially(index: 0)
+        func animateTypingEffect(node: SKLabelNode, text: String, characterDelay: TimeInterval) {
+            var currentIndex = 0
+            let totalCharacters = text.count
+            
+            // Create a timer to display characters one by one with a delay
+            Timer.scheduledTimer(withTimeInterval: characterDelay, repeats: true) { timer in
+                guard currentIndex < totalCharacters else {
+                    timer.invalidate()  // Stop the timer when all characters are displayed
+                    return
+                }
+                
+                let index = text.index(text.startIndex, offsetBy: currentIndex)
+                let substring = text[...index]
+                node.text = String(substring)
+                
+                currentIndex += 1
+            }
+        }
+
+        // Function to display descriptions sequentially
+  
+
+        displayDescriptionsSequentially(index: 0)
+
         let nextButton = SKLabelNode(text: "Next")
         nextButton.name = "nextButton"
         nextButton.fontSize = 24
@@ -225,6 +317,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             nextScene.currentStoryIndex = currentStoryIndex
             self.view?.presentScene(nextScene, transition: transition)
         }
+    }
+    func transitionToLevelScene() {
+        
+        SoundManager.playClick()
+        print("masuk")
+            let transition = SKTransition.fade(withDuration: 0.5)
+        let nextScene = LevelSelectScene()
+            self.view?.presentScene(nextScene, transition: transition)
+        
     }
     
     func createLevelContent() {
@@ -344,7 +445,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 // Buat animasi mundur (membalik urutan texture)
                 let texturesBackward = texturesForward.reversed()
                 let animateBackward = SKAction.animate(with: Array(texturesBackward), timePerFrame: 0.2)
-                let animateBackwardLoop = SKAction.repeatForever(animateBackward)
 
                 // Tentukan durasi gerakan
                 let moveDuration: TimeInterval = 2.0
@@ -534,6 +634,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     }
                     for player in players {
                         player.keyDown(with: event)
+                    }
+                }else if gameControllerManager.isGameWon{
+                    if event.keyCode == 36 {
+                        gameControllerManager.resetGameState()
+                        let transition = SKTransition.fade(withDuration: 3)
+                        if let scene = LevelSelectScene(fileNamed: "LevelSelectScene"){
+                            
+                            insertDataToScene(scene: scene, debugMode: false)
+                            scene.scaleMode = .aspectFill
+                            scene.gameControllerManager = gameControllerManager
+                            scene.hapticsManager = hapticsManager
+                            self.view?.presentScene(scene, transition: transition)
+                        }
                     }
                 }
             }
