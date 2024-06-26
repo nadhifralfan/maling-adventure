@@ -397,21 +397,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let box3 = InteractableBox(imageNamed: "box3", position: CGPoint(x: 210, y: 200), size: CGSize(width: 35, height: 40))
             box3.zPosition = 3
             
-            self.addChild(box3)
-        }
-        
-        //MARK: Foreground
-        if currentSection == 2 {
-            let foreground = Foreground(imageNamed: "foreground", isDynamic: true, position: CGPoint(x: 0, y: 340), size: CGSize(width: 105, height: 428))
-            foreground.zPosition = 5
-            self.addChild(foreground)
-        }
-        
-        if currentSection == 4 {
-            let box = InteractableBox(imageNamed: "trampoline3", position: CGPoint(x: 140, y: 120), size: CGSize(width: 70, height: 20))
-            box.zPosition = 3
-            self.addChild(box)
-        }
+
+                if currentSection == 2 {
+                    let foreground = Foreground(imageNamed: "foreground", isDynamic: true, position: CGPoint(x: 0, y: 340), size: CGSize(width: 105, height: 420))
+                    foreground.zPosition = 5
+                    self.addChild(foreground)
+                }
+            if currentSection == 5 {
+                let foreground = Foreground(imageNamed: "foreground5", isDynamic: true, position: CGPoint(x: 0, y: 0), size: CGSize(width: 650, height: 500))
+                foreground.zPosition = 2
+                self.addChild(foreground)
+            }
+            if currentSection == 6 {
+                let foreground = Foreground(imageNamed: "foreground6", isDynamic: true, position: CGPoint(x: 0, y: 0), size: CGSize(width: 1026, height: 450))
+                foreground.zPosition = 2
+                self.addChild(foreground)
+            }
+
+            }
         
         //Doors
         let doorEntry = section.doorEntry.doorType
