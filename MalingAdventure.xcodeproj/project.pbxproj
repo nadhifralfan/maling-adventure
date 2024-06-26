@@ -35,6 +35,7 @@
 		4C7EFB2D2C27584D00E9F8DE /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7EFB2C2C27584D00E9F8DE /* MenuScene.swift */; };
 		4C7EFB2F2C28553C00E9F8DE /* Foreground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7EFB2E2C28553C00E9F8DE /* Foreground.swift */; };
 		4C7EFB312C2919C700E9F8DE /* InteractableBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7EFB302C2919C700E9F8DE /* InteractableBox.swift */; };
+		4CC1D9092C2C492400AFA2E5 /* scb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4CC1D9082C2C492400AFA2E5 /* scb.ttf */; };
 		4CED17EA2C130D2F007588F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CED17E92C130D2F007588F7 /* AppDelegate.swift */; };
 		4CED17EC2C130D2F007588F7 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4CED17EB2C130D2F007588F7 /* GameScene.sks */; };
 		4CED17EE2C130D2F007588F7 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4CED17ED2C130D2F007588F7 /* Actions.sks */; };
@@ -84,6 +85,8 @@
 		4C7EFB2C2C27584D00E9F8DE /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		4C7EFB2E2C28553C00E9F8DE /* Foreground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Foreground.swift; sourceTree = "<group>"; };
 		4C7EFB302C2919C700E9F8DE /* InteractableBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractableBox.swift; sourceTree = "<group>"; };
+		4CC1D9052C2C463E00AFA2E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		4CC1D9082C2C492400AFA2E5 /* scb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = scb.ttf; sourceTree = "<group>"; };
 		4CED17E62C130D2F007588F7 /* MalingAdventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MalingAdventure.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CED17E92C130D2F007588F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4CED17EB2C130D2F007588F7 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -194,6 +197,8 @@
 		4CED17E82C130D2F007588F7 /* MalingAdventure */ = {
 			isa = PBXGroup;
 			children = (
+				4CC1D9082C2C492400AFA2E5 /* scb.ttf */,
+				4CC1D9052C2C463E00AFA2E5 /* Info.plist */,
 				4C7462F22C2AED46009A40F9 /* SoundController */,
 				4C7462F12C2AED24009A40F9 /* Sound */,
 				013712AB2C26C6F100A1F6AF /* AHAP */,
@@ -332,6 +337,7 @@
 				4CED181B2C13641C007588F7 /* LevelSelectScene.sks in Resources */,
 				4C7EFB2B2C27584400E9F8DE /* MenuScene.sks in Resources */,
 				013712AF2C26C6F200A1F6AF /* Gravel.ahap in Resources */,
+				4CC1D9092C2C492400AFA2E5 /* scb.ttf in Resources */,
 				4CED17EE2C130D2F007588F7 /* Actions.sks in Resources */,
 				013712B52C26C6F200A1F6AF /* Rumble.ahap in Resources */,
 				013712AE2C26C6F200A1F6AF /* Drums.wav in Resources */,
@@ -523,6 +529,7 @@
 				DEVELOPMENT_TEAM = KK835KRLS4;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MalingAdventure/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -552,6 +559,7 @@
 				DEVELOPMENT_TEAM = KK835KRLS4;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MalingAdventure/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;

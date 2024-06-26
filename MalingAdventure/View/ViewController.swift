@@ -24,10 +24,9 @@ class ViewController: NSViewController {
         super.viewDidLoad()
 
         if let view = self.skView {
-            if let scene = LevelSelectScene(fileNamed: "LevelSelectScene") {
-                
+            if let scene = MenuScene(fileNamed: "MenuScene") {
                 insertDataToScene(scene: scene, debugMode: debugMode)
-                
+
                 scene.scaleMode = .aspectFill
                 scene.gameControllerManager = gameControllerManager
                 scene.hapticsManager = hapticsManager
@@ -35,10 +34,6 @@ class ViewController: NSViewController {
                 // Present the scene
                 view.presentScene(scene)
             }
-//            if let scene = MenuScene(fileNamed: "MenuScene") {
-//                scene.scaleMode = .aspectFill
-//                view.presentScene(scene)
-//            }
             
             view.ignoresSiblingOrder = true
             
