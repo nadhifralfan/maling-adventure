@@ -7,9 +7,14 @@
         "description": "lorem ipsum dolor sit amet"
       },
       {
-        "imageName": "image2",
+        "imageName": "flow2",
         "description": "lorem ipsum dolor sit amet"
-      }
+      },
+      {
+        "imageName": "flow3",
+        "description": "lorem ipsum dolor sit amet"
+      },
+      
     ],
     "section":[
         {"1" :
@@ -406,7 +411,7 @@
           "platforms": [
               {
                   "coordinate" : { "x":0, "y": 0 },
-                  "size" : { "width": 440, "height": 40 }
+                  "size" : { "width": 435, "height": 35 }
               },
               {
                   "coordinate" : { "x":0, "y": 0 },
@@ -489,7 +494,7 @@
               },
               {
                   "coordinate" : { "x":0, "y": 640 },
-                  "size" : { "width": 10, "height": 80 }
+                  "size" : { "width": 5, "height": 80 }
               },
               {
                   "coordinate" : { "x":420, "y": 0 },
@@ -508,8 +513,8 @@
           
           "doorEntry" : {
             "doorType" : "type1",
-            "x": 100,
-            "y": 100
+            "x": 880,
+            "y": 0
           },
           "doorExit" : {
             "doorType" : "type2",
@@ -535,15 +540,6 @@
                   "width":35,
                   "height":35,
               },
-              {
-                  "hazzardType" : "rat",
-                  "xSpawn" : 1015,
-                  "ySpawn" : 0,
-                  "xEnd" : 455,
-                  "yEnd" : 0,
-                  "width":40,
-                  "height":30,
-              },
               
               {
                   "hazzardType" : "trans",
@@ -551,7 +547,7 @@
                   "ySpawn" : 0,
                   "xEnd" : 420,
                   "yEnd" : 0,
-                  "width":595,
+                  "width":315,
                   "height":10,
               }
         ]
@@ -561,7 +557,8 @@
       
       
       {"5" :
-          {
+          {   "transitionNext" : "up",
+              "transitionBack" : "left",
               "background" : "imageBackground5",
               "platforms": [
                   {
@@ -572,33 +569,38 @@
                       "coordinate" : { "x":0, "y": 0 },
                       "size" : { "width": 35, "height": 768 }
                   },
+                  
                   {
-                      "coordinate" : { "x":35, "y": 40 },
-                      "size" : { "width": 885, "height": 40 }
+                      "coordinate" : { "x":335, "y": 640 },
+                      "size" : { "width": 10, "height": 50 }
                   },
                   {
-                      "coordinate" : { "x":455, "y": 80 },
-                      "size" : { "width": 405, "height": 40 }
+                      "coordinate" : { "x":270, "y": 640 },
+                      "size" : { "width": 10, "height": 50 }
+                  },
+                  {
+                      "coordinate" : { "x":510, "y": 80 },
+                      "size" : { "width": 340, "height": 35 }
                   },
                   
                   {
-                      "coordinate" : { "x":525, "y": 120 },
-                      "size" : { "width": 265, "height": 40 }
+                      "coordinate" : { "x":545, "y": 120 },
+                      "size" : { "width": 240, "height": 35 }
                   },
                   {
-                      "coordinate" : { "x":595, "y": 160 },
-                      "size" : { "width": 125, "height": 40 }
+                      "coordinate" : { "x":580, "y": 160 },
+                      "size" : { "width": 140, "height": 35 }
                   },
                   {
                       "coordinate" : { "x":990, "y": 0 },
                       "size" : { "width": 45, "height": 650 }
                   },
                   {
-                      "coordinate" : { "x": 840, "y": 480 },
-                      "size" : { "width": 260, "height": 20 }
+                      "coordinate" : { "x": 805, "y": 480 },
+                      "size" : { "width": 280, "height": 20 }
                   },
                   {
-                      "coordinate" : { "x": 35, "y": 740 },
+                      "coordinate" : { "x": 35, "y": 760 },
                       "size" : { "width": 989, "height": 50 }
                   },
                   {
@@ -606,56 +608,70 @@
                       "size" : { "width": 660, "height": 20 }
                   },
                   {
-                      "coordinate" : { "x": 650, "y": 320 },
-                      "size" : { "width": 50, "height": 180 }
+                      "coordinate" : { "x": 610, "y": 320 },
+                      "size" : { "width": 40, "height": 180 }
                   },
                   {
-                      "coordinate" : { "x": 35, "y": 640 },
-                      "size" : { "width": 249, "height": 20 }
+                      "coordinate" : { "x": 35, "y": 635 },
+                      "size" : { "width": 240, "height": 15 }
                   },
                   {
-                      "coordinate" : { "x": 331, "y": 640 },
-                      "size" : { "width": 700, "height": 20 }
+                      "coordinate" : { "x": 335, "y": 635 },
+                      "size" : { "width": 700, "height": 15 }
                   },
-                  
-                  
+                  {
+                      "coordinate" : { "x": 1020, "y": 640 },
+                      "size" : { "width": 5, "height": 100 }
+                  },
+                  {
+                      "coordinate" : { "x": 910, "y": 0 },
+                      "size" : { "width": 70, "height": 10 }
+                  },
                   
                   
               ],
-              
+              "spawnEntry" : {
+                  "x" : 945,
+                  "y" : 660
+              },
+              "spawnExit" : {
+                  "x" : 946,
+                  "y" : 0
+              },
               
               "doorEntry" : {
                   "doorType" : "type1",
-                  "x": 0,
-                  "y": 0
+                  "x": 1015,
+                  "y": 640
               },
               "doorExit" : {
                   "doorType" : "type2",
-                  "x": 2,
-                  "y": 4
+                  "x": 946,
+                  "y": 0
               },
               
               "coins" : [
-                  { "x": 210, "y": 160 },
-                  { "x": 385, "y": 280 },
+                  { "x": 735, "y": 160 },
+                  { "x": 910, "y": 80 },
               ],
               
               "hazzards" : [
                   {
-                      "hazzardType" : "type2",
-                      "xSpawn" : 500,
-                      "ySpawn" : 180,
-                      "xEnd" : 500,
-                      "yEnd" : 280,
-                      "width":7,
-                      "height":8,
-                  }
+                      "hazzardType" :"trans",
+                      "xSpawn" : 0,
+                      "ySpawn" : 0,
+                      "xEnd" : 0,
+                      "yEnd" : 0,
+                      "width":2,
+                      "height":2,
+                  },
               ]
           }
       },
       
       {"6" :
-          {
+          {   "transitionNext" : "right",
+              "transitionBack" : "down",
               "background" : "imageBackground6",
               "platforms": [
                   {
@@ -667,6 +683,10 @@
                       "size" : { "width": 35, "height": 75 }
                   },
                   {
+                      "coordinate" : { "x":0, "y": 0 },
+                      "size" : { "width": 2, "height": 280 }
+                  },
+                  {
                       "coordinate" : { "x":0, "y": 280 },
                       "size" : { "width": 35, "height": 490 }
                   },
@@ -675,8 +695,8 @@
                       "size" : { "width": 924, "height": 50 }
                   },
                   {
-                      "coordinate" : { "x":0, "y": 600 },
-                      "size" : { "width": 175, "height": 35 }
+                      "coordinate" : { "x":0, "y": 580 },
+                      "size" : { "width": 175, "height": 25 }
                   },
                   {
                       "coordinate" : { "x":0, "y": 425 },
@@ -696,60 +716,60 @@
                   },
                   
                   {
-                      "coordinate" : { "x":875, "y": 240 },
+                      "coordinate" : { "x":860, "y": 240 },
                       "size" : { "width": 140, "height": 25 }
                   },
                   
                   {
                       "coordinate" : { "x":35, "y": 40 },
-                      "size" : { "width": 35, "height": 75 }
+                      "size" : { "width": 30, "height": 75 }
                   },
                   {
-                      "coordinate" : { "x":70, "y": 40 },
+                      "coordinate" : { "x":35, "y": 35 },
                       "size" : { "width": 945, "height": 38 }
                   },
                   {
-                      "coordinate" : { "x":105, "y": 80 },
-                      "size" : { "width": 135, "height": 35 }
+                      "coordinate" : { "x":110, "y": 80 },
+                      "size" : { "width": 125, "height": 35 }
                   },
                   {
                       "coordinate" : { "x":280, "y": 80 },
                       "size" : { "width": 90, "height": 35 }
                   },
                   {
-                      "coordinate" : { "x":420, "y": 80 },
-                      "size" : { "width": 100, "height": 35 }
+                      "coordinate" : { "x":415, "y": 80 },
+                      "size" : { "width": 125, "height": 35 }
                   },
                   {
-                      "coordinate" : { "x":595, "y": 80 },
+                      "coordinate" : { "x":585, "y": 80 },
                       "size" : { "width": 70, "height": 35 }
                   },
                   {
-                      "coordinate" : { "x":665, "y": 120 },
+                      "coordinate" : { "x":650, "y": 120 },
                       "size" : { "width": 70, "height": 35 }
                   },
                   {
-                      "coordinate" : { "x":735, "y": 160 },
+                      "coordinate" : { "x":720, "y": 160 },
                       "size" : { "width": 70, "height": 35 }
                   },
                   {
-                      "coordinate" : { "x":805, "y": 200 },
-                      "size" : { "width": 120, "height": 35 }
+                      "coordinate" : { "x":785, "y": 200 },
+                      "size" : { "width": 120, "height": 28 }
                   },
                   {
-                      "coordinate" : { "x":665, "y": 520 },
+                      "coordinate" : { "x":650, "y": 520 },
                       "size" : { "width": 120, "height": 15 }
                   },
                   {
-                      "coordinate" : { "x":735, "y": 520 },
+                      "coordinate" : { "x":720, "y": 520 },
                       "size" : { "width": 120, "height": 55 }
                   },
                   {
-                      "coordinate" : { "x":805, "y": 560 },
+                      "coordinate" : { "x":790, "y": 560 },
                       "size" : { "width": 120, "height": 52 }
                   },
                   {
-                      "coordinate" : { "x":875, "y": 600 },
+                      "coordinate" : { "x":860, "y": 600 },
                       "size" : { "width": 120, "height": 50 }
                   },
                   {
@@ -757,341 +777,48 @@
                       "size" : { "width": 35, "height": 760 }
                   },
                   
-                  
-                  
               ],
               
+              "spawnEntry" : {
+                  "x" : 945,
+                  "y" : 640
+              },
+              "spawnExit" : {
+                  "x" : 0,
+                  "y" : 120
+              },
               
               "doorEntry" : {
                   "doorType" : "type1",
-                  "x": 0,
-                  "y": 0
+                  "x": 945,
+                  "y": 640
               },
               "doorExit" : {
                   "doorType" : "type2",
-                  "x": 2,
-                  "y": 4
+                  "x": 0,
+                  "y": 120
               },
               
               "coins" : [
-                  { "x": 210, "y": 160 },
-                  { "x": 385, "y": 280 },
+                  { "x": 280, "y": 450 },
+                  { "x": 585, "y": 450 },
               ],
               
               "hazzards" : [
                   {
                       "hazzardType" : "type2",
-                      "xSpawn" : 500,
-                      "ySpawn" : 180,
-                      "xEnd" : 500,
-                      "yEnd" : 280,
-                      "width":7,
-                      "height":8,
+                      "xSpawn" : 0,
+                      "ySpawn" : 0,
+                      "xEnd" : 0,
+                      "yEnd" : 0,
+                      "width":2,
+                      "height":2,
                   }
               ]
           }
       },
       
-      
-      {"7" :
-          {
-              "background" : "imageBackground7",
-              "platforms": [
-                  {
-                      "coordinate" : { "x":0, "y": 0 },
-                      "size" : { "width": 850, "height": 40 }
-                  },
-                  {
-                      "coordinate" : { "x":0, "y": 40 },
-                      "size" : { "width": 35, "height": 75 }
-                  },
-                  {
-                      "coordinate" : { "x":0, "y": 120 },
-                      "size" : { "width": 20, "height": 740 }
-                  },
-                  {
-                      "coordinate" : { "x":980, "y": 0 },
-                      "size" : { "width": 45, "height": 110 }
-                  },
-                  {
-                      "coordinate" : { "x":35, "y": 40 },
-                      "size" : { "width": 350, "height": 75 }
-                  },
-                  {
-                      "coordinate" : { "x":385, "y": 40 },
-                      "size" : { "width": 470, "height": 75 }
-                  },
-                  {
-                      "coordinate" : { "x":245, "y": 730 },
-                      "size" : { "width": 770, "height": 75 }
-                  },
-                  {
-                      "coordinate" : { "x":595, "y": 265 },
-                      "size" : { "width": 420, "height": 40 }
-                  },
-                  {
-                      "coordinate" : { "x":1000, "y": 280 },
-                      "size" : { "width": 50, "height": 480 }
-                  },
-                  {
-                      "coordinate" : { "x":525, "y": 500 },
-                      "size" : { "width": 490, "height": 40 }
-                  },
-                  {
-                      "coordinate" : { "x":380, "y": 120 },
-                      "size" : { "width": 25, "height": 110 }
-                  },
-                  {
-                      "coordinate" : { "x":380, "y": 400 },
-                      "size" : { "width": 25, "height": 320 }
-                  },
-                  
-                  {
-                      "coordinate" : { "x":70, "y": 200 },
-                      "size" : { "width": 70, "height": 30 }
-                  },
-                  {
-                      "coordinate" : { "x":70, "y": 280 },
-                      "size" : { "width": 70, "height": 30 }
-                  },
-                  {
-                      "coordinate" : { "x":70, "y": 360 },
-                      "size" : { "width": 70, "height": 30 }
-                  },
-                  {
-                      "coordinate" : { "x":70, "y": 440 },
-                      "size" : { "width": 70, "height": 30 }
-                  },
-                  {
-                      "coordinate" : { "x":70, "y": 520 },
-                      "size" : { "width": 70, "height": 30 }
-                  },
-                  {
-                      "coordinate" : { "x":70, "y": 600 },
-                      "size" : { "width": 70, "height": 30 }
-                  },
-                  {
-                      "coordinate" : { "x":70, "y": 680 },
-                      "size" : { "width": 70, "height": 30 }
-                  },
-                  
-              ],
-              
-              
-              "doorEntry" : {
-                  "doorType" : "type1",
-                  "x": 0,
-                  "y": 0
-              },
-              "doorExit" : {
-                  "doorType" : "type2",
-                  "x": 2,
-                  "y": 4
-              },
-              
-              "coins" : [
-                  { "x": 210, "y": 160 },
-                  { "x": 385, "y": 280 },
-              ],
-              
-              "hazzards" : [
-                  {
-                      "hazzardType" : "type2",
-                      "xSpawn" : 500,
-                      "ySpawn" : 180,
-                      "xEnd" : 500,
-                      "yEnd" : 280,
-                      "width":7,
-                      "height":8,
-                  }
-              ]
-          }
-      },
-      
-      
-      {"8" :
-          {
-              "background" : "imageBackground8",
-              "platforms": [
-                
-                  {
-                      "coordinate" : { "x":0, "y": 0 },
-                      "size" : { "width": 20, "height": 760 }
-                  },
-                  {
-                      "coordinate" : { "x":0, "y": 440 },
-                      "size" : { "width": 70, "height": 25 }
-                  },
-                  {
-                      "coordinate" : { "x":245, "y": 0 },
-                      "size" : { "width": 770, "height": 70 }
-                  },
-                  {
-                      "coordinate" : { "x":245, "y": 70 },
-                      "size" : { "width": 35, "height": 80 }
-                  },
-                  {
-                      "coordinate" : { "x":350, "y": 240 },
-                      "size" : { "width": 35, "height": 240 }
-                  },
-                  {
-                      "coordinate" : { "x":1000, "y": 0 },
-                      "size" : { "width": 50, "height": 760 }
-                  },
-                  
-                  
-                  {
-                      "coordinate" : { "x":70, "y": 45 },
-                      "size" : { "width": 80, "height": 25 }
-                  },
-                  {
-                      "coordinate" : { "x":70, "y": 130 },
-                      "size" : { "width": 70, "height": 25 }
-                  },
-                  {
-                      "coordinate" : { "x":70, "y": 210 },
-                      "size" : { "width": 70, "height": 25 }
-                  },
-                  {
-                      "coordinate" : { "x":70, "y": 280 },
-                      "size" : { "width": 70, "height": 25 }
-                  },
-                 
-                 
-                  
-              ],
-              
-              
-              "doorEntry" : {
-                  "doorType" : "type1",
-                  "x": 0,
-                  "y": 0
-              },
-              "doorExit" : {
-                  "doorType" : "type2",
-                  "x": 2,
-                  "y": 4
-              },
-              
-              "coins" : [
-                  { "x": 210, "y": 160 },
-                  { "x": 385, "y": 280 },
-              ],
-              
-              "hazzards" : [
-                  {
-                      "hazzardType" : "type2",
-                      "xSpawn" : 500,
-                      "ySpawn" : 180,
-                      "xEnd" : 500,
-                      "yEnd" : 280,
-                      "width":7,
-                      "height":8,
-                  }
-              ]
-          }
-      },
-      {"9" :
-          {
-              "background" : "imageBackground9",
-              "platforms": [
-                
-                  {
-                      "coordinate" : { "x":0, "y": 0 },
-                      "size" : { "width": 20, "height": 760 }
-                  },
-                  
-                  {
-                      "coordinate" : { "x":0, "y": 0 },
-                      "size" : { "width": 308, "height": 110 }
-                  },
-                  {
-                      "coordinate" : { "x":475, "y": 0 },
-                      "size" : { "width": 525, "height": 110 }
-                  },
-                  {
-                      "coordinate" : { "x":855, "y": 120 },
-                      "size" : { "width": 80, "height": 35 }
-                  },
-                  {
-                      "coordinate" : { "x":920, "y": 160 },
-                      "size" : { "width": 80, "height": 35 }
-                  },
-                  {
-                      "coordinate" : { "x":980, "y": 0 },
-                      "size" : { "width": 40, "height": 760 }
-                  },
-                  
-                  
-                  
-                  
-                  {
-                      "coordinate" : { "x":0, "y": 400 },
-                      "size" : { "width": 385, "height": 25 }
-                  },
-                  {
-                      "coordinate" : { "x":0, "y": 720 },
-                      "size" : { "width": 860, "height": 80 }
-                  },
-                  {
-                      "coordinate" : { "x":0, "y": 480 },
-                      "size" : { "width": 245, "height": 25 }
-                  },
-                  {
-                      "coordinate" : { "x":245, "y": 555 },
-                      "size" : { "width": 770, "height": 20 }
-                  },
-                  {
-                      "coordinate" : { "x":875, "y": 640 },
-                      "size" : { "width": 140, "height": 20 }
-                  },
-                  {
-                      "coordinate" : { "x":490, "y": 360 },
-                      "size" : { "width": 35, "height": 35 }
-                  },
-                 
-                 
-                 
-                  
-              ],
-              
-              
-              "doorEntry" : {
-                  "doorType" : "type1",
-                  "x": 0,
-                  "y": 0
-              },
-              "doorExit" : {
-                  "doorType" : "type2",
-                  "x": 2,
-                  "y": 4
-              },
-              
-              "coins" : [
-                  { "x": 210, "y": 160 },
-                  { "x": 385, "y": 280 },
-              ],
-              
-              "hazzards" : [
-                  {
-                      "hazzardType" : "type2",
-                      "xSpawn" : 500,
-                      "ySpawn" : 180,
-                      "xEnd" : 500,
-                      "yEnd" : 280,
-                      "width":7,
-                      "height":8,
-                  }
-              ]
-          }
-      },
-      
-      
-      
-      
-      
-      
-      
+    
       ]
     },
 }

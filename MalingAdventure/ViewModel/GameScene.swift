@@ -351,6 +351,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     foreground.zPosition = 5
                     self.addChild(foreground)
                 }
+            if currentSection == 5 {
+                let foreground = Foreground(imageNamed: "foreground5", isDynamic: true, position: CGPoint(x: 0, y: 0), size: CGSize(width: 650, height: 500))
+                foreground.zPosition = 2
+                self.addChild(foreground)
+            }
+            if currentSection == 6 {
+                let foreground = Foreground(imageNamed: "foreground6", isDynamic: true, position: CGPoint(x: 0, y: 0), size: CGSize(width: 1026, height: 450))
+                foreground.zPosition = 2
+                self.addChild(foreground)
+            }
+
             }
         
         //Doors
