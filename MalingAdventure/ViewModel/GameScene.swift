@@ -89,7 +89,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
                 SoundManager.stopBackground()
                 SoundManager.playEnding()
-                let texture = SKTexture(imageNamed: "image1")
+                let texture = SKTexture(imageNamed: "ending")
                 let ImageNode = SKSpriteNode(texture: texture)
                 ImageNode.size = self.size
                 ImageNode.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
