@@ -223,9 +223,18 @@
           "hazzards" : [
               {
                   "hazzardType" :"rat",
+                  "xSpawn" : 560,
+                  "ySpawn" : 120,
+                  "xEnd" : 500,
+                  "yEnd" : 120,
+                  "width":38,
+                  "height":40,
+              },
+              {
+                  "hazzardType" :"water",
                   "xSpawn" : 580,
                   "ySpawn" : 40,
-                  "xEnd" : 500,
+                  "xEnd" : 580,
                   "yEnd" : 40,
                   "width":38,
                   "height":40,
