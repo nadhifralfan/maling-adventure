@@ -41,6 +41,16 @@ class InteractableBox: SKSpriteNode {
         
     }
     
+    func changeImagedName(_ imageNamed: String){
+        textureNode.removeFromParent()
+        
+        let texture = SKTexture(imageNamed: imageNamed)
+        textureNode = SKSpriteNode(texture: texture, size: size)
+        textureNode.anchorPoint = CGPoint(x: 0, y: 0)
+        
+        self.addChild(textureNode)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

@@ -19,8 +19,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let coinScoreNode = SKLabelNode(text: "Coins: 0")
     var previousUpdateTime: TimeInterval = 0
     var buttonPressed = 0
-    let buttonPressedImage = "trampoline1"
-    let buttonNotPressedImage = "trampoline3"
+    let buttonPressedImage = "button_pressed"
+    let buttonNotPressedImage = "button_unpressed"
     
     init(size: CGSize, level: Level, section: Int, gameControllerManager: GameControllerManager, spawn: CGPoint, hapticsManager: HapticsManager, coins: Int) {
         self.level = level
@@ -524,7 +524,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             self.addChild(box3)
             
-            let button1 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 440, y: 445), size: CGSize(width: 35, height: 20))
+            let button1 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 440, y: 460), size: CGSize(width: 35, height: 40))
             button1.name = "button1"
             button1.physicsBody?.isDynamic = false
             button1.physicsBody?.pinned = true
@@ -534,7 +534,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             button1.zPosition = 3
             self.addChild(button1)
             
-            let button2 = InteractableBox(imageNamed: "trampoline3", position: CGPoint(x: 320, y: 445), size: CGSize(width: 35, height: 20))
+            let button2 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 320, y: 460), size: CGSize(width: 35, height: 40))
             button2.name = "button2"
             button2.physicsBody?.isDynamic = false
             button2.physicsBody?.pinned = true
@@ -543,7 +543,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             button2.zPosition = 3
             self.addChild(button2)
             
-            let button3 = InteractableBox(imageNamed: "trampoline3", position: CGPoint(x: 200, y: 445), size: CGSize(width: 35, height: 20))
+            let button3 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 200, y: 460), size: CGSize(width: 35, height: 40))
             button3.name = "button3"
             button3.physicsBody?.isDynamic = false
             button3.physicsBody?.pinned = true
@@ -552,7 +552,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             button3.zPosition = 3
             self.addChild(button3)
             
-            let button4 = InteractableBox(imageNamed: "trampoline3", position: CGPoint(x: 80, y: 445), size: CGSize(width: 35, height: 20))
+            let button4 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 80, y: 460), size: CGSize(width: 35, height: 40))
             button4.name = "button4"
             button4.physicsBody?.isDynamic = false
             button4.physicsBody?.pinned = true
@@ -751,21 +751,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if (coinAndPlayerContact) {
             SoundManager.play("coin")
             
-            let node = (bodyA.categoryBitMask == PhysicsCategory.coin) ? bodyA.node! : bodyB.node!
+            let node = (bodyA.categoryBitMask == PhysicsCategory.coin) ? bodyA.node as! CoinNode : bodyB.node as! CoinNode
+            coins += node.value
             
-            let coinArray = level.sections[currentSection-1].coins
-            
-            for i in 0..<coinArray.count {
-                let coinData = coinArray[i]
-                
-                if coinData.position.x < (node.position.x) + 10 && coinData.position.x > (node.position.x) - 10 &&
-                    coinData.position.y + 40 < (node.position.y) + 10 && coinData.position.y + 40 > (node.position.y) - 10 {
-                    coins += coinData.value
-                    
-                    level.sections[currentSection-1].coins.remove(at: i)
-                }
-            }
-            
+            level.sections[currentSection-1].coins.removeAll { Int($0.position.x) as Int == Int(node.position.x) as Int && Int($0.position.y) as Int == Int(node.position.y) as Int}
+                        
             node.removeFromParent()
         }
     }
@@ -853,16 +843,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if boxAndButtonContact && (bodyA.categoryBitMask == PhysicsCategory.box || bodyB.categoryBitMask == PhysicsCategory.box) {
             
-            let buttonNode = (bodyA.categoryBitMask == PhysicsCategory.button) ? bodyA.node as! SKSpriteNode : bodyB.node as! SKSpriteNode
-            buttonNode.texture = SKTexture(imageNamed: buttonPressedImage)
+            let buttonNode = (bodyA.categoryBitMask == PhysicsCategory.button) ? bodyA.node as! InteractableBox : bodyB.node as! InteractableBox
+            buttonNode.changeImagedName(buttonPressedImage)
             buttonNode.userData = ["imageNamed" : buttonPressedImage]
         }
         
         let playerAndButtonContact = bodyA.categoryBitMask | bodyB.categoryBitMask == PhysicsCategory.player | PhysicsCategory.button
         
         if playerAndButtonContact && (bodyA.categoryBitMask == PhysicsCategory.player || bodyB.categoryBitMask == PhysicsCategory.player) {
-            let buttonNode = (bodyA.categoryBitMask == PhysicsCategory.button) ? bodyA.node as! SKSpriteNode : bodyB.node as! SKSpriteNode
-            buttonNode.texture = SKTexture(imageNamed: buttonPressedImage)
+            let buttonNode = (bodyA.categoryBitMask == PhysicsCategory.button) ? bodyA.node as! InteractableBox : bodyB.node as! InteractableBox
+            buttonNode.changeImagedName(buttonPressedImage)
             buttonNode.userData = ["imageNamed" : buttonPressedImage]
             
         }
@@ -906,9 +896,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let boxAndButtonContact = bodyA.categoryBitMask | bodyB.categoryBitMask == PhysicsCategory.box | PhysicsCategory.button
         
         if boxAndButtonContact && (bodyA.categoryBitMask == PhysicsCategory.box || bodyB.categoryBitMask == PhysicsCategory.box) {
-            let buttonNode = (bodyA.categoryBitMask == PhysicsCategory.button) ? bodyA.node as! SKSpriteNode : bodyB.node as! SKSpriteNode
+            let buttonNode = (bodyA.categoryBitMask == PhysicsCategory.button) ? bodyA.node as! InteractableBox : bodyB.node as! InteractableBox
             if buttonNode.physicsBody!.allContactedBodies().isEmpty {
-                buttonNode.texture = SKTexture(imageNamed: buttonNotPressedImage)
+                buttonNode.changeImagedName(buttonNotPressedImage)
                 buttonNode.userData = ["imageNamed" : buttonNotPressedImage]
             }
         }
@@ -917,12 +907,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         if playerAndButtonContact && (bodyA.categoryBitMask == PhysicsCategory.player || bodyB.categoryBitMask == PhysicsCategory.player) {
-            let buttonNode = (bodyA.categoryBitMask == PhysicsCategory.button) ? bodyA.node as! SKSpriteNode : bodyB.node as! SKSpriteNode
+            let buttonNode = (bodyA.categoryBitMask == PhysicsCategory.button) ? bodyA.node as! InteractableBox : bodyB.node as! InteractableBox
             if buttonNode.physicsBody!.allContactedBodies().isEmpty {
                 if self.buttonPressed == 4 {
                     return
                 }
-                buttonNode.texture = SKTexture(imageNamed: buttonNotPressedImage)
+
+                buttonNode.changeImagedName(buttonNotPressedImage)
                 buttonNode.userData = ["imageNamed" : buttonNotPressedImage]
             }
         }
@@ -971,19 +962,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let coinEntity = GKEntity()
         
         let texture = SKTexture(imageNamed: "coins")
-        let coinNode = SKSpriteNode(texture: texture)
-        coinNode.size = CGSize(width: 35, height: 40)
-        coinNode.name = "coin"
-        coinNode.position = CGPoint(x: coin.position.x, y: coin.position.y+coinNode.size.height)
-        coinNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 30, height: 35))
-        coinNode.physicsBody?.isDynamic = true
-        coinNode.physicsBody?.allowsRotation = false
-        coinNode.physicsBody?.affectedByGravity = false
-        coinNode.physicsBody?.categoryBitMask = PhysicsCategory.coin
-        coinNode.physicsBody?.collisionBitMask = 0
-        coinNode.physicsBody?.collisionBitMask = PhysicsCategory.player | PhysicsCategory.platform
-        coinNode.physicsBody?.contactTestBitMask = PhysicsCategory.player
-        coinNode.zPosition = 10
+
+        let coinNode = CoinNode(texture: texture, coin: coin)
+        
         scene.addChild(coinNode)
         
         let coinComponent = NodeComponent(node: coinNode)
