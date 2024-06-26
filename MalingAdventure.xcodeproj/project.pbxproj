@@ -23,6 +23,7 @@
 		013712B92C2A95C700A1F6AF /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013712B82C2A95C700A1F6AF /* Coin.swift */; };
 		01FE5C402C247FF20077920C /* NodeComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FE5C3F2C247FF20077920C /* NodeComponent.swift */; };
 		01FE5C422C2480110077920C /* JumpForeverComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FE5C412C2480110077920C /* JumpForeverComponent.swift */; };
+		1A9A25312C2C2EF400A4C43A /* unlock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1A9A25302C2C2EF400A4C43A /* unlock.mp3 */; };
 		4C7462F42C2AED6B009A40F9 /* SoundController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7462F32C2AED6B009A40F9 /* SoundController.swift */; };
 		4C7462F62C2AEE38009A40F9 /* bgmGamePlay.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C7462F52C2AEE38009A40F9 /* bgmGamePlay.mp3 */; };
 		4C7462F82C2AEF75009A40F9 /* click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C7462F72C2AEF75009A40F9 /* click.mp3 */; };
@@ -72,6 +73,7 @@
 		013712B82C2A95C700A1F6AF /* Coin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
 		01FE5C3F2C247FF20077920C /* NodeComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeComponent.swift; sourceTree = "<group>"; };
 		01FE5C412C2480110077920C /* JumpForeverComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpForeverComponent.swift; sourceTree = "<group>"; };
+		1A9A25302C2C2EF400A4C43A /* unlock.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = unlock.mp3; path = ../../../../Downloads/unlock.mp3; sourceTree = "<group>"; };
 		4C7462F32C2AED6B009A40F9 /* SoundController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundController.swift; sourceTree = "<group>"; };
 		4C7462F52C2AEE38009A40F9 /* bgmGamePlay.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bgmGamePlay.mp3; sourceTree = "<group>"; };
 		4C7462F72C2AEF75009A40F9 /* click.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = click.mp3; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 		4C7462F12C2AED24009A40F9 /* Sound */ = {
 			isa = PBXGroup;
 			children = (
+				1A9A25302C2C2EF400A4C43A /* unlock.mp3 */,
 				4C7462F92C2AF352009A40F9 /* coin.mp3 */,
 				4C7462F72C2AEF75009A40F9 /* click.mp3 */,
 				4C7463012C2B02FC009A40F9 /* bgmEnding.mp3 */,
@@ -324,6 +327,7 @@
 				4CED17EC2C130D2F007588F7 /* GameScene.sks in Resources */,
 				013712B12C26C6F200A1F6AF /* Hit.ahap in Resources */,
 				4CED17F42C130D31007588F7 /* Assets.xcassets in Resources */,
+				1A9A25312C2C2EF400A4C43A /* unlock.mp3 in Resources */,
 				013712AC2C26C6F200A1F6AF /* Boing.ahap in Resources */,
 				013712B62C26C6F200A1F6AF /* Sparkle.ahap in Resources */,
 				4C7462FA2C2AF352009A40F9 /* coin.mp3 in Resources */,
