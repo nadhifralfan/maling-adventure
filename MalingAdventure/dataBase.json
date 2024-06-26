@@ -611,16 +611,6 @@
               ],
               
               
-              "spawnEntry" : {
-                  "x" : 315,
-                  "y" : 640
-              },
-              "spawnExit" : {
-                  "x" : 875,
-                  "y" : 80
-              },
-              
-              
               "doorEntry" : {
                   "doorType" : "type1",
                   "x": 0,
@@ -757,15 +747,6 @@
                   
                   
               ],
-              
-              "spawnEntry" : {
-                  "x" : 945,
-                  "y" : 760
-              },
-              "spawnExit" : {
-                  "x" : 875,
-                  "y" : 80
-              },
               
               
               "doorEntry" : {
