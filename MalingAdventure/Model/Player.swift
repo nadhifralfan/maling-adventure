@@ -21,6 +21,8 @@ struct PhysicsCategory {
     static let foreground: UInt32 = 1 << 9
     static let box: UInt32 = 1 << 10
     static let button: UInt32 = 1 << 11
+    static let key: UInt32 = 1 << 12
+    static let finalDoor: UInt32 = 1 << 13
 }
 
 class Player: SKSpriteNode {
@@ -89,8 +91,8 @@ class Player: SKSpriteNode {
     func createPhysicBody(){
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: self.size.width / 2, y: self.size.height / 2))
         self.physicsBody?.categoryBitMask = PhysicsCategory.player
-        self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.player | PhysicsCategory.box
-        self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.door | PhysicsCategory.foreground | PhysicsCategory.box
+        self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.player | PhysicsCategory.box | PhysicsCategory.finalDoor
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.door | PhysicsCategory.foreground | PhysicsCategory.box | PhysicsCategory.key
         self.physicsBody?.affectedByGravity = true
         self.physicsBody?.allowsRotation = false
         self.physicsBody?.restitution = 0
