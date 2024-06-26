@@ -36,6 +36,7 @@
 		4C7EFB2F2C28553C00E9F8DE /* Foreground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7EFB2E2C28553C00E9F8DE /* Foreground.swift */; };
 		4C7EFB312C2919C700E9F8DE /* InteractableBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7EFB302C2919C700E9F8DE /* InteractableBox.swift */; };
 		4CC1D9092C2C492400AFA2E5 /* scb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4CC1D9082C2C492400AFA2E5 /* scb.ttf */; };
+		4CC1D90B2C2C519B00AFA2E5 /* unlock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4CC1D90A2C2C519B00AFA2E5 /* unlock.mp3 */; };
 		4CED17EA2C130D2F007588F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CED17E92C130D2F007588F7 /* AppDelegate.swift */; };
 		4CED17EC2C130D2F007588F7 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4CED17EB2C130D2F007588F7 /* GameScene.sks */; };
 		4CED17EE2C130D2F007588F7 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4CED17ED2C130D2F007588F7 /* Actions.sks */; };
@@ -87,6 +88,7 @@
 		4C7EFB302C2919C700E9F8DE /* InteractableBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractableBox.swift; sourceTree = "<group>"; };
 		4CC1D9052C2C463E00AFA2E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4CC1D9082C2C492400AFA2E5 /* scb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = scb.ttf; sourceTree = "<group>"; };
+		4CC1D90A2C2C519B00AFA2E5 /* unlock.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = unlock.mp3; sourceTree = "<group>"; };
 		4CED17E62C130D2F007588F7 /* MalingAdventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MalingAdventure.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CED17E92C130D2F007588F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4CED17EB2C130D2F007588F7 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 		4C7462F12C2AED24009A40F9 /* Sound */ = {
 			isa = PBXGroup;
 			children = (
+				4CC1D90A2C2C519B00AFA2E5 /* unlock.mp3 */,
 				4C7462F92C2AF352009A40F9 /* coin.mp3 */,
 				4C7462F72C2AEF75009A40F9 /* click.mp3 */,
 				4C7463012C2B02FC009A40F9 /* bgmEnding.mp3 */,
@@ -326,6 +329,7 @@
 				4C7463002C2AF944009A40F9 /* dead.mp3 in Resources */,
 				013712B22C26C6F200A1F6AF /* Inflate.ahap in Resources */,
 				013712B42C26C6F200A1F6AF /* Recharge.ahap in Resources */,
+				4CC1D90B2C2C519B00AFA2E5 /* unlock.mp3 in Resources */,
 				4CED17EC2C130D2F007588F7 /* GameScene.sks in Resources */,
 				013712B12C26C6F200A1F6AF /* Hit.ahap in Resources */,
 				4CED17F42C130D31007588F7 /* Assets.xcassets in Resources */,

@@ -36,10 +36,10 @@ func insertDataToScene(scene: MenuScene, debugMode: Bool = false) {
                             var stories: [Story] = []
                             for storyDict in storiesArray {
                                 if let imageName = storyDict["imageName"] as? String,
-                                   let description = storyDict["description"] as? String {
+                                   let descriptionArray = storyDict["description"] as? [String] {
                                     let story = Story()
                                     story.image = SKSpriteNode(imageNamed: imageName)
-                                    story.desc = description
+                                    story.desc = descriptionArray
                                     stories.append(story)
                                 }
                             }

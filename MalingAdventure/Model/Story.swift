@@ -10,5 +10,5 @@ import SpriteKit
 
 class Story : SKNode {
     var image : SKSpriteNode = SKSpriteNode()
-    var desc : String = ""
+    var desc : [String] = []
 }

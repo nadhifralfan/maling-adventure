@@ -4,17 +4,14 @@
     "stories" : [
       {
         "imageName": "image1",
-        "description": "lorem ipsum dolor sit amet"
+        "description": [
+            "It’s a beautiful night",
+            "A perfect setting for our scheme",
+            "Let’s break into someone’s house...",
+            "...and steal their most valuable things!",
+            "Let’s move!"]
       },
-      {
-        "imageName": "flow2",
-        "description": "lorem ipsum dolor sit amet"
-      },
-      {
-        "imageName": "flow3",
-        "description": "lorem ipsum dolor sit amet"
-      },
-      
+
     ],
     "section":[
         {"1" :
