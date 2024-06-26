@@ -18,7 +18,7 @@ func parseJSONToDictionary(from jsonData: Data) -> [String: Any]? {
     }
 }
 
-func insertDataToScene(scene: LevelSelectScene, debugMode: Bool = false) {
+func insertDataToScene(scene: MenuScene, debugMode: Bool = false) {
     if let path = Bundle.main.path(forResource: "dataBase", ofType: "json") {
         do {
             let data = try Data(contentsOf: URL(fileURLWithPath: path))

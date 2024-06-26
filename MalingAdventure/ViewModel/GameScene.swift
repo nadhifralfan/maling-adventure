@@ -122,7 +122,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if gamepad.buttonA.isPressed || gamepad.buttonX.isPressed {
                 gameControllerManager!.resetGameState()
                 let transition = SKTransition.fade(withDuration: 3)
-                if let scene = LevelSelectScene(fileNamed: "LevelSelectScene"){
+                if let scene = MenuScene(fileNamed: "LevelSelectScene"){
                     
                     insertDataToScene(scene: scene, debugMode: false)
                     scene.scaleMode = .aspectFill
@@ -719,7 +719,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if event.keyCode == 36 {
                     gameControllerManager.resetGameState()
                     let transition = SKTransition.fade(withDuration: 3)
-                    if let scene = LevelSelectScene(fileNamed: "LevelSelectScene"){
+                    if let scene = MenuScene(fileNamed: "LevelSelectScene"){
                         
                         insertDataToScene(scene: scene, debugMode: false)
                         scene.scaleMode = .aspectFill
