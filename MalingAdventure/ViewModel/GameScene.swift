@@ -869,7 +869,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // End of Box/Player and Button
         
         
-        if bodyA.categoryBitMask == PhysicsCategory.foreground || bodyB.categoryBitMask == PhysicsCategory.foreground {
+        if currentSection != 6 && (bodyA.categoryBitMask == PhysicsCategory.foreground || bodyB.categoryBitMask == PhysicsCategory.foreground) {
             let foregroundNode = (bodyA.categoryBitMask == PhysicsCategory.foreground) ? bodyA.node as! Foreground : bodyB.node as! Foreground
             foregroundNode.didBegin(contact)
         }
