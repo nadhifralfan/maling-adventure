@@ -37,7 +37,12 @@ class Foreground: SKSpriteNode {
     func makeVisible() {
         self.visible = true
         self.alpha = 1.0
-        self.isHidden = false
+        let fadeOut = SKAction.fadeOut(withDuration: 1.0)
+        let visible = SKAction.run {
+            self.isHidden = false
+        }
+        let sequence = SKAction.sequence([fadeOut, visible])
+        self.run(sequence)
     }
         
     func makeInvisible() {
