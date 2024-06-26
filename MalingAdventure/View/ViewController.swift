@@ -42,7 +42,7 @@ class ViewController: NSViewController {
             
             view.ignoresSiblingOrder = true
             
-            view.showsPhysics = false
+            view.showsPhysics = true
             view.showsDrawCount = false
             view.showsFPS = false
             view.showsNodeCount = false

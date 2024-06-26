@@ -250,25 +250,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundNode.zPosition = -1
         self.addChild(backgroundNode)
         
-//        var position = CGPoint(x: 0, y: 0)
-//
-//        //Coordinate Position
-//        for _ in 0..<20 {
-//            for _ in 0..<30 {
-//                let text = SKLabelNode(text: position.debugDescription)
-//                let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
-//                platformNode.position = position
-//                self.addChild(platformNode)
-//                text.fontSize = 5
-//                text.fontColor = SKColor.white
-//                text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
-//                text.position = position
-//                text.zPosition = 2
-//                position = CGPoint(x: position.x + 35, y: position.y)
-//                self.addChild(text)
-//            }
-//            position = CGPoint(x: 0, y: position.y + 40)
-//        }
+        var position = CGPoint(x: 0, y: 0)
+
+        //Coordinate Position
+        for _ in 0..<20 {
+            for _ in 0..<30 {
+                let text = SKLabelNode(text: position.debugDescription)
+                let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
+                platformNode.position = position
+                self.addChild(platformNode)
+                text.fontSize = 5
+                text.fontColor = SKColor.white
+                text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
+                text.position = position
+                text.zPosition = 2
+                position = CGPoint(x: position.x + 35, y: position.y)
+                self.addChild(text)
+            }
+            position = CGPoint(x: 0, y: position.y + 40)
+        }
         
         //Platforms
         for platformData in section.platforms {
@@ -387,20 +387,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         
         //MARK: Interactable Box
-        if currentSection == 1 {
-            let box = InteractableBox(imageNamed: "box1", position: CGPoint(x: 210, y: 120), size: CGSize(width: 35, height: 40))
+        if currentSection == 6 {
+            let box = InteractableBox(imageNamed: "box1", position: CGPoint(x: 280, y: 460), size: CGSize(width: 35, height: 40))
             box.zPosition = 3
             self.addChild(box)
-            let box2 = InteractableBox(imageNamed: "box2", position: CGPoint(x: 210, y: 160), size: CGSize(width: 35, height: 40))
+            let box2 = InteractableBox(imageNamed: "box2", position: CGPoint(x: 315, y: 460), size: CGSize(width: 35, height: 40))
             box2.zPosition = 3
             self.addChild(box2)
-            let box3 = InteractableBox(imageNamed: "box3", position: CGPoint(x: 210, y: 200), size: CGSize(width: 35, height: 40))
+            let box3 = InteractableBox(imageNamed: "box3", position: CGPoint(x: 350, y: 460), size: CGSize(width: 35, height: 40))
             box3.zPosition = 3
             self.addChild(box3)
         }
         
         if currentSection == 4 {
             let box = InteractableBox(imageNamed: "trampoline3", position: CGPoint(x: 140, y: 120), size: CGSize(width: 70, height: 20))
+            box.zPosition = 3
+            self.addChild(box)
+        }
+        if currentSection == 5 {
+            let box = InteractableBox(imageNamed: "trampoline3", position: CGPoint(x: 420, y: 500), size: CGSize(width: 70, height: 20))
             box.zPosition = 3
             self.addChild(box)
         }
@@ -658,7 +663,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
                 
                 //Trampoline
-                if playerNode.position.y >= box.position.y + box.size.height - 10 && box.isInteracting == false && currentSection == 4 {
+                if playerNode.position.y >= box.position.y + box.size.height - 10 && box.isInteracting == false && (currentSection == 4 || currentSection == 5){
                     playerNode.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 67))
                     SoundManager.play("trampoline")
                     let texture: [SKTexture] = (1...3).map { SKTexture(imageNamed: "trampoline\($0)")}
