@@ -20,8 +20,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var previousUpdateTime: TimeInterval = 0
     var buttonPressed = 0
     var tombolPressed = 0
-    let buttonPressedImage = "trampoline1"
-    let buttonNotPressedImage = "trampoline3"
+    let buttonPressedImage = "buttonPressed"
+    let buttonNotPressedImage = "buttonUnpressed"
+    var isKeySpawned = false
     
     init(size: CGSize, level: Level, section: Int, gameControllerManager: GameControllerManager, spawn: CGPoint, hapticsManager: HapticsManager, coins: Int) {
         self.level = level
@@ -89,16 +90,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     }
                 }
                 SoundManager.stopBackground()
-                SoundManager.playEnding()
-                let texture = SKTexture(imageNamed: "ending")
-                let ImageNode = SKSpriteNode(texture: texture)
-                ImageNode.size = self.size
-                ImageNode.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
-                ImageNode.zPosition = 0
-                self.addChild(ImageNode)
-                
-                
-                
+                if let videoURL = Bundle.main.url(forResource: "endSceneVid", withExtension: "mov") {
+                    let video = SKVideoNode(url: videoURL)
+                    video.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
+                    video.size = self.size
+                    video.zPosition = 1
+                    self.addChild(video)
+                    Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
+                        video.play()
+                    }
+                } else {
+                    print("Video file not found.")
+                }
             }
         }
     }
@@ -123,7 +126,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if gamepad.buttonA.isPressed || gamepad.buttonX.isPressed {
                 gameControllerManager!.resetGameState()
                 let transition = SKTransition.fade(withDuration: 3)
-                if let scene = MenuScene(fileNamed: "LevelSelectScene"){
+                if let scene = MenuScene(fileNamed: "MenuScene"){
                     
                     insertDataToScene(scene: scene, debugMode: false)
                     scene.scaleMode = .aspectFill
@@ -228,7 +231,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Loop through each description and create SKLabelNode for each
         for description in story.desc {
             let storyDescriptionNode = SKLabelNode(text: description)
-            storyDescriptionNode.fontSize = 24
+            storyDescriptionNode.fontSize = 32
+            storyDescriptionNode.fontName = "Test"
             storyDescriptionNode.fontColor = SKColor.white
             storyDescriptionNode.numberOfLines = 0
             storyDescriptionNode.preferredMaxLayoutWidth = self.size.width - 40
@@ -289,11 +293,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         displayDescriptionsSequentially(index: 0)
         
-        let nextButton = SKLabelNode(text: "Next")
+        let nextTexture = SKTexture(imageNamed: "skip")
+        let nextButton = SKSpriteNode(texture: nextTexture)
         nextButton.name = "nextButton"
-        nextButton.fontSize = 24
-        nextButton.fontColor = SKColor.blue
-        nextButton.position = CGPoint(x: self.size.width - 50, y: 50)
+        nextButton.size = CGSize(width: nextTexture.size().width / 16, height: nextTexture.size().height / 16)
+        nextButton.position = CGPoint(x: self.size.width - 100, y: 50)
         nextButton.zPosition = 1
         self.addChild(nextButton)
         
@@ -355,25 +359,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundNode.zPosition = -1
         self.addChild(backgroundNode)
         
-        //        var position = CGPoint(x: 0, y: 0)
-        //
-        //        //Coordinate Position
-        //        for _ in 0..<20 {
-        //            for _ in 0..<30 {
-        //                let text = SKLabelNode(text: position.debugDescription)
-        //                let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
-        //                platformNode.position = position
-        //                self.addChild(platformNode)
-        //                text.fontSize = 5
-        //                text.fontColor = SKColor.white
-        //                text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
-        //                text.position = position
-        //                text.zPosition = 2
-        //                position = CGPoint(x: position.x + 35, y: position.y)
-        //                self.addChild(text)
-        //            }
-        //            position = CGPoint(x: 0, y: position.y + 40)
-        //        }
+                var position = CGPoint(x: 0, y: 0)
+        
+                //Coordinate Position
+                for _ in 0..<20 {
+                    for _ in 0..<30 {
+                        let text = SKLabelNode(text: position.debugDescription)
+                        let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
+                        platformNode.position = position
+                        self.addChild(platformNode)
+                        text.fontSize = 5
+                        text.fontColor = SKColor.white
+                        text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
+                        text.position = position
+                        text.zPosition = 2
+                        position = CGPoint(x: position.x + 35, y: position.y)
+                        self.addChild(text)
+                    }
+                    position = CGPoint(x: 0, y: position.y + 40)
+                }
         
         //Platforms
         for platformData in section.platforms {
@@ -401,9 +405,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //Coins
         coinScoreNode.fontSize = 24
         coinScoreNode.fontColor = SKColor.white
+        coinScoreNode.fontName = "Test"
         coinScoreNode.numberOfLines = 0
-        coinScoreNode.position.x = 945
-        coinScoreNode.position.y = 740
+        coinScoreNode.position.x = 950
+        coinScoreNode.position.y = 725
         coinScoreNode.zPosition = 100
         
         self.addChild(coinScoreNode)
@@ -510,93 +515,93 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         if currentSection == 6 {
-            let box = InteractableBox(imageNamed: "box1", position: CGPoint(x: 560, y: 200), size: CGSize(width: 35, height: 40))
-            box.zPosition = 4
+            let box = InteractableBox(imageNamed: "box1", position: CGPoint(x: 560, y: 500), size: CGSize(width: 35, height: 40))
+            box.zPosition = 2
             box.name = "box1"
             self.addChild(box)
-            let box2 = InteractableBox(imageNamed: "box2", position: CGPoint(x: 560, y: 260), size: CGSize(width: 35, height: 40))
-            box2.zPosition = 4
+            let box2 = InteractableBox(imageNamed: "box2", position: CGPoint(x: 560, y: 550), size: CGSize(width: 35, height: 40))
+            box2.zPosition = 2
             box2.name = "box2"
             
             self.addChild(box2)
-            let box3 = InteractableBox(imageNamed: "box3", position: CGPoint(x: 560, y: 350), size: CGSize(width: 35, height: 40))
-            box3.zPosition = 4
+            let box3 = InteractableBox(imageNamed: "box3", position: CGPoint(x: 560, y: 600), size: CGSize(width: 35, height: 40))
+            box3.zPosition = 2
             box3.name = "box3"
             
             self.addChild(box3)
             
-            let button1 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 440, y: 460), size: CGSize(width: 35, height: 40))
+            let button1 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 440, y: 450), size: CGSize(width: 35, height: 40))
             button1.name = "button1"
             button1.physicsBody?.isDynamic = false
             button1.physicsBody?.pinned = true
             button1.physicsBody?.categoryBitMask = PhysicsCategory.button
             button1.physicsBody?.collisionBitMask = PhysicsCategory.box | PhysicsCategory.player
             button1.physicsBody?.contactTestBitMask = PhysicsCategory.player | PhysicsCategory.box
-            button1.zPosition = 3
+            button1.zPosition = 2
             self.addChild(button1)
             
-            let button2 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 320, y: 460), size: CGSize(width: 35, height: 40))
+            let button2 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 320, y: 450), size: CGSize(width: 35, height: 40))
             button2.name = "button2"
             button2.physicsBody?.isDynamic = false
             button2.physicsBody?.pinned = true
             button2.physicsBody?.categoryBitMask = PhysicsCategory.button
             button2.physicsBody?.contactTestBitMask = PhysicsCategory.player | PhysicsCategory.box
-            button2.zPosition = 3
+            button2.zPosition = 2
             self.addChild(button2)
             
-            let button3 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 200, y: 460), size: CGSize(width: 35, height: 40))
+            let button3 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 200, y: 450), size: CGSize(width: 35, height: 40))
             button3.name = "button3"
             button3.physicsBody?.isDynamic = false
             button3.physicsBody?.pinned = true
             button3.physicsBody?.categoryBitMask = PhysicsCategory.button
             button3.physicsBody?.contactTestBitMask = PhysicsCategory.player | PhysicsCategory.box
-            button3.zPosition = 3
+            button3.zPosition = 2
             self.addChild(button3)
             
-            let button4 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 80, y: 460), size: CGSize(width: 35, height: 40))
+            let button4 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 80, y: 450), size: CGSize(width: 35, height: 40))
             button4.name = "button4"
             button4.physicsBody?.isDynamic = false
             button4.physicsBody?.pinned = true
             button4.physicsBody?.categoryBitMask = PhysicsCategory.button
             button4.physicsBody?.contactTestBitMask = PhysicsCategory.player | PhysicsCategory.box
-            button4.zPosition = 3
+            button4.zPosition = 2
             self.addChild(button4)
             
-            let tombol1 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 440, y: 150), size: CGSize(width: 35, height: 20))
+            let tombol1 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 545, y: 75), size: CGSize(width: 35, height: 40))
             tombol1.name = "tombol1"
             tombol1.physicsBody?.isDynamic = false
             tombol1.physicsBody?.pinned = true
             tombol1.physicsBody?.categoryBitMask = PhysicsCategory.button
             tombol1.physicsBody?.collisionBitMask = PhysicsCategory.box | PhysicsCategory.player
             tombol1.physicsBody?.contactTestBitMask = PhysicsCategory.player | PhysicsCategory.box
-            tombol1.zPosition = 3
+            tombol1.zPosition = 2
             self.addChild(tombol1)
             
-            let tombol2 = InteractableBox(imageNamed: "trampoline3", position: CGPoint(x: 320, y: 150), size: CGSize(width: 35, height: 20))
+            let tombol2 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 375, y: 75), size: CGSize(width: 35, height: 40))
             tombol2.name = "tombol2"
             tombol2.physicsBody?.isDynamic = false
             tombol2.physicsBody?.pinned = true
             tombol2.physicsBody?.categoryBitMask = PhysicsCategory.button
             tombol2.physicsBody?.contactTestBitMask = PhysicsCategory.player | PhysicsCategory.box
-            tombol2.zPosition = 3
+            tombol2.zPosition = 2
             self.addChild(tombol2)
             
-            let tombol3 = InteractableBox(imageNamed: "trampoline3", position: CGPoint(x: 200, y: 150), size: CGSize(width: 35, height: 20))
+            let tombol3 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 239, y: 75), size: CGSize(width: 35, height: 40))
             tombol3.name = "tombol3"
             tombol3.physicsBody?.isDynamic = false
             tombol3.physicsBody?.pinned = true
             tombol3.physicsBody?.categoryBitMask = PhysicsCategory.button
             tombol3.physicsBody?.contactTestBitMask = PhysicsCategory.player | PhysicsCategory.box
-            tombol3.zPosition = 3
+            tombol3.zPosition = 2
             self.addChild(tombol3)
             
-            let tombol4 = InteractableBox(imageNamed: "trampoline3", position: CGPoint(x: 80, y: 150), size: CGSize(width: 35, height: 20))
+            let tombol4 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 68, y: 75), size: CGSize(width: 35, height: 40))
             tombol4.name = "tombol4"
             tombol4.physicsBody?.isDynamic = false
             tombol4.physicsBody?.pinned = true
             tombol4.physicsBody?.categoryBitMask = PhysicsCategory.button
             tombol4.physicsBody?.contactTestBitMask = PhysicsCategory.player | PhysicsCategory.box
-            tombol4.zPosition = 3
+            tombol4.zPosition = 2
             self.addChild(tombol4)
         }
         
@@ -607,11 +612,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.addChild(foreground)
         }
         if currentSection == 5{
+            
             if gameControllerManager?.isHaveKey == false {
                 let foreground = Foreground(imageNamed: "color", isDynamic: false, position: CGPoint(x: 0, y: 0), size: CGSize(width: 630, height: 493))
                 foreground.zPosition = 2
                 foreground.physicsBody?.categoryBitMask = PhysicsCategory.finalDoor
                 foreground.physicsBody?.collisionBitMask = PhysicsCategory.player
+                foreground.physicsBody?.contactTestBitMask = PhysicsCategory.player
                 self.addChild(foreground)
             } else {
                 let foreground = Foreground(imageNamed: "color", isDynamic: true, position: CGPoint(x: 0, y: 0), size: CGSize(width: 630, height: 493))
@@ -620,9 +627,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         if currentSection == 6 {
-            let foreground = Foreground(imageNamed: "foreground6", isDynamic: true, position: CGPoint(x: 0, y: 0), size: CGSize(width: 1026, height: 450))
+            //foreground6
+            let foreground = Foreground(imageNamed: "foreground6", isDynamic: false, position: CGPoint(x: 0, y: 0), size: CGSize(width: 1026, height: 450))
             foreground.name = "foreground"
-            foreground.zPosition = 4
+            foreground.zPosition = 3
+            foreground.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 1026, height: 450), center: CGPoint(x: foreground.size.width / 2, y: foreground.size.height / 2))
+            foreground.physicsBody?.isDynamic = false
+            foreground.physicsBody?.categoryBitMask = PhysicsCategory.finalDoor
+            foreground.physicsBody?.collisionBitMask = PhysicsCategory.player
+            foreground.physicsBody?.contactTestBitMask = PhysicsCategory.player
             self.addChild(foreground)
         }
         
@@ -679,7 +692,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             jumpComponentSystem.update(deltaTime: timeSincePreviousUpdate)
             previousUpdateTime = currentTime
             
-            buttonPressed = 0
+            buttonPressed=0
             tombolPressed=0
             
             enumerateChildNodes(withName: "*button*") {
@@ -706,9 +719,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
             
-            if tombolPressed == 4 && gameControllerManager.isHaveKey == false {
+            if tombolPressed == 4 && gameControllerManager.isHaveKey == false && isKeySpawned == false{
+                isKeySpawned = true
                 let keyNode = SKSpriteNode(imageNamed: "key")
-                keyNode.position = CGPoint(x: 240, y: 445) // Sesuaikan posisi sesuai kebutuhan
+                keyNode.position = CGPoint(x: 80, y: 650) // Sesuaikan posisi sesuai kebutuhan
                 keyNode.size = CGSize(width: 50, height: 50) // Sesuaikan ukuran sesuai kebutuhan
                 keyNode.zPosition = 4
                 keyNode.name = "kunci"
@@ -785,7 +799,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if event.keyCode == 36 {
                     gameControllerManager.resetGameState()
                     let transition = SKTransition.fade(withDuration: 3)
-                    if let scene = MenuScene(fileNamed: "LevelSelectScene"){
+                    if let scene = MenuScene(fileNamed: "MenuScene"){
                         
                         insertDataToScene(scene: scene, debugMode: false)
                         scene.scaleMode = .aspectFill
@@ -932,8 +946,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
         }
         // End of Box/Player and Button
-        
-        
         if currentSection != 6 && (bodyA.categoryBitMask == PhysicsCategory.foreground || bodyB.categoryBitMask == PhysicsCategory.foreground) {
             let foregroundNode = (bodyA.categoryBitMask == PhysicsCategory.foreground) ? bodyA.node as! Foreground : bodyB.node as! Foreground
             foregroundNode.didBegin(contact)

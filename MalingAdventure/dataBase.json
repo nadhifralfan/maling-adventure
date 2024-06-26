@@ -791,13 +791,6 @@
               
               "hazzards" : [
                   {
-                      "hazzardType" : "type2",
-                      "xSpawn" : 0,
-                      "ySpawn" : 0,
-                      "xEnd" : 0,
-                      "yEnd" : 0,
-                      "width":2,
-                      "height":2,
                   }
               ]
           }
