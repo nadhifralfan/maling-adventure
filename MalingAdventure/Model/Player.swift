@@ -20,6 +20,7 @@ struct PhysicsCategory {
     static let door: UInt32 = 1 << 8
     static let foreground: UInt32 = 1 << 9
     static let box: UInt32 = 1 << 10
+    static let button: UInt32 = 1 << 11
 }
 
 class Player: SKSpriteNode {
