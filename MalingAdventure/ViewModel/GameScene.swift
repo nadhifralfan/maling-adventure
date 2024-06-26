@@ -72,14 +72,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 //                createLevelContent()
                 //                gameControllerManager.isPlaying = true
             } else if gameControllerManager.isGameWon {
+                Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
+                    if gameControllerManager.controllers.count > 0 {
+                        timer.invalidate()
+                        
+                        for controller in gameControllerManager.controllers {
+                            controller.extendedGamepad?.valueChangedHandler = nil
+                            self?.setupControllerEndScene(controller: controller)
+                        }
+                    } else {
+                        print("Waiting for controllers to connect...")
+                    }
+                }
                 SoundManager.stopBackground()
                 SoundManager.playEnding()
-                let texture = SKTexture(imageNamed: "ending")
+                let texture = SKTexture(imageNamed: "image1")
                 let ImageNode = SKSpriteNode(texture: texture)
                 ImageNode.size = self.size
                 ImageNode.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
                 ImageNode.zPosition = 0
                 self.addChild(ImageNode)
+                
+                
+              
             }
         }
     }
@@ -93,6 +108,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             } else if gamepad.buttonX.isPressed {
                 self.currentStoryIndex = self.level.stories.count - 1
                 self.transitionToNextStory()
+            }
+        }
+    }
+    
+    func setupControllerEndScene(controller: GCController) {
+        controller.extendedGamepad?.valueChangedHandler = { [weak self] (gamepad, element) in
+            guard let self = self else { return }
+            
+            if gamepad.buttonA.isPressed || gamepad.buttonX.isPressed {
+                gameControllerManager!.resetGameState()
+                let transition = SKTransition.fade(withDuration: 3)
+                if let scene = LevelSelectScene(fileNamed: "LevelSelectScene"){
+                    
+                    insertDataToScene(scene: scene, debugMode: false)
+                    scene.scaleMode = .aspectFill
+                    scene.gameControllerManager = gameControllerManager
+                    scene.hapticsManager = hapticsManager
+                    self.view?.presentScene(scene, transition: transition)
+                }
             }
         }
     }
@@ -284,6 +318,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.view?.presentScene(nextScene, transition: transition)
         }
     }
+    func transitionToLevelScene() {
+        
+        SoundManager.playClick()
+        print("masuk")
+            let transition = SKTransition.fade(withDuration: 0.5)
+        let nextScene = LevelSelectScene()
+            self.view?.presentScene(nextScene, transition: transition)
+        
+    }
     
     func createLevelContent() {
         
@@ -402,7 +445,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 // Buat animasi mundur (membalik urutan texture)
                 let texturesBackward = texturesForward.reversed()
                 let animateBackward = SKAction.animate(with: Array(texturesBackward), timePerFrame: 0.2)
-                let animateBackwardLoop = SKAction.repeatForever(animateBackward)
 
                 // Tentukan durasi gerakan
                 let moveDuration: TimeInterval = 2.0
@@ -592,6 +634,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     }
                     for player in players {
                         player.keyDown(with: event)
+                    }
+                }else if gameControllerManager.isGameWon{
+                    if event.keyCode == 36 {
+                        gameControllerManager.resetGameState()
+                        let transition = SKTransition.fade(withDuration: 3)
+                        if let scene = LevelSelectScene(fileNamed: "LevelSelectScene"){
+                            
+                            insertDataToScene(scene: scene, debugMode: false)
+                            scene.scaleMode = .aspectFill
+                            scene.gameControllerManager = gameControllerManager
+                            scene.hapticsManager = hapticsManager
+                            self.view?.presentScene(scene, transition: transition)
+                        }
                     }
                 }
             }
