@@ -185,14 +185,72 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         storyImageNode.zPosition = 0
         self.addChild(storyImageNode)
         
-        let storyDescriptionNode = SKLabelNode(text: story.desc)
-        storyDescriptionNode.fontSize = 24
-        storyDescriptionNode.fontColor = SKColor.white
-        storyDescriptionNode.numberOfLines = 0
-        storyDescriptionNode.preferredMaxLayoutWidth = self.size.width - 40
-        storyDescriptionNode.verticalAlignmentMode = .center
-        storyDescriptionNode.horizontalAlignmentMode = .center
-        
+        var descriptionNodes: [SKLabelNode] = []
+
+        // Loop through each description and create SKLabelNode for each
+        for description in story.desc {
+            let storyDescriptionNode = SKLabelNode(text: description)
+            storyDescriptionNode.fontSize = 24
+            storyDescriptionNode.fontColor = SKColor.white
+            storyDescriptionNode.numberOfLines = 0
+            storyDescriptionNode.preferredMaxLayoutWidth = self.size.width - 40
+            storyDescriptionNode.verticalAlignmentMode = .center
+            storyDescriptionNode.horizontalAlignmentMode = .center
+            storyDescriptionNode.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
+            storyDescriptionNode.zPosition = 1
+            storyDescriptionNode.alpha = 0  // Initially hidden
+            self.addChild(storyDescriptionNode)
+            descriptionNodes.append(storyDescriptionNode)
+        }
+
+        // Function to display descriptions sequentially
+        func displayDescriptionsSequentially(index: Int) {
+            guard index < descriptionNodes.count else {
+                return
+            }
+            
+            let currentDescriptionNode = descriptionNodes[index]
+            currentDescriptionNode.alpha = 1
+            let textToAnimate = story.desc[index]
+            
+            animateTypingEffect(node: currentDescriptionNode, text: textToAnimate, characterDelay: 0.03)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                currentDescriptionNode.alpha = 0
+                
+                if index == descriptionNodes.count - 1 {
+                    currentDescriptionNode.alpha = 1
+                }
+                
+                displayDescriptionsSequentially(index: index + 1)
+            }
+        }
+
+        displayDescriptionsSequentially(index: 0)
+        func animateTypingEffect(node: SKLabelNode, text: String, characterDelay: TimeInterval) {
+            var currentIndex = 0
+            let totalCharacters = text.count
+            
+            // Create a timer to display characters one by one with a delay
+            Timer.scheduledTimer(withTimeInterval: characterDelay, repeats: true) { timer in
+                guard currentIndex < totalCharacters else {
+                    timer.invalidate()  // Stop the timer when all characters are displayed
+                    return
+                }
+                
+                let index = text.index(text.startIndex, offsetBy: currentIndex)
+                let substring = text[...index]
+                node.text = String(substring)
+                
+                currentIndex += 1
+            }
+        }
+
+        // Function to display descriptions sequentially
+  
+
+        displayDescriptionsSequentially(index: 0)
+
         let nextButton = SKLabelNode(text: "Next")
         nextButton.name = "nextButton"
         nextButton.fontSize = 24
