@@ -31,7 +31,9 @@ class MenuScene: SKScene{
         setupPlayer(playerNumber: 2, startX: -600, startY: -250, endX: 450)
         setupPlayer(playerNumber: 3, startX: -600, startY: -250, endX: 400)
         setupPlayer(playerNumber: 4, startX: -600, startY: -250, endX: 350)
-        setupButton()
+        Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
+            self.setupButton()
+        }
         
         guard !levels.isEmpty else { return }
         
@@ -75,7 +77,7 @@ class MenuScene: SKScene{
         gameControllerManager?.isSelectingLevel = false
         gameControllerManager?.isStoryMode = true
         SoundManager.playBackground()
-        let newScene = GameScene(size: self.size, level: level, section: 1, gameControllerManager: gameControllerManager!, spawn : level.sections[0].spawnEntry, hapticsManager: hapticsManager!, coins: 0)
+        let newScene = GameScene(size: self.size, level: level, section: 6, gameControllerManager: gameControllerManager!, spawn : level.sections[0].spawnEntry, hapticsManager: hapticsManager!, coins: 0)
         self.view?.presentScene(newScene, transition: reveal)
     }
     
