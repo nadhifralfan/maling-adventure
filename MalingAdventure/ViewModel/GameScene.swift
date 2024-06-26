@@ -583,38 +583,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         
-        if contactMask == (PhysicsCategory.player | PhysicsCategory.hazzard) {
-            SoundManager.play("dead")
-        }
-        
-        //Coin Player
-        coinAndPlayerContact(contact)
-        
-        let bodyA = contact.bodyA
-        let bodyB = contact.bodyB
-        
-        if bodyB.node == nil || bodyA.node == nil { return }
-        
-        let boxAndPlayerContact = bodyA.categoryBitMask | bodyB.categoryBitMask == PhysicsCategory.box | PhysicsCategory.player
-        
-        //Box & Player
-        if boxAndPlayerContact && (bodyA.categoryBitMask == PhysicsCategory.box || bodyB.categoryBitMask == PhysicsCategory.box) {
-            let box = (bodyA.categoryBitMask == PhysicsCategory.box) ? bodyA.node as! InteractableBox : bodyB.node  as! InteractableBox
-            let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
-            
-            if playerNode.position.y <= box.position.y + 10 && box.isInteracting == false {
-                playerNode.buttonInteract.isHidden = false
-                playerNode.contactJoint = box
-                playerNode.canInteract = true
-            }
-            
-            if playerNode.position.y >= box.position.y + box.size.height - 10 && box.isInteracting == false && currentSection == 4 {
-                playerNode.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 67))
-                SoundManager.play("trampoline")
-                let texture: [SKTexture] = (1...3).map { SKTexture(imageNamed: "trampoline\($0)")}
-                let action = SKAction.animate(with: texture, timePerFrame: 0.1)
-                box.textureNode.run(action)
-                
+        func getTransition(to direction: String) -> SKTransitionDirection {
+            if direction == "up"{
+                return SKTransitionDirection.up
+            } else if direction == "down"{
+                return SKTransitionDirection.down
+            }else if direction == "left"{
+                return SKTransitionDirection.left
+            }else{
+                return SKTransitionDirection.right
             }
         }
         
@@ -622,23 +599,65 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             let contactMask = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
             
-        }
-        
-        if bodyA.categoryBitMask == PhysicsCategory.foreground || bodyB.categoryBitMask == PhysicsCategory.foreground {
-            let foregroundNode = (bodyA.categoryBitMask == PhysicsCategory.foreground) ? bodyA.node as! Foreground : bodyB.node as! Foreground
-            foregroundNode.didBegin(contact)
-        }
-        
-        //Door
-        if (bodyA.categoryBitMask == PhysicsCategory.player && bodyB.categoryBitMask == PhysicsCategory.door) || (bodyB.categoryBitMask == PhysicsCategory.player && bodyA.categoryBitMask == PhysicsCategory.door) {
-            let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
-            let doorNode = (bodyA.categoryBitMask == PhysicsCategory.door) ? bodyA.node as! DoorType : bodyB.node as! DoorType
+            for player in players {
+                if contactMask == (PhysicsCategory.player | PhysicsCategory.hazzard) {
+                    // Reset player position and¸ stop its movement
+                    player.position = spawn
+                    player.createPhysicBody()
+                    
+                    //add haptic
+                    if let controller = player.controller {
+                        hapticsManager!.playHapticsFileController(named: "Boing", controller: controller)
+                    }
+                    
+                    if playersAtDoorExit.contains(player){
+                        playersAtDoorExit.remove(player)
+                    }
+                    if playersAtDoorEntry.contains(player){
+                        playersAtDoorExit.remove(player)
+                    }
+                    
+                    player.buttonInteract.isHidden = true
+                    player.contactWith = nil
+                    player.canInteract = false
+                    player.isHidden = false
+                    
+                }
+            }
             
-            if playerNode.contactJoint != nil { return }
+            if contactMask == (PhysicsCategory.player | PhysicsCategory.hazzard) {
+                SoundManager.play("dead")
+            }
+            
+            //Coin Player
+            coinAndPlayerContact(contact)
+            
+            let bodyA = contact.bodyA
+            let bodyB = contact.bodyB
             
             if bodyB.node == nil || bodyA.node == nil { return }
             
-            playerNode.isHidden = false
+            //Box & Player
+            if bodyA.categoryBitMask == PhysicsCategory.box || bodyB.categoryBitMask == PhysicsCategory.box {
+                let box = (bodyA.categoryBitMask == PhysicsCategory.box) ? bodyA.node as! InteractableBox : bodyB.node  as! InteractableBox
+                let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
+                
+                if playerNode.position.y <= box.position.y + 10 && box.isInteracting == false {
+                    playerNode.buttonInteract.isHidden = false
+                    playerNode.contactJoint = box
+                    playerNode.canInteract = true
+                }
+                
+                //Trampoline
+                if playerNode.position.y >= box.position.y + box.size.height - 10 && box.isInteracting == false && currentSection == 4 {
+                    playerNode.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 67))
+                    SoundManager.play("trampoline")
+                    let texture: [SKTexture] = (1...3).map { SKTexture(imageNamed: "trampoline\($0)")}
+                    let action = SKAction.animate(with: texture, timePerFrame: 0.1)
+                    box.textureNode.run(action)
+                    
+                }
+            }
             
             
             if bodyA.categoryBitMask == PhysicsCategory.foreground || bodyB.categoryBitMask == PhysicsCategory.foreground {
