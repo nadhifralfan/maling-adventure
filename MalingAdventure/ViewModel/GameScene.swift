@@ -681,6 +681,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         
+        if contactMask == (PhysicsCategory.player | PhysicsCategory.hazzard) {
+            SoundManager.play("dead")
+        }
+        
         //Coin Player
         coinAndPlayerContact(contact)
         
@@ -704,6 +708,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             if playerNode.position.y >= box.position.y + box.size.height - 10 && box.isInteracting == false && currentSection == 4 {
                 playerNode.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 67))
+                SoundManager.play("trampoline")
                 let texture: [SKTexture] = (1...3).map { SKTexture(imageNamed: "trampoline\($0)")}
                 let action = SKAction.animate(with: texture, timePerFrame: 0.1)
                 box.textureNode.run(action)
@@ -738,38 +743,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if (bodyA.categoryBitMask == PhysicsCategory.player && bodyB.categoryBitMask == PhysicsCategory.door) || (bodyB.categoryBitMask == PhysicsCategory.player && bodyA.categoryBitMask == PhysicsCategory.door) {
             let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
             let doorNode = (bodyA.categoryBitMask == PhysicsCategory.door) ? bodyA.node as! DoorType : bodyB.node as! DoorType
-            if contactMask == (PhysicsCategory.player | PhysicsCategory.hazzard) {
-                SoundManager.play("dead")
-            }
-            
-            //Coin Player
-            coinAndPlayerContact(contact)
             
             if playerNode.contactJoint != nil { return }
             
             playerNode.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.box
             
-            //Box & Player
-            if bodyA.categoryBitMask == PhysicsCategory.box || bodyB.categoryBitMask == PhysicsCategory.box {
-                let box = (bodyA.categoryBitMask == PhysicsCategory.box) ? bodyA.node as! InteractableBox : bodyB.node  as! InteractableBox
-                let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
-                
-                if playerNode.position.y <= box.position.y + 10 && box.isInteracting == false {
-                    playerNode.buttonInteract.isHidden = false
-                    playerNode.contactJoint = box
-                    playerNode.canInteract = true
-                }
-                
-                //Trampoline
-                if playerNode.position.y >= box.position.y + box.size.height - 10 && box.isInteracting == false && currentSection == 4 {
-                    playerNode.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 67))
-                    SoundManager.play("trampoline")
-                    let texture: [SKTexture] = (1...3).map { SKTexture(imageNamed: "trampoline\($0)")}
-                    let action = SKAction.animate(with: texture, timePerFrame: 0.1)
-                    box.textureNode.run(action)
-                    
-                }
-            }
+            playerNode.isHidden = false
             
             if doorNode == level.sections[currentSection-1].doorExit.doorType {
                 playerNode.buttonInteract.isHidden = false
