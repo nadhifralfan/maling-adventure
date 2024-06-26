@@ -437,7 +437,7 @@
               },
               {
                   "coordinate" : { "x":35, "y":110  },
-                  "size" : { "width": 80, "height": 540 }
+                  "size" : { "width": 60, "height": 540 }
               },
               {
                   "coordinate" : { "x":375, "y": 120 },
@@ -500,8 +500,8 @@
           
           "doorEntry" : {
             "doorType" : "type1",
-            "x": 880,
-            "y": 0
+            "x": 770,
+            "y": 80
           },
           "doorExit" : {
             "doorType" : "type2",
@@ -534,7 +534,7 @@
                   "ySpawn" : 0,
                   "xEnd" : 420,
                   "yEnd" : 0,
-                  "width":315,
+                  "width": 800,
                   "height":10,
               }
         ]
