@@ -14,7 +14,7 @@ class ViewController: NSViewController {
     @IBOutlet var skView: SKView!
     
     //TURN ON DEBUG MODE FOR DATEBASE
-    var debugMode : Bool = true
+    var debugMode : Bool = false
     
     let gameControllerManager = GameControllerManager()
     let hapticsManager = HapticsManager()
