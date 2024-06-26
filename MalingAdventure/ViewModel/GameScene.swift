@@ -359,25 +359,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundNode.zPosition = -1
         self.addChild(backgroundNode)
         
-                var position = CGPoint(x: 0, y: 0)
-        
-                //Coordinate Position
-                for _ in 0..<20 {
-                    for _ in 0..<30 {
-                        let text = SKLabelNode(text: position.debugDescription)
-                        let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
-                        platformNode.position = position
-                        self.addChild(platformNode)
-                        text.fontSize = 5
-                        text.fontColor = SKColor.white
-                        text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
-                        text.position = position
-                        text.zPosition = 2
-                        position = CGPoint(x: position.x + 35, y: position.y)
-                        self.addChild(text)
-                    }
-                    position = CGPoint(x: 0, y: position.y + 40)
-                }
+//                var position = CGPoint(x: 0, y: 0)
+//
+//                //Coordinate Position
+//                for _ in 0..<20 {
+//                    for _ in 0..<30 {
+//                        let text = SKLabelNode(text: position.debugDescription)
+//                        let platformNode = SKSpriteNode(color: .red, size: CGSize(width: 3, height: 3))
+//                        platformNode.position = position
+//                        self.addChild(platformNode)
+//                        text.fontSize = 5
+//                        text.fontColor = SKColor.white
+//                        text.scene?.anchorPoint = CGPoint(x: 0.5, y: 0)
+//                        text.position = position
+//                        text.zPosition = 2
+//                        position = CGPoint(x: position.x + 35, y: position.y)
+//                        self.addChild(text)
+//                    }
+//                    position = CGPoint(x: 0, y: position.y + 40)
+//                }
         
         //Platforms
         for platformData in section.platforms {
