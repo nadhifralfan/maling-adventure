@@ -77,7 +77,18 @@ class MenuScene: SKScene{
         gameControllerManager?.isSelectingLevel = false
         gameControllerManager?.isStoryMode = true
         SoundManager.playBackground()
-        let newScene = GameScene(size: self.size, level: level, section: 1, gameControllerManager: gameControllerManager!, spawn : level.sections[0].spawnEntry, hapticsManager: hapticsManager!, coins: 0)
+        let gameModel = GameModel(
+            size: size,
+            level: level,
+            section: 1,
+            gameControllerManager: gameControllerManager!,
+            spawn: level.sections[0].spawnEntry,
+            hapticsManager: hapticsManager!,
+            coins: 0,
+            boxPositions: [CGPoint(x: 0, y: 0),CGPoint(x: 0, y: 0),CGPoint(x: 0, y: 0)],
+            buttonsPressed: 0
+        )
+        let newScene = GameScene(gameModel)
         self.view?.presentScene(newScene, transition: reveal)
     }
     
