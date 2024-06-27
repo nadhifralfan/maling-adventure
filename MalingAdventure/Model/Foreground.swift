@@ -37,6 +37,7 @@ class Foreground: SKSpriteNode {
     func makeVisible() {
         self.visible = true
         self.alpha = 1.0
+        self.physicsBody?.categoryBitMask = 0
         let fadeOut = SKAction.fadeOut(withDuration: 1.0)
         let visible = SKAction.run {
             self.isHidden = false

@@ -91,7 +91,7 @@ class Player: SKSpriteNode {
     func createPhysicBody(){
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: self.size.width / 2, y: self.size.height / 2))
         self.physicsBody?.categoryBitMask = PhysicsCategory.player
-        self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.player | PhysicsCategory.box | PhysicsCategory.finalDoor
+        self.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.player | PhysicsCategory.box | PhysicsCategory.finalDoor | PhysicsCategory.foreground
         self.physicsBody?.contactTestBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.door | PhysicsCategory.foreground | PhysicsCategory.box | PhysicsCategory.key
         self.physicsBody?.affectedByGravity = true
         self.physicsBody?.allowsRotation = false
