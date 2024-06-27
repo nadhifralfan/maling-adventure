@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01271ACD2C2DA3CC004A4A83 /* GameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01271ACC2C2DA3CC004A4A83 /* GameModel.swift */; };
 		013712972C2698AF00A1F6AF /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013712962C2698AF00A1F6AF /* HapticsManager.swift */; };
 		013712AC2C26C6F200A1F6AF /* Boing.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 0137129F2C26C6F100A1F6AF /* Boing.ahap */; };
 		013712AD2C26C6F200A1F6AF /* Drums.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 013712A02C26C6F100A1F6AF /* Drums.ahap */; };
@@ -59,6 +60,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		01271ACC2C2DA3CC004A4A83 /* GameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModel.swift; sourceTree = "<group>"; };
 		013712962C2698AF00A1F6AF /* HapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsManager.swift; sourceTree = "<group>"; };
 		0137129F2C26C6F100A1F6AF /* Boing.ahap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Boing.ahap; sourceTree = "<group>"; };
 		013712A02C26C6F100A1F6AF /* Drums.ahap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Drums.ahap; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 				4C7EFB2E2C28553C00E9F8DE /* Foreground.swift */,
 				4C7EFB302C2919C700E9F8DE /* InteractableBox.swift */,
 				013712B82C2A95C700A1F6AF /* Coin.swift */,
+				01271ACC2C2DA3CC004A4A83 /* GameModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -372,6 +375,7 @@
 				4CED17F22C130D2F007588F7 /* ViewController.swift in Sources */,
 				4CFED3C12C183C3600912A89 /* GameController.swift in Sources */,
 				013712972C2698AF00A1F6AF /* HapticsManager.swift in Sources */,
+				01271ACD2C2DA3CC004A4A83 /* GameModel.swift in Sources */,
 				013712B92C2A95C700A1F6AF /* Coin.swift in Sources */,
 				01FE5C422C2480110077920C /* JumpForeverComponent.swift in Sources */,
 				4C7EFB312C2919C700E9F8DE /* InteractableBox.swift in Sources */,
@@ -534,7 +538,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = KK835KRLS4;
+				DEVELOPMENT_TEAM = UW36D2XW6X;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MalingAdventure/Info.plist;
@@ -564,7 +568,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = KK835KRLS4;
+				DEVELOPMENT_TEAM = UW36D2XW6X;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MalingAdventure/Info.plist;

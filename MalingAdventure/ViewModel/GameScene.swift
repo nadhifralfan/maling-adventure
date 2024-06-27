@@ -23,15 +23,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let buttonPressedImage = "buttonPressed"
     let buttonNotPressedImage = "buttonUnpressed"
     var isKeySpawned = false
+    var boxPositions = [ CGPoint(x: 560, y: 500), CGPoint(x: 560, y: 550),  CGPoint(x: 560, y: 600)]
+    var boxes : [InteractableBox] = []
     
-    init(size: CGSize, level: Level, section: Int, gameControllerManager: GameControllerManager, spawn: CGPoint, hapticsManager: HapticsManager, coins: Int) {
-        self.level = level
-        self.currentSection = section
-        self.gameControllerManager = gameControllerManager
-        self.spawn = spawn
-        self.hapticsManager = hapticsManager
-        self.coins = coins
-        super.init(size: size)
+    init(_ gameModel: GameModel) {
+        self.level = gameModel.level
+        self.currentSection = gameModel.section
+        self.gameControllerManager = gameModel.gameControllerManager
+        self.spawn = gameModel.spawn
+        self.hapticsManager = gameModel.hapticsManager
+        self.coins = gameModel.coins
+        
+        if gameModel.boxPositions != [ CGPoint(x: 0, y: 0), CGPoint(x: 0, y: 0),  CGPoint(x: 0, y: 0)] {
+            self.boxPositions = gameModel.boxPositions
+        }
+        
+        if gameModel.buttonsPressed != 0 {
+            self.buttonPressed = gameModel.buttonsPressed
+        }
+                
+        super.init(size: gameModel.size)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -178,11 +189,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                             gameControllerManager?.isPlaying = false
                             gameControllerManager?.isGameWon = true
                             let transition = SKTransition.fade(withDuration: 3)
-                            let newScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-1].spawnEntry, hapticsManager: hapticsManager!, coins: self.coins)
+                            let gameModel = GameModel(
+                                size: size,
+                                level: level,
+                                section: currentSection, 
+                                gameControllerManager: gameControllerManager!,
+                                spawn: level.sections[currentSection-1].spawnEntry,
+                                hapticsManager: hapticsManager!,
+                                coins: coins,
+                                boxPositions: boxPositions,
+                                buttonsPressed: buttonPressed
+                            )
+                            let newScene = GameScene(gameModel)
                             self.view?.presentScene(newScene, transition: transition)
                         } else {
                             let reveal = SKTransition.push(with: getTransition(to: level.sections[currentSection-1].transitionNext), duration: 1)
-                            let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection].spawnEntry, hapticsManager: hapticsManager!, coins: self.coins)
+                            let gameModel = GameModel(
+                                size: size,
+                                level: level,
+                                section: currentSection + 1,
+                                gameControllerManager: gameControllerManager!,
+                                spawn: level.sections[currentSection].spawnEntry,
+                                hapticsManager: hapticsManager!,
+                                coins: coins,
+                                boxPositions: boxPositions,
+                                buttonsPressed: buttonPressed
+                            )
+                            let newScene = GameScene(gameModel)
                             self.view?.presentScene(newScene, transition: reveal)
                         }
                     }
@@ -192,7 +225,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     player.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.box
                     if playersAtDoorEntry.count == players.count {
                         let reveal = SKTransition.push(with: getTransition(to: level.sections[currentSection-1].transitionBack), duration: 1)
-                        let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-2].spawnExit, hapticsManager: hapticsManager!, coins: self.coins)
+                        let gameModel = GameModel(
+                            size: size,
+                            level: level,
+                            section: currentSection + 1,
+                            gameControllerManager: gameControllerManager!,
+                            spawn: level.sections[currentSection-2].spawnExit,
+                            hapticsManager: hapticsManager!,
+                            coins: coins,
+                            boxPositions: boxPositions,
+                            buttonsPressed: buttonPressed
+                        )
+                        let newScene = GameScene(gameModel)
                         self.view?.presentScene(newScene, transition: reveal)
                     }
                 } else if let contactJoint = player.contactJoint, contactJoint is InteractableBox {
@@ -315,14 +359,36 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if currentStoryIndex < level.stories.count {
             let transition = SKTransition.fade(withDuration: 0.5)
-            let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-1].spawnEntry, hapticsManager: hapticsManager!, coins: self.coins)
+            let gameModel = GameModel(
+                size: size,
+                level: level,
+                section: currentSection,
+                gameControllerManager: gameControllerManager!,
+                spawn: level.sections[currentSection-1].spawnEntry,
+                hapticsManager: hapticsManager!,
+                coins: coins,
+                boxPositions: boxPositions,
+                buttonsPressed: buttonPressed
+            )
+            let nextScene = GameScene(gameModel)
             nextScene.currentStoryIndex = currentStoryIndex
             self.view?.presentScene(nextScene, transition: transition)
         } else {
             gameControllerManager?.isPlaying = true
             gameControllerManager?.isStoryMode = false
             let transition = SKTransition.fade(withDuration: 0.5)
-            let nextScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager!, spawn : level.sections[currentSection-1].spawnEntry, hapticsManager: hapticsManager!, coins: self.coins)
+            let gameModel = GameModel(
+                size: size,
+                level: level,
+                section: currentSection,
+                gameControllerManager: gameControllerManager!,
+                spawn: level.sections[currentSection-1].spawnEntry,
+                hapticsManager: hapticsManager!,
+                coins: coins,
+                boxPositions: boxPositions,
+                buttonsPressed: buttonPressed
+            )
+            let nextScene = GameScene(gameModel)
             nextScene.currentStoryIndex = currentStoryIndex
             self.view?.presentScene(nextScene, transition: transition)
         }
@@ -525,22 +591,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         if currentSection == 6 {
-            let box = InteractableBox(imageNamed: "box1", position: CGPoint(x: 560, y: 500), size: CGSize(width: 35, height: 40))
-            box.zPosition = 2
-            box.name = "box1"
-            self.addChild(box)
-            let box2 = InteractableBox(imageNamed: "box2", position: CGPoint(x: 560, y: 550), size: CGSize(width: 35, height: 40))
-            box2.zPosition = 2
-            box2.name = "box2"
             
-            self.addChild(box2)
-            let box3 = InteractableBox(imageNamed: "box3", position: CGPoint(x: 560, y: 600), size: CGSize(width: 35, height: 40))
-            box3.zPosition = 2
-            box3.name = "box3"
+            var idx = 0
+            for boxPosition in boxPositions {
+                let box = InteractableBox(imageNamed: "box\(idx+1)", position: boxPosition, size: CGSize(width: 35, height: 40))
+                box.zPosition = 2
+                box.name = "box\(idx+1)"
+                self.addChild(box)
+                boxes.append(box)
+                
+                idx += 1
+            }
             
-            self.addChild(box3)
+            var imageNamed = buttonNotPressedImage
             
-            let button1 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 440, y: 450), size: CGSize(width: 35, height: 40))
+            if buttonPressed == 4{
+                imageNamed = buttonPressedImage
+            }
+            
+            let button1 = InteractableBox(imageNamed: imageNamed, position: CGPoint(x: 440, y: 450), size: CGSize(width: 35, height: 40))
             button1.name = "button1"
             button1.physicsBody?.isDynamic = false
             button1.physicsBody?.pinned = true
@@ -550,7 +619,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             button1.zPosition = 2
             self.addChild(button1)
             
-            let button2 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 320, y: 450), size: CGSize(width: 35, height: 40))
+            let button2 = InteractableBox(imageNamed: imageNamed, position: CGPoint(x: 320, y: 450), size: CGSize(width: 35, height: 40))
             button2.name = "button2"
             button2.physicsBody?.isDynamic = false
             button2.physicsBody?.pinned = true
@@ -559,7 +628,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             button2.zPosition = 2
             self.addChild(button2)
             
-            let button3 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 200, y: 450), size: CGSize(width: 35, height: 40))
+            let button3 = InteractableBox(imageNamed: imageNamed, position: CGPoint(x: 200, y: 450), size: CGSize(width: 35, height: 40))
             button3.name = "button3"
             button3.physicsBody?.isDynamic = false
             button3.physicsBody?.pinned = true
@@ -568,7 +637,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             button3.zPosition = 2
             self.addChild(button3)
             
-            let button4 = InteractableBox(imageNamed: buttonNotPressedImage, position: CGPoint(x: 80, y: 450), size: CGSize(width: 35, height: 40))
+            let button4 = InteractableBox(imageNamed: imageNamed, position: CGPoint(x: 80, y: 450), size: CGSize(width: 35, height: 40))
             button4.name = "button4"
             button4.physicsBody?.isDynamic = false
             button4.physicsBody?.pinned = true
@@ -702,16 +771,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             jumpComponentSystem.update(deltaTime: timeSincePreviousUpdate)
             previousUpdateTime = currentTime
             
-            buttonPressed=0
+            if buttonPressed != 4 {
+                buttonPressed=0
+            }
+            
             tombolPressed=0
             
             enumerateChildNodes(withName: "*button*") {
                 (node, stop) in
                 
-                if node.userData?["imageNamed"] as? String == self.buttonPressedImage{
-                    self.buttonPressed += 1
+                if self.buttonPressed != 4 {
+                    if node.userData?["imageNamed"] as? String == self.buttonPressedImage{
+                        self.buttonPressed += 1
+                    }
                 }
             }
+            
             enumerateChildNodes(withName: "*tombol*") {
                 (node, stop) in
                 
@@ -766,11 +841,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                 gameControllerManager.isPlaying = false
                                 gameControllerManager.isGameWon = true
                                 let transition = SKTransition.fade(withDuration: 3)
-                                let newScene = GameScene(size: self.size, level: level, section: currentSection, gameControllerManager: gameControllerManager, spawn : level.sections[currentSection-1].spawnEntry, hapticsManager: hapticsManager!, coins: self.coins)
+                                let gameModel = GameModel(
+                                    size: size,
+                                    level: level,
+                                    section: currentSection,
+                                    gameControllerManager: gameControllerManager,
+                                    spawn: level.sections[currentSection-1].spawnEntry,
+                                    hapticsManager: hapticsManager!,
+                                    coins: coins,
+                                    boxPositions: boxPositions,
+                                    buttonsPressed: buttonPressed
+                                )
+                                let newScene = GameScene(gameModel)
                                 self.view?.presentScene(newScene, transition: transition)
                             } else {
                                 let reveal = SKTransition.push(with: getTransition(to: level.sections[currentSection-1].transitionNext), duration: 1)
-                                let newScene = GameScene(size: self.size, level: level, section: currentSection + 1, gameControllerManager: gameControllerManager, spawn : level.sections[currentSection].spawnEntry, hapticsManager: hapticsManager!, coins: self.coins)
+                                let gameModel = GameModel(
+                                    size: size,
+                                    level: level,
+                                    section: currentSection + 1,
+                                    gameControllerManager: gameControllerManager,
+                                    spawn: level.sections[currentSection].spawnEntry,
+                                    hapticsManager: hapticsManager!,
+                                    coins: coins,
+                                    boxPositions: boxPositions,
+                                    buttonsPressed: buttonPressed
+                                )
+                                let newScene = GameScene(gameModel)
                                 self.view?.presentScene(newScene, transition: reveal)
                             }
                         }
@@ -779,8 +876,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         playersAtDoorEntry.insert(player)
                         
                         if playersAtDoorEntry.count == players.count && currentSection != 1 {
+                            // set boxPositions
+                            var idx = 0
+                            for box in boxes {
+                                boxPositions[idx] = box.position
+                                idx += 1
+                            }
+                           
                             let reveal = SKTransition.push(with: getTransition(to: level.sections[currentSection-1].transitionBack), duration: 1)
-                            let newScene = GameScene(size: self.size, level: level, section: currentSection - 1, gameControllerManager: gameControllerManager, spawn : level.sections[currentSection-2].spawnExit, hapticsManager: hapticsManager!, coins: self.coins)
+                            let gameModel = GameModel(
+                                size: size,
+                                level: level,
+                                section: currentSection - 1,
+                                gameControllerManager: gameControllerManager,
+                                spawn: level.sections[currentSection-2].spawnExit,
+                                hapticsManager: hapticsManager!,
+                                coins: coins,
+                                boxPositions: boxPositions,
+                                buttonsPressed: buttonPressed
+                            )
+                            let newScene = GameScene(gameModel)
                             self.view?.presentScene(newScene, transition: reveal)
                         }
                     } else if let contactJoint = player.contactJoint, contactJoint is InteractableBox {
@@ -1046,12 +1161,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
         if boxAndPlayerContact && (bodyA.categoryBitMask == PhysicsCategory.box || bodyB.categoryBitMask == PhysicsCategory.box) {
             let playerNode = (bodyA.categoryBitMask == PhysicsCategory.player) ? bodyA.node as! Player : bodyB.node as! Player
+            let boxNode = (bodyA.categoryBitMask == PhysicsCategory.box) ? bodyA.node : bodyB.node
+            
+            if boxes.count > 0 {
+                enumerateChildNodes(withName: "*box*") {
+                    (node, stop) in
+                    
+                    if node.name == "box1" {
+                        self.boxes[0].position = node.position
+                    }
+                    
+                    if node.name == "box2" {
+                        self.boxes[1].position = node.position
+                    }
+                    
+                    if node.name == "box3" {
+                        self.boxes[2].position = node.position
+                    }
+                }
+            }
             
             if playerNode.joint != nil { return}
             
             playerNode.buttonInteract.isHidden = true
             playerNode.contactJoint = nil
             playerNode.canInteract = false
+            
+            
         }
     }
     
