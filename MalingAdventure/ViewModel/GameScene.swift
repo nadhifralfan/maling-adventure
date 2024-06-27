@@ -707,14 +707,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         if currentSection == 6 {
             //foreground6
+//            let foreground = Foreground(imageNamed: "foreground6", isDynamic: false, position: CGPoint(x: 0, y: 0), size: CGSize(width: 1026, height: 450))
+//            foreground.name = "foreground"
+//            foreground.zPosition = 3
+//            foreground.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 1026, height: 450), center: CGPoint(x: foreground.size.width / 2, y: foreground.size.height / 2))
+//            foreground.physicsBody?.isDynamic = false
+//            foreground.physicsBody?.categoryBitMask = PhysicsCategory.foreground
+//            foreground.physicsBody?.collisionBitMask = PhysicsCategory.player
+//            foreground.physicsBody?.contactTestBitMask = PhysicsCategory.player
+//            self.addChild(foreground)
+            
             let foreground = Foreground(imageNamed: "foreground6", isDynamic: false, position: CGPoint(x: 0, y: 0), size: CGSize(width: 1026, height: 450))
             foreground.name = "foreground"
-            foreground.zPosition = 3
-            foreground.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 1026, height: 450), center: CGPoint(x: foreground.size.width / 2, y: foreground.size.height / 2))
+            foreground.anchorPoint = CGPoint(x: 0, y: 0)
+            foreground.position = CGPoint(x: 0, y: 0)
+            foreground.physicsBody = SKPhysicsBody(rectangleOf:CGSize(width: 1026, height: 350), center: CGPoint(x: 1026 / 2, y: 350 / 2))
             foreground.physicsBody?.isDynamic = false
-            foreground.physicsBody?.categoryBitMask = PhysicsCategory.finalDoor
-            foreground.physicsBody?.collisionBitMask = PhysicsCategory.player
-            foreground.physicsBody?.contactTestBitMask = PhysicsCategory.player
+            foreground.physicsBody?.categoryBitMask = PhysicsCategory.platform
+            foreground.physicsBody?.collisionBitMask = PhysicsCategory.player | PhysicsCategory.box
+            foreground.zPosition = 3
             self.addChild(foreground)
         }
         
