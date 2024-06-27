@@ -16,7 +16,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var gameControllerManager: GameControllerManager?
     var hapticsManager: HapticsManager?
     var coins: Int = 0
-    let coinScoreNode = SKLabelNode(text: "Coins: 0")
+    let coinScoreNode = SKLabelNode(text: "000")
     var previousUpdateTime: TimeInterval = 0
     var buttonPressed = 0
     var tombolPressed = 0
@@ -104,6 +104,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
         }
+        
     }
     
     func setupControllerInputsScene(controller: GCController) {
@@ -407,9 +408,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         coinScoreNode.fontColor = SKColor.white
         coinScoreNode.fontName = "Test"
         coinScoreNode.numberOfLines = 0
-        coinScoreNode.position.x = 950
+        coinScoreNode.position.x = 980
         coinScoreNode.position.y = 725
         coinScoreNode.zPosition = 100
+        
+        let coinIconTexture = SKTexture(imageNamed: "coin_icon")
+        let coinIconNode = SKSpriteNode(texture: coinIconTexture)
+        coinIconNode.anchorPoint = CGPoint(x: 0, y: 0)
+        coinIconNode.size =  CGSize(width: 30, height: 30)
+        coinIconNode.position = CGPoint(x: 930, y: 725)
+        coinIconNode.zPosition = 100
+
+        self.addChild(coinIconNode)
         
         self.addChild(coinScoreNode)
         
@@ -733,7 +743,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.addChild(keyNode)
             }
             
-            coinScoreNode.text = "Coins: \(coins)"
+            coinScoreNode.text = "\(coins)"
         }
     }
     

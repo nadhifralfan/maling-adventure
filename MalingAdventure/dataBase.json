@@ -85,7 +85,7 @@
                 "coins" : [
                     { "x": 290, "y": 180, "type": "coin" },
                     { "x": 320, "y": 240, "type": "coin"},
-                    { "x": 370, "y": 350, "type": "diamond"},
+                    { "x": 370, "y": 380, "type": "diamond"},
                     { "x": 370, "y": 260, "type": "coin" },
                     { "x": 420, "y": 240, "type": "coin" },
                     { "x": 460, "y": 180, "type": "coin" },
