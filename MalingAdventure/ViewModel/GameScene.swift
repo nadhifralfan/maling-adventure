@@ -180,12 +180,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         controller.extendedGamepad?.buttonB.pressedChangedHandler = { [weak self] (button,value,pressed) in
             guard let self = self else { return }
             if pressed && player.canInteract {
-                if player.contactWith == level.sections[currentSection-1].doorExit.doorType {
+                if player.contactWith == level.sections[currentSection-1].doorExit.doorType || player.contactWith == level.sections[currentSection-1].finalDoor.doorTypeSize{
                     playersAtDoorExit.insert(player)
                     player.isHidden = true
                     player.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.box
                     if playersAtDoorExit.count == players.count {
-                        if currentSection == 6 {
+                        if currentSection == 5 && gameControllerManager!.isFinalDoor {
                             gameControllerManager?.isPlaying = false
                             gameControllerManager?.isGameWon = true
                             let transition = SKTransition.fade(withDuration: 3)
@@ -703,7 +703,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let foreground = Foreground(imageNamed: "color", isDynamic: true, position: CGPoint(x: 0, y: 0), size: CGSize(width: 630, height: 493))
                 foreground.zPosition = 2
                 self.addChild(foreground)
+                
             }
+            
         }
         if currentSection == 6 {
             //foreground6
@@ -739,6 +741,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         doorExit.position = section.doorExit.doorPosition
         doorExit.zPosition = 2
         self.addChild(doorExit)
+        
+        let finalDoor = section.finalDoor.doorTypeSize
+        finalDoor.position = section.finalDoor.doorPosition
+        finalDoor.zPosition = 2
+
+        self.addChild(finalDoor)
         
         
         //Players
@@ -832,7 +840,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             coinScoreNode.text = "\(coins)"
         }
     }
-    
+
     override func keyDown(with event: NSEvent) {
         if let gameControllerManager = gameControllerManager {
             if gameControllerManager.isStoryMode{
@@ -843,12 +851,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if gameControllerManager.isPlaying {
                 if event.keyCode == 36 && players.count == 1 && players[0].canInteract {
                     let player = players[0]
-                    if player.contactWith == level.sections[currentSection-1].doorExit.doorType {
+                    if player.contactWith == level.sections[currentSection-1].doorExit.doorType || player.contactWith == level.sections[currentSection-1].finalDoor.doorTypeSize {
                         playersAtDoorExit.insert(player)
                         player.isHidden = true
                         player.physicsBody?.collisionBitMask = PhysicsCategory.platform | PhysicsCategory.ground | PhysicsCategory.hazzard | PhysicsCategory.box
                         if playersAtDoorExit.count == players.count {
-                            if currentSection == 6 {
+                            if currentSection == 5 && gameControllerManager.isFinalDoor {
                                 gameControllerManager.isPlaying = false
                                 gameControllerManager.isGameWon = true
                                 let transition = SKTransition.fade(withDuration: 3)
@@ -1106,6 +1114,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 playerNode.buttonInteract.isHidden = false
                 playerNode.contactWith = doorNode
                 playerNode.canInteract = true
+            } else if doorNode == level.sections[currentSection-1].finalDoor.doorTypeSize {
+                playerNode.buttonInteract.isHidden = false
+                playerNode.contactWith = doorNode
+                playerNode.canInteract = true
+                
+                gameControllerManager?.isFinalDoor = true
             }
         }
     }

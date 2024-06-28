@@ -10,6 +10,7 @@ class GameControllerManager: ObservableObject {
     var isGameWon: Bool = false
     var isStoryMode: Bool = false
     var isHaveKey: Bool = false
+    var isFinalDoor: Bool = false
 
     init() {
         NotificationCenter.default.addObserver(

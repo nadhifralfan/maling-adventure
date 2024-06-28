@@ -102,6 +102,22 @@ func insertDataToScene(scene: MenuScene, debugMode: Bool = false) {
                                             }
                                             section.doorExit = doorExit
                                         }
+                                        if let finalDoorData = sectionData["finalDoor"] as? [String: Any] {
+                                            let finalDoor = Door()
+                                            if let doorTypeString = finalDoorData["doorType"] as? String,
+                                               let doorType = DoorTypeEnum(from: doorTypeString) {
+                                                finalDoor.doorType = createDoorType(for: doorType)
+                                            }
+                                            if let x = finalDoorData["x"] as? CGFloat,
+                                               let y = finalDoorData["y"] as? CGFloat {
+                                                finalDoor.doorPosition = CGPoint(x: x, y: y)
+                                            }
+                                            if let width = finalDoorData["width"] as? CGFloat,
+                                               let height = finalDoorData["height"] as? CGFloat {
+                                                finalDoor.doorSize = CGSize(width: width, height: height)
+                                            }
+                                            section.finalDoor = finalDoor
+                                        }
                                         if let coins = sectionData["coins"] as? [[String: Any]] {
                                             for coin in coins {
                                                 if let x = coin["x"] as? CGFloat,
@@ -186,6 +202,9 @@ func debugLevelData(levels: [String:Level]){
             print(section.doorEntry.doorPosition.debugDescription)
             print(section.doorEntry.doorType.doorImageName)
             print("---DOOR EXIT---")
+            print(section.doorExit.doorPosition.debugDescription)
+            print(section.doorExit.doorType.doorImageName)
+            print("---FINAL DOOR---")
             print(section.doorExit.doorPosition.debugDescription)
             print(section.doorExit.doorType.doorImageName)
             print("---COINS---")
