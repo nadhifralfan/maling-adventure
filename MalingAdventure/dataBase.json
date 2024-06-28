@@ -590,7 +590,7 @@
                   },
                   {
                       "coordinate" : { "x": 35, "y": 480 },
-                      "size" : { "width": 660, "height": 20 }
+                      "size" : { "width": 640, "height": 20 }
                   },
                   {
                       "coordinate" : { "x": 610, "y": 320 },
@@ -601,8 +601,8 @@
                       "size" : { "width": 240, "height": 15 }
                   },
                   {
-                      "coordinate" : { "x": 335, "y": 635 },
-                      "size" : { "width": 700, "height": 15 }
+                      "coordinate" : { "x": 335, "y": 645 },
+                      "size" : { "width": 700, "height": 5 }
                   },
                   {
                       "coordinate" : { "x": 1020, "y": 640 },
@@ -633,6 +633,14 @@
                   "doorType" : "type2",
                   "x": 946,
                   "y": 0
+              },
+              
+              "finalDoor" : {
+                  "doorType" : "type3",
+                  "x": 65,
+                  "y": 78,
+                  "width": 110,
+                  "height": 110
               },
               
               "coins" : [

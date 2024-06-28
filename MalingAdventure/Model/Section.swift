@@ -14,6 +14,7 @@ class Section : SKNode {
     var platforms : [[String : Any]] = []
     var doorEntry : Door = Door()
     var doorExit : Door = Door()
+    var finalDoor : Door = Door()
     var coins : [Coin] = []
     var hazzards : [Hazzard] = []
     var transitionNext: String = "right"
